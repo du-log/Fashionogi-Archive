@@ -29,7 +29,7 @@ export interface EquipmentItem {
     partF: string | null
 }
 
-export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'primary' | 'secondary' | 'accessory1' | 'accessory2';
+export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'primary' | 'secondary' | 'accessory1' | 'accessory2';
 
 type cropDimen = {
     x: number,
@@ -74,6 +74,7 @@ function SubmissionUpload() {
         shoes: defaultItem('shoes'),
         back: defaultItem('back'),
         tail: defaultItem('tail'),
+        face: defaultItem('face'),
         primary: defaultItem('primary'),
         secondary: defaultItem('secondary'),
         accessory1: defaultItem('accessory1'),
@@ -291,6 +292,7 @@ function SubmissionUpload() {
             shoes: defaultItem('shoes'),
             back: defaultItem('back'),
             tail: defaultItem('tail'),
+            face: defaultItem('face'),
             primary: defaultItem('primary'),
             secondary: defaultItem('secondary'),
             accessory1: defaultItem('accessory1'),
@@ -305,6 +307,7 @@ function SubmissionUpload() {
         { title: "Shoes", key: "shoes" },
         { title: "Robe / Wings / Cape", key: "back" },
         { title: "Tail", key: "tail" },
+        {title: "Face", key: "face"},
         { title: "Primary", key: "primary" },
         { title: "Secondary", key: "secondary" },
         { title: "Accessory 1", key: "accessory1" },
@@ -312,8 +315,8 @@ function SubmissionUpload() {
     ];
 
     return (
-        <div className="flex flex-col gap-3 w-full sm:px-[5%] xl:px-[10%]">
-            <h2 className="text-2xl">Submit a Style</h2>
+        <div className="flex flex-col gap-3 w-full min-h-[80vh] sm:px-[15%] xl:px-[20%]">
+            <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"
                 type="text"
@@ -328,15 +331,16 @@ function SubmissionUpload() {
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"
                 type="text"
-                placeholder="Description... (Optional)"
+                placeholder="Description... (Required)"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 maxLength={200}
+                required
                 />
                 <p className="absolute bottom-0 right-1 text-[#ffffff90] text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
             </div>
             <div className="flex w-fit gap-3 items-center text-md">
-                <label htmlFor="gender">Gender:</label>
+                <label htmlFor="gender" className="text-xl">Gender:</label>
                 <select id="gender" className="bg-[#ffffff] text-[#000000] px-1" value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value=""></option>
                     <option value="female">Female</option>
@@ -345,7 +349,7 @@ function SubmissionUpload() {
                 </select>
             </div>
             <div className="flex flex-col gap-2 w-full">
-                <h2 className="text-lg">Tags</h2>
+                <h2 className="text-xl">Tags</h2>
                 <input className="p-2 border border-[#666666] bg-[#666666] w-full text-md text-[#ffffff] rounded" type="text"
                 placeholder={tags.length < 5 ? "Add at least 1 tag, up to 5 tags (No spaces, separate with ' , ' or 'Enter')" : "Tag limit reached"}
                 value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={tagKeyDownHandler}

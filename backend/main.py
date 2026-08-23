@@ -37,6 +37,7 @@ os.makedirs(AVATARS_DIR, exist_ok = True)
 
 app.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
 
+# deprecated
 @app.post('/upload')
 async def upload_img(caption: str = Form(...), file: UploadFile = File(...)):
     unique_id = uuid.uuid4().hex
@@ -54,6 +55,7 @@ async def upload_img(caption: str = Form(...), file: UploadFile = File(...)):
     
     return {'message': 'success', 'path': img_url_path}
 
+# deprecated
 @app.get('/gallery')
 def get_gallery():
     with engine.connect() as con:
@@ -62,6 +64,7 @@ def get_gallery():
     
     return items
 
+# Equipment Search for ComboBox
 @app.get('/equipment/search')
 def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
     if len(q) < 3:
@@ -80,6 +83,7 @@ def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
 
     return[{'id': item.id, 'name': item.name} for item in results]
 
+# For upload_submission
 class EquipmentPayload(BaseModel):
     slot: str
     name: str
@@ -187,6 +191,7 @@ async def upload_submission(
 def get_submission_gallery(db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission)
+        .where(models.Submission.status == 'approved')
         .options(
             joinedload(models.Submission.author),
             selectinload(models.Submission.images)

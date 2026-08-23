@@ -31,7 +31,7 @@ function Gallery() {
     }, []);
 
     return (
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full min-h-[80vh] px-[20%]">
             <form method="GET" className="flex flex-col items-center w-full 2xl:w-[70%] px-4 py-3 rounded-xl outline-3">
                 <div className="grid grid-cols-4 gap-[10px] py-[10px] w-full">
                     <div className="flex flex-col items-center gap-2 md:text-sm lg:text-md xl:text-lg">
@@ -47,9 +47,9 @@ function Gallery() {
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center w-full pt-3 border-t-1">
-                    <button className="btn">Apply Filters</button>
-                    <button className="btn">Reset Filters</button>
+                <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
+                    <button className="btn btn-success btn-soft">Apply Filters</button>
+                    <button className="btn btn-error btn-soft">Reset Filters</button>
                 </div>
             </form>
             {isLoading && (

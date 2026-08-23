@@ -6,7 +6,7 @@ function Layout() {
     return (
         <div className="flex flex-col w-full">
             <Navigation />
-            <div className="flex flex-col w-full px-[20%] py-25">
+            <div className="flex flex-col w-full py-25">
                 <Outlet />
             </div>
             <Footer />

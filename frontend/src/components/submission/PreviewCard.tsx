@@ -47,9 +47,9 @@ function PreviewCard({images, styleName} : {images: UploadImageItem[], styleName
             className={`aspect-[9/16] object-cover rounded-lg 
             ${hasImages ? "w-full h-full" : "w-[225px] h-[400px]"}
             ${isHovered ? "transition-opacity duration-200 ease-in-out" : ""}`} alt={"Preview"}></img>
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00000099] to-transparent rounded-b-lg pb-2 px-4 pt-2 transition-[0.5s] group-hover:bg-[#10101090]">
-                <h3 className="font-bold text-lg text-transparent truncate transition-[0.5s] group-hover:text-[#daa520]">{hasImages ? styleName : "Select image(s) first"}</h3>
-                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe99]">{hasImages ? "Username" : "Actual dimensions may vary"}</h5>
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00000099] to-transparent rounded-b-lg pb-2 px-4 pt-2 transition-[0.5s] group-hover:bg-[#00000090]">
+                <h3 className="font-bold text-md text-transparent truncate transition-[0.5s] group-hover:text-[#faa920]">{hasImages ? styleName : "Select image(s) first"}</h3>
+                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">{hasImages ? "Username" : "Actual dimensions may vary"}</h5>
             </div>
         </div>
     )
