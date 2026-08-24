@@ -72,7 +72,13 @@ function SubmissionPage() {
                     <div className="flex justify-between w-full">
                         <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => history.back()}>{'<-'} Back</button>
                         {submission.status === 'pending' && (
-                            <h4 className="p-2 rounded-lg bg-[#aaff00] text-[#ffffff]">Pending</h4>
+                            <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
+                        )}
+                        {submission.status === 'flagged_for_deletion' && (
+                            <h4 className="p-2 rounded-lg bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
+                        )}
+                        {submission.status === 'rejected' && (
+                            <h4 className="p-2 rounded-lg bg-[#111111] text-[#ffffff]">Rejected</h4>
                         )}
                     </div>
                     <h1 className="sm:text-3xl xl:text-4xl bold">{submission.title}</h1>
@@ -90,17 +96,17 @@ function SubmissionPage() {
                         <div className="flex flex-col items-end gap-2">
                             <h2 className="text-sm p-2 rounded bg-[#90909030] h-fit">Submitted: {formattedDate}</h2>
                             <div className="flex gap-2 items-center">
-                                for:
-                                <p className="rounded bg-[#008000] text-[#ffffff] text-sm py-1 px-2">{submission.gender}</p>
+                                For:
+                                <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.gender}</p>
                             </div>
                             <div className="flex gap-2 items-center">
-                                fits:
-                                <p className="rounded bg-[#008000] text-[#ffffff] text-sm py-1 px-2">{submission.race}</p>
+                                Fits:
+                                <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.race}</p>
                             </div>
                             <div className="flex gap-2 items-center rounded">
                                 <h2 className="text-md">Tags: </h2> 
                                 {submission.tags.map((tag) => (
-                                    <p key={tag} className="text-sm py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
+                                    <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
                                 ))}
                             </div>
                         </div>
@@ -109,44 +115,44 @@ function SubmissionPage() {
                         <h2 className="text-lg font-bold">Equipment</h2>
                         <div className="flex flex-wrap gap-3">
                             {submission.equipment.map((item) => (
-                                <div key={item.name} className="flex flex-col gap-1 py-2 px-4 rounded outline outline-[#ffffff30] bg-[#91009120]">
+                                <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-[#ffffff30] bg-[#91009120]">
                                     <h5 className="text-xs text-[#ffffff30]">{item.slot}</h5>
                                     <h4 className="text-md">{item.name}</h4>
-                                    <div className="grid grid-cols-3 gap-1 text-sm place-items-start">
+                                    <div className="flex gap-2 text-sm">
                                         {item.partA && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>A: {item.partA.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
                                             </div>
                                         )}
                                         {item.partB && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>B: {item.partB.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
                                             </div>
                                         )}
                                         {item.partC && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>C: {item.partC.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
                                                 </div>
                                         )}
                                     </div>
-                                    <div className="grid grid-cols-3 gap-1 text-sm place-items-start">
+                                    <div className="flex gap-2 text-sm">
                                         {item.partD && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>D: {item.partD.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
                                             </div>
                                         )}
                                         {item.partE && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>E: {item.partE.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
                                             </div>
                                         )}
                                         {item.partF && (
-                                            <div className="flex gap-1 text-md">
+                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
                                                 <p>F: {item.partF.toUpperCase()}</p>
                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
                                             </div>

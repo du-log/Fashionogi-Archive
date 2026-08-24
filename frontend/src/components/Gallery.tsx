@@ -16,6 +16,9 @@ function Gallery() {
     const [gender, setGender] = useState<string>("");
     const [race, setRace] = useState<string>("");
     const [sortBy, setSortBy] = useState<string>("Newest");
+    const [title, setTitle] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [tag, setTag] = useState<string>('');
 
     useEffect(() => {
         const fetchGallery = async () => {
@@ -34,12 +37,12 @@ function Gallery() {
 
     return (
         <div className="flex flex-col items-center w-full min-h-[80vh] px-[20%]">
-            <form method="GET" className="flex flex-col w-fit xl:w-[70%] px-5 py-3 rounded-xl outline-3">
+            <form method="GET" className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
-                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Title" />
-                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Username" />
-                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Tag" />
+                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Title" />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Username" />
+                    <input type="text" value={tag} onChange={(e) => setTag(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Tag" />
                 </div>
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Filter By:</h1>
@@ -65,7 +68,7 @@ function Gallery() {
                     </div>
                     <div className="flex gap-2 items-center">
                         <label htmlFor="sort">Sort By</label>
-                        <select id="sort" value={race} onChange={(e) => setRace(e.target.value)} 
+                        <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)} 
                         className="text-[#000] bg-[#ffffff90] p-1">
                             <option value="newest">Newest</option>
                             <option value="oldest">Oldest</option>
@@ -91,7 +94,7 @@ function Gallery() {
                 ))}
             </div>
             {!isLoading && gallery.length === 0 && (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-center h-[30vh]">
                     <h1 className="text-lg">No styles found. Try a new search.</h1>
                 </div>
             )}

@@ -257,6 +257,7 @@ def get_submission(submission_id: int, db: Session = Depends(get_db)):
         'race': sub.race,
         'author': sub.author.username,
         'created_at': sub.created_at,
+        'status': sub.status,
         'tags': [tag.name for tag in sub.tags],
         'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
         'equipment': equipment_data

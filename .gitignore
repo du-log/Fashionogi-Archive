@@ -15,13 +15,14 @@ dist-ssr
 *.env.*
 .env
 .env.*
-*.vite
-.vite
-*.vite*
-.vite*
+*/.vite/
+/.vite/
+*/.vite/*
+/.vite/*
 *.venv
 *.webp
 **/__pycache__/
+**.pyc
 
 # Editor directories and files
 .vscode/*
