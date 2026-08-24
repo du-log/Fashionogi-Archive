@@ -13,7 +13,9 @@ function Gallery() {
     const [isLoading, setLoading] = useState<boolean>(true);
     // const [currentPage, setCurrentPage] = useState<number>(1);
     // const [totalPages, setTotalPages] = useState<number>(1);
-    const [gender, setGender] = useState<string>("All");
+    const [gender, setGender] = useState<string>("");
+    const [race, setRace] = useState<string>("");
+    const [sortBy, setSortBy] = useState<string>("Newest");
 
     useEffect(() => {
         const fetchGallery = async () => {
@@ -32,19 +34,43 @@ function Gallery() {
 
     return (
         <div className="flex flex-col items-center w-full min-h-[80vh] px-[20%]">
-            <form method="GET" className="flex flex-col items-center w-full 2xl:w-[70%] px-4 py-3 rounded-xl outline-3">
-                <div className="grid grid-cols-4 gap-[10px] py-[10px] w-full">
-                    <div className="flex flex-col items-center gap-2 md:text-sm lg:text-md xl:text-lg">
-                        <div className="flex gap-3 items-center">
-                            <label htmlFor="gender">Gender</label>
-                            <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} 
-                            className="text-[#000000] bg-[#ffffff] border-1 border-[#000000] px-1">
-                                <option value="A">All</option>
-                                <option value="F">Female</option>
-                                <option value="M">Male</option>
-                                <option value="U">Unisex</option>
-                            </select>
-                        </div>
+            <form method="GET" className="flex flex-col w-fit xl:w-[70%] px-5 py-3 rounded-xl outline-3">
+                <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
+                    <h1 className="font-bold">Search By:</h1>
+                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Title" />
+                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Username" />
+                    <input type="text" className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Tag" />
+                </div>
+                <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
+                    <h1 className="font-bold">Filter By:</h1>
+                    <div className="flex gap-2 items-center">
+                        <label htmlFor="gender">Gender</label>
+                        <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} 
+                        className="text-[#000] bg-[#ffffff90] p-1">
+                            <option value="">All</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="unisex">Unisex</option>
+                        </select>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <label htmlFor="race">Race</label>
+                        <select id="race" value={race} onChange={(e) => setRace(e.target.value)} 
+                        className="text-[#000] bg-[#ffffff90] p-1">
+                            <option value="">All</option>
+                            <option value="elf">Elf</option>
+                            <option value="human">Human</option>
+                            <option value="giant">Giant</option>
+                        </select>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <label htmlFor="sort">Sort By</label>
+                        <select id="sort" value={race} onChange={(e) => setRace(e.target.value)} 
+                        className="text-[#000] bg-[#ffffff90] p-1">
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                            <option value="favorites">Favorites</option>
+                        </select>
                     </div>
                 </div>
                 <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
@@ -64,6 +90,11 @@ function Gallery() {
                     <GalleryCard key={item.id} item={item} />
                 ))}
             </div>
+            {!isLoading && gallery.length === 0 && (
+                <div className="flex flex-col items-center">
+                    <h1 className="text-lg">No styles found. Try a new search.</h1>
+                </div>
+            )}
         </div>
     )
 }

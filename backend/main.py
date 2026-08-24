@@ -100,6 +100,7 @@ async def upload_submission(
     title: str = Form(...),
     description: Optional[str] = Form(None),
     gender: str = Form(...),
+    race: str = Form(...),
     tags: str = Form(...),
     equipment: str = Form(...),
     files: List[UploadFile] = File(...),
@@ -123,6 +124,7 @@ async def upload_submission(
         title = title,
         description = description,
         gender = gender,
+        race = race,
         status = 'pending'
     )
     db.add(new_submission)
@@ -252,6 +254,7 @@ def get_submission(submission_id: int, db: Session = Depends(get_db)):
         'title': sub.title,
         'description': sub.description,
         'gender': sub.gender,
+        'race': sub.race,
         'author': sub.author.username,
         'created_at': sub.created_at,
         'tags': [tag.name for tag in sub.tags],

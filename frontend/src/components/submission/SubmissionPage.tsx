@@ -19,6 +19,7 @@ type SubmissionDetail = {
     description: string,
     author: string,
     gender: string,
+    race: string,
     created_at: string,
     status: string,
     tags: string[],
@@ -92,6 +93,10 @@ function SubmissionPage() {
                                 for:
                                 <p className="rounded bg-[#008000] text-[#ffffff] text-sm py-1 px-2">{submission.gender}</p>
                             </div>
+                            <div className="flex gap-2 items-center">
+                                fits:
+                                <p className="rounded bg-[#008000] text-[#ffffff] text-sm py-1 px-2">{submission.race}</p>
+                            </div>
                             <div className="flex gap-2 items-center rounded">
                                 <h2 className="text-md">Tags: </h2> 
                                 {submission.tags.map((tag) => (
@@ -107,15 +112,45 @@ function SubmissionPage() {
                                 <div key={item.name} className="flex flex-col gap-1 py-2 px-4 rounded outline outline-[#ffffff30] bg-[#91009120]">
                                     <h5 className="text-xs text-[#ffffff30]">{item.slot}</h5>
                                     <h4 className="text-md">{item.name}</h4>
-                                    <div className="flex gap-1 text-sm">
-                                        {item.partA && (<div className="flex gap-1 text-md">A: {item.partA} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} /></div>)}
-                                        {item.partB && (<div className="flex gap-1 text-md">B: {item.partB} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} /></div>)}
-                                        {item.partC && (<div className="flex gap-1 text-md">C: {item.partC} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} /></div>)}
+                                    <div className="grid grid-cols-3 gap-1 text-sm place-items-start">
+                                        {item.partA && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>A: {item.partA.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
+                                            </div>
+                                        )}
+                                        {item.partB && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>B: {item.partB.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
+                                            </div>
+                                        )}
+                                        {item.partC && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>C: {item.partC.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
+                                                </div>
+                                        )}
                                     </div>
-                                    <div className="flex gap-1 text-sm">
-                                        {item.partD && (<div className="flex gap-1 text-md">D: {item.partD} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} /></div>)}
-                                        {item.partE && (<div className="flex gap-1 text-md">E: {item.partE} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} /></div>)}
-                                        {item.partF && (<div className="flex gap-1 text-md">F: {item.partF} <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} /></div>)}
+                                    <div className="grid grid-cols-3 gap-1 text-sm place-items-start">
+                                        {item.partD && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>D: {item.partD.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
+                                            </div>
+                                        )}
+                                        {item.partE && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>E: {item.partE.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
+                                            </div>
+                                        )}
+                                        {item.partF && (
+                                            <div className="flex gap-1 text-md">
+                                                <p>F: {item.partF.toUpperCase()}</p>
+                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

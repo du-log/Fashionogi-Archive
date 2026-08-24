@@ -95,6 +95,7 @@ class Submission(Base):
     title: Mapped[str] = mapped_column(String(100), index = True, nullable = False)
     description: Mapped[Optional[str]] = mapped_column(TEXT, nullable = True)
     gender: Mapped[str] = mapped_column(String(6), index = True, nullable = False)
+    race: Mapped[str] = mapped_column(String(5), index = True, nullable = False)
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
     # "pending", "approved", "flagged_for_deletion", "rejected"
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)

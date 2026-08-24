@@ -20,7 +20,6 @@ dist-ssr
 *.vite*
 .vite*
 *.venv
-__pycache__
 *.webp
 
 # Editor directories and files

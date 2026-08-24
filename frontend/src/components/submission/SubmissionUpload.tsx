@@ -29,7 +29,7 @@ export interface EquipmentItem {
     partF: string | null
 }
 
-export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'primary' | 'secondary' | 'accessory1' | 'accessory2';
+export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'mainhand' | 'offhand' | 'accessory1' | 'accessory2';
 
 type cropDimen = {
     x: number,
@@ -38,10 +38,15 @@ type cropDimen = {
     height: number
 }
 
+function rgbToHex(r: number, g: number, b: number): string {
+    return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+}
+
 function SubmissionUpload() {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [gender, setGender] = useState<string>('');
+    const [race, setRace] = useState<string>('all');
 
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState<string>('');
@@ -56,6 +61,11 @@ function SubmissionUpload() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
 
+    const [r, setR] = useState<number>(0);
+    const [g, setG] = useState<number>(0);
+    const [b, setB] = useState<number>(0);
+    const [hex, setHex] = useState<string>('');
+
     const defaultItem = (slot: string): EquipmentItem => ({
         slot,
         name: '',
@@ -67,6 +77,7 @@ function SubmissionUpload() {
         partE: '',
         partF: ''
     })
+
     const [equipment, setEquipment] = useState<Record<SlotKey, EquipmentItem>>({
         headgear: defaultItem('headgear'),
         body: defaultItem('body'),
@@ -75,10 +86,10 @@ function SubmissionUpload() {
         back: defaultItem('back'),
         tail: defaultItem('tail'),
         face: defaultItem('face'),
-        primary: defaultItem('primary'),
-        secondary: defaultItem('secondary'),
-        accessory1: defaultItem('accessory1'),
-        accessory2: defaultItem('accessory2')
+        mainhand: defaultItem('wielded'),
+        offhand: defaultItem('wielded'),
+        accessory1: defaultItem('accessory'),
+        accessory2: defaultItem('accessory')
     })
 
     const equipmentChangeHandler = (slot: SlotKey, part: keyof EquipmentItem | string, value: string | boolean) => {
@@ -243,6 +254,7 @@ function SubmissionUpload() {
             formData.append('title', title);
             formData.append('description', description);
             formData.append('gender', gender);
+            formData.append('race', race);
 
             formData.append('tags', JSON.stringify(tags));
 
@@ -293,10 +305,10 @@ function SubmissionUpload() {
             back: defaultItem('back'),
             tail: defaultItem('tail'),
             face: defaultItem('face'),
-            primary: defaultItem('primary'),
-            secondary: defaultItem('secondary'),
-            accessory1: defaultItem('accessory1'),
-            accessory2: defaultItem('accessory2')
+            mainhand: defaultItem('wielded'),
+            offhand: defaultItem('wielded'),
+            accessory1: defaultItem('accessory'),
+            accessory2: defaultItem('accessory')
         });
     }
 
@@ -308,8 +320,8 @@ function SubmissionUpload() {
         { title: "Robe / Wings / Cape", key: "back" },
         { title: "Tail", key: "tail" },
         {title: "Face", key: "face"},
-        { title: "Primary", key: "primary" },
-        { title: "Secondary", key: "secondary" },
+        { title: "Mainhand", key: "mainhand" },
+        { title: "Offhand", key: "offhand" },
         { title: "Accessory 1", key: "accessory1" },
         { title: "Accessory 2", key: "accessory2" },
     ];
@@ -342,10 +354,18 @@ function SubmissionUpload() {
             <div className="flex w-fit gap-3 items-center text-md">
                 <label htmlFor="gender" className="text-xl">Gender:</label>
                 <select id="gender" className="bg-[#ffffff] text-[#000000] px-1" value={gender} onChange={(e) => setGender(e.target.value)}>
-                    <option value=""></option>
+                    <option value="all">All</option>
                     <option value="female">Female</option>
                     <option value="male">Male</option>
-                    <option value="unisex">Unisex</option>
+                </select>
+            </div>
+            <div className="flex w-fit gap-3 items-center text-md">
+                <label htmlFor="race" className="text-xl">Race:</label>
+                <select id="race" className="bg-[#ffffff] text-[#000000] px-1" value={race} onChange={(e) => setRace(e.target.value)}>
+                    <option value="all">All</option>
+                    <option value="human">Human</option>
+                    <option value="elf">Elf</option>
+                    <option value="giant">Giant</option>
                 </select>
             </div>
             <div className="flex flex-col gap-2 w-full">
@@ -460,6 +480,19 @@ function SubmissionUpload() {
                             data={equipment[section.key]}
                             onChange={equipmentChangeHandler}/>
                         ))}
+                    </div>
+                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-[#ffffff90] rounded-lg">
+                        <h2 className="text-xl">RGB to Hex Converter</h2>
+                        <div className="flex gap-2">
+                            <input type="number" className="bg-[#fff] text-[#000] px-1" value={r} min={0} max={255} onChange={(e) => setR(Number(e.target.value))} />
+                            <input type="number" className="bg-[#fff] text-[#000] px-1" value={g} min={0} max={255} onChange={(e) => setG(Number(e.target.value))} />
+                            <input type="number" className="bg-[#fff] text-[#000] px-1" value={b} min={0} max={255} onChange={(e) => setB(Number(e.target.value))} />
+                        </div>
+                        <input type="text" className="bg-[#fff] text-[#000] px-1 w-fit" maxLength={7} value={hex} placeholder="Hex Code..." />
+                        <div className="flex gap-2 justify-center">
+                            <button className="btn btn-success" onClick={() => setHex(rgbToHex(r, g, b))}>Convert</button>
+                            <button className="btn btn-warning" onClick={() => navigator.clipboard.writeText(hex)}>Copy</button>
+                        </div>
                     </div>
                 </div>
             </div>
