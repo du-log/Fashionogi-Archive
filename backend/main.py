@@ -6,7 +6,7 @@ import json
 from pydantic import BaseModel
 from typing import List, Optional
 
-from fastapi import FastAPI, File, UploadFile, Form, Depends, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form, Depends, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -190,17 +190,46 @@ async def upload_submission(
     return {'message': 'Upload successful', 'success': True, 'submission_id': new_submission.id}
 
 @app.get('/submission/gallery')
-def get_submission_gallery(db: Session = Depends(get_db)):
+def get_submission_gallery(
+    title: Optional[str] = None,
+    username: Optional[str] = None,
+    tag: Optional[str] = None,
+    gender: Optional[str] = None,
+    race: Optional[str] = None,
+    sort_by: str = Query('newest', alias='sortBy'),
+    db: Session = Depends(get_db)
+):
     stmt = (
         select(models.Submission)
-        .where(models.Submission.status == 'approved')
+        #.where(models.Submission.status == 'approved')
         .options(
             joinedload(models.Submission.author),
-            selectinload(models.Submission.images)
+            selectinload(models.Submission.images),
+            selectinload(models.Submission.tags)
         )
-        .order_by(models.Submission.created_at.desc())
-        .limit(50)
     )
+
+    if title:
+        stmt = stmt.where(models.Submission.title.ilike(f'%{title}%'))
+    
+    if username:
+        stmt = stmt.join(models.User).where(models.User.username.ilike(f'%{username}%'))
+
+    if tag:
+        stmt = stmt.where(models.Submission.tags.any(models.Tag.name.ilike(f'%{tag}%')))
+
+    if gender:
+        stmt = stmt.where(models.Submission.gender == gender)
+    
+    if race:
+        stmt = stmt.where(models.Submission.race == race)
+
+    if sort_by == 'oldest':
+        stmt = stmt.order_by(models.Submission.created_at.asc())
+    #elif sort_by == 'favorites':
+    #    stmt = stmt.order_by(models.Submission.favorites.desc())
+    else:
+        stmt = stmt.order_by(models.Submission.created_at.desc())
 
     submissions = db.execute(stmt).scalars().unique().all()
 

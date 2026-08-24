@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
+import { useSearchParams } from "react-router-dom";
 
 export type GalleryItem = {
     id: number,
@@ -19,6 +20,50 @@ function Gallery() {
     const [title, setTitle] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [tag, setTag] = useState<string>('');
+    const [, setSearchParams] = useSearchParams();
+
+    const fetchGallery = async (queryParams = '') => {
+        setLoading(true);
+        try {
+            const res = await fetch(`http://localhost:8000/submission/gallery${queryParams}`);
+            const data = await res.json();
+            setGallery(data as GalleryItem[]);
+        } catch (err) {
+            console.error("Failed to fetch gallery:", err);
+        }
+        setTimeout(() => setLoading(false), 500);
+    }
+
+    const applyFiltersHandler = (e: React.SubmitEvent) => {
+        e.preventDefault();
+
+        const params = new URLSearchParams();
+        if (title) params.append('title', title);
+        if (username) params.append("username", username);
+        if (tag) params.append("tag", tag);
+        if (gender) params.append("gender", gender);
+        if (race) params.append("race", race);
+        if (sortBy && sortBy !== 'newest') params.append("sortBy", sortBy);
+
+        setSearchParams(params);
+
+        const queryString = params.toString() ? `?${params.toString()}` : '';
+        fetchGallery(queryString);
+    }
+
+    const resetFiltersHandler = () => {
+        setTitle('');
+        setUsername('');
+        setTag('');
+        setGender('');
+        setRace('');
+        setSortBy('newest');
+        setSearchParams({});
+
+        fetchGallery('');
+    }
+
+
 
     useEffect(() => {
         const fetchGallery = async () => {
@@ -30,14 +75,14 @@ function Gallery() {
             } catch (err) {
                 console.error("Failed to fetch gallery:", err);
             }
-            setLoading(false);
         }
         fetchGallery();
+        setTimeout(() => setLoading(false), 500);
     }, []);
 
     return (
         <div className="flex flex-col items-center w-full min-h-[80vh] px-[20%]">
-            <form method="GET" className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
+            <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
                     <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Title" />
@@ -53,7 +98,6 @@ function Gallery() {
                             <option value="">All</option>
                             <option value="female">Female</option>
                             <option value="male">Male</option>
-                            <option value="unisex">Unisex</option>
                         </select>
                     </div>
                     <div className="flex gap-2 items-center">
@@ -77,24 +121,26 @@ function Gallery() {
                     </div>
                 </div>
                 <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
-                    <button className="btn btn-success btn-soft">Apply Filters</button>
-                    <button className="btn btn-error btn-soft">Reset Filters</button>
+                    <button type="submit" className="btn btn-success btn-soft">Apply Filters</button>
+                    <button type="button" onClick={resetFiltersHandler} className="btn btn-error btn-soft">Reset Filters</button>
                 </div>
             </form>
             {isLoading && (
-                <div className="flex flex-col items-center justify-center h-[40vh] w-full">
+                <div className="absolute flex flex-col items-center justify-center h-[60vh] w-full z-[-10]">
                     <span className="text-[#ffffff90]">Loading...</span>
                     <span className="loading loading-ring loading-xl" />
                 </div>
             )}
-            <div className={`grid md:grid-cols-3 xl:grid-cols-5 2xl:max-w-[80%] gap-5 pt-30 place-items-center w-full
-            transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-                {gallery.map((item) => (
-                    <GalleryCard key={item.id} item={item} />
-                ))}
-            </div>
+            {gallery.length >= 1 && (
+                <div className={`grid md:grid-cols-3 xl:grid-cols-5 2xl:max-w-[80%] gap-5 pt-30 place-items-center w-full
+                transition-opacity duration-500 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                    {gallery.map((item) => (
+                        <GalleryCard key={item.id} item={item} />
+                    ))}
+                </div>
+            )}
             {!isLoading && gallery.length === 0 && (
-                <div className="flex flex-col items-center justify-center h-[30vh]">
+                <div className="absolute flex flex-col items-center justify-center h-[60vh] z-[-10]">
                     <h1 className="text-lg">No styles found. Try a new search.</h1>
                 </div>
             )}
