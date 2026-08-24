@@ -246,7 +246,7 @@ function SubmissionUpload() {
     }
     
     const handleUpload = async () => {
-        if (!images || !title || !gender || !equipment || !tags) return;
+        if (!images || !title || !description || !equipment || !tags) return alert('One or more fields are missing or empty.');
 
         try {
             const formData = new FormData();
@@ -259,6 +259,9 @@ function SubmissionUpload() {
             formData.append('tags', JSON.stringify(tags));
 
             const cleanEquipment = equipmentSanitize(equipment);
+            if (cleanEquipment.length === 0) {
+                return alert('Please include at least one item in the equipment data.');
+            }
             formData.append('equipment', JSON.stringify(cleanEquipment));
 
             images.forEach((img, index) => {
@@ -488,10 +491,13 @@ function SubmissionUpload() {
                             <input type="number" className="bg-[#fff] text-[#000] px-1" value={g} min={0} max={255} onChange={(e) => setG(Number(e.target.value))} />
                             <input type="number" className="bg-[#fff] text-[#000] px-1" value={b} min={0} max={255} onChange={(e) => setB(Number(e.target.value))} />
                         </div>
-                        <input type="text" className="bg-[#fff] text-[#000] px-1 w-fit" maxLength={7} value={hex} placeholder="Hex Code..." />
+                        <input type="text" className="bg-[#fff] text-[#000] px-1 w-fit" maxLength={7} value={hex} placeholder="Hex Code..." disabled />
                         <div className="flex gap-2 justify-center">
                             <button className="btn btn-success" onClick={() => setHex(rgbToHex(r, g, b))}>Convert</button>
-                            <button className="btn btn-warning" onClick={() => navigator.clipboard.writeText(hex)}>Copy</button>
+                            <button className="btn btn-warning" onClick={() => {
+                                navigator.clipboard.writeText(hex);
+                                alert('Copied to clipboard!');
+                            }}>Copy</button>
                         </div>
                     </div>
                 </div>

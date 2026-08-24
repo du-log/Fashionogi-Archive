@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SlotKey } from "./SubmissionUpload";
 
 type Equipment = {
@@ -15,12 +15,18 @@ interface ComboBoxProps {
 function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
     const [results, setResults] = useState([]);
     const [isOpen, setOpen] = useState<boolean>(false);
+    const skipSearch = useRef<boolean>(false);
 
     useEffect(() => {
+        if (skipSearch.current) {
+            skipSearch.current = false;
+            return;
+        }
+
         const timerDebounce = setTimeout(async () => {
             if (value.length >= 3) {
                 try {
-                const res = await fetch(`http://localhost:8000/api/equipment/search?q=${value}&slot=${slot}`);
+                const res = await fetch(`http://localhost:8000/equipment/search?q=${value}&slot=${slot}`);
                 const data = await res.json();
                 setResults(data);
                 setOpen(true);
@@ -44,10 +50,11 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
                     {results.map((item: Equipment) => (
                         <li key={item.id} 
                         onClick={() => {
-                            onSelect(slot, 'name', item.name)
+                            skipSearch.current = true;
+                            onSelect(slot, 'name', item.name);
                             setOpen(false);
                         }}
-                        className="cursor-pointer hover:bg-[#666666] p-2">
+                        className="cursor-pointer bg-[#666] hover:bg-[#777] p-2">
                             {item.name}
                         </li>
                     ))}
