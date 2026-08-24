@@ -21,6 +21,7 @@ dist-ssr
 .vite*
 *.venv
 *.webp
+**/__pycache__/
 
 # Editor directories and files
 .vscode/*
