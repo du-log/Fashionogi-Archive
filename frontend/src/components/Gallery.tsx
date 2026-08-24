@@ -16,7 +16,7 @@ function Gallery() {
     // const [totalPages, setTotalPages] = useState<number>(1);
     const [gender, setGender] = useState<string>("");
     const [race, setRace] = useState<string>("");
-    const [sortBy, setSortBy] = useState<string>("Newest");
+    const [sortBy, setSortBy] = useState<string>("newest");
     const [title, setTitle] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [tag, setTag] = useState<string>('');
