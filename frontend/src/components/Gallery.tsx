@@ -11,6 +11,7 @@ export type GalleryItem = {
 
 function Gallery() {
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
+    const [pageLoading, setPageLoading] = useState<boolean>(true);
     const [isLoading, setLoading] = useState<boolean>(true);
     // const [currentPage, setCurrentPage] = useState<number>(1);
     // const [totalPages, setTotalPages] = useState<number>(1);
@@ -76,12 +77,14 @@ function Gallery() {
                 console.error("Failed to fetch gallery:", err);
             }
         }
+        document.documentElement.scrollTop = 0;
+        setTimeout(() => setPageLoading(false), 100);
         fetchGallery();
         setTimeout(() => setLoading(false), 500);
     }, []);
 
     return (
-        <div className="flex flex-col items-center w-full min-h-[80vh] px-[20%]">
+        <div className={`flex flex-col items-center w-full min-h-[80vh] px-[20%] transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
@@ -132,7 +135,7 @@ function Gallery() {
                 </div>
             )}
             {gallery.length >= 1 && (
-                <div className={`grid md:grid-cols-3 xl:grid-cols-5 2xl:max-w-[80%] gap-5 pt-30 place-items-center w-full
+                <div className={`grid md:grid-cols-3 xl:grid-cols-5 xl:max-w-[80%] pt-30 gap-5 place-items-center w-full
                 transition-opacity duration-500 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                     {gallery.map((item) => (
                         <GalleryCard key={item.id} item={item} />

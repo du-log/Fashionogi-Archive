@@ -43,6 +43,13 @@ class BaseEquipment(Base):
         back_populates = "base_item"
     )
 
+# Preset Tags Model
+class BaseTags(Base):
+    __tablename__ = "base_tags"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+    name: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
+
 # Tag Model
 class Tag(Base):
     __tablename__ = "tags"

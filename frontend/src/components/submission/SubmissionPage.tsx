@@ -52,6 +52,7 @@ function SubmissionPage() {
             } catch (err) {
                 console.error("Failed to fetch submission", err);
             } finally {
+                document.documentElement.scrollTop = 0;
                 setLoading(false);
                 setTimeout(() => setVisible(true), 200);
             }

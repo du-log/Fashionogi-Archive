@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cropper from "react-easy-crop";
 import getCroppedImg from '../../utilities/CropUtility';
@@ -43,6 +43,8 @@ function rgbToHex(r: number, g: number, b: number): string {
 }
 
 function SubmissionUpload() {
+    const [isLoading, setLoading] = useState<boolean>(true);
+
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [gender, setGender] = useState<string>('');
@@ -329,8 +331,13 @@ function SubmissionUpload() {
         { title: "Accessory 2", key: "accessory2" },
     ];
 
+    useEffect(() => {
+        document.documentElement.scrollTop = 0;
+        setTimeout(() => setLoading(false), 50);
+    }, [])
+
     return (
-        <div className="flex flex-col gap-3 w-full min-h-[80vh] sm:px-[15%] xl:px-[20%]">
+        <div className={`flex flex-col gap-3 w-full min-h-[80vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"

@@ -189,6 +189,71 @@ async def upload_submission(
 
     return {'message': 'Upload successful', 'success': True, 'submission_id': new_submission.id}
 
+@app.get('/submission/latest')
+def get_latest_ten(db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        #.where(models.Submission.status == 'approved')
+        .options(
+            joinedload(models.Submission.author),
+            selectinload(models.Submission.images)
+        )
+        .order_by(models.Submission.created_at.desc())
+        .limit(10)
+    )
+
+    submissions = db.execute(stmt).scalars().unique().all()
+
+    results = []
+    for sub in submissions:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        results.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author.username,
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+        })
+    
+    return results
+
+@app.get('/submission/top')
+def get_top_five(db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        #.where(models.Submission.status == 'approved')
+        .options(
+            joinedload(models.Submission.author),
+            selectinload(models.Submission.images)
+        )
+        .order_by(models.Submission.created_at.desc())
+        .limit(5)
+    )
+
+    submissions = db.execute(stmt).scalars().unique().all()
+
+    results = []
+    for sub in submissions:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        results.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author.username,
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+        })
+    
+    return results
+
+@app.get('/submission/all/amount')
+def get_submissions_amount(db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission.id)
+        #.where(models.Submission.status == 'approved')
+        )
+
+    submissions = db.execute(stmt).scalars().unique().all()
+
+    return {'total_submissions': len(submissions)}
+
 @app.get('/submission/gallery')
 def get_submission_gallery(
     title: Optional[str] = None,
