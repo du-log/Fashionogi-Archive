@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type EquipmentDetail = {
     name: string,
@@ -24,7 +25,9 @@ type SubmissionDetail = {
     status: string,
     tags: string[],
     images: string[],
-    equipment: EquipmentDetail[]
+    equipment: EquipmentDetail[],
+    favorites_count: number,
+    is_favorited: boolean,
 }
 
 function SubmissionPage() {
@@ -33,16 +36,54 @@ function SubmissionPage() {
     const [isLoading, setLoading] = useState<boolean>(true);
     const [isVisible, setVisible] = useState<boolean>(false);
 
+    const auth = useContext(AuthContext);
+    const user = auth?.user ?? null;
+
     const formattedDate: string = submission ? new Date(submission.created_at).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
     }) : "";
 
+    const fetchSubmission = async () => {
+        try {
+            const res = await fetch(`http://localhost:8000/api/submissions/id/${id}`, {
+                credentials: 'include'
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setSubmission(data);
+            } else {
+                console.error("Submission not found.");
+            }
+        } catch (err) {
+            console.error("Failed to fetch submission", err);
+        }
+    }
+
+    const toggleFavorite = async () => {
+        if (!user) return;
+        try {
+            const res = await fetch(`http://localhost:8000/api/submissions/id/${id}/favorite`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (res.ok) {
+                const data = await res.json();
+                console.log(data);
+                fetchSubmission();
+            }
+        } catch (err) {
+            console.error('Failed to toggle', err);
+        }
+    }
+
     useEffect(() => {
         const fetchSubmission = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/submission/id/${id}`);
+                const res = await fetch(`http://localhost:8000/api/submissions/id/${id}`, {
+                    credentials: 'include'
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setSubmission(data);
@@ -104,11 +145,15 @@ function SubmissionPage() {
                                 Fits:
                                 <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.race}</p>
                             </div>
-                            <div className="flex gap-2 items-center rounded">
+                            <div className="flex gap-2 items-center">
                                 <h2 className="text-md">Tags: </h2> 
                                 {submission.tags.map((tag) => (
                                     <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
                                 ))}
+                            </div>
+                            <div className="flex flex-col gap-2 items-center">
+                                <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorited: {submission.favorites_count}</h2>
+                                <button onClick={toggleFavorite} className={`btn ${user ? '' : 'btn-disabled'} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>{submission.is_favorited ? 'Unfavorite' : 'Favorite'}</button>
                             </div>
                         </div>
                     </div>

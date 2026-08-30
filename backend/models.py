@@ -14,6 +14,22 @@ submission_tags = Table(
     Column("tag_id", Integer, ForeignKey("tags.id", ondelete = "CASCADE"), primary_key = True)
 )
 
+# Favorites Join Table
+user_favorites = Table(
+    "user_favorites",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True),
+    Column("submission_id", Integer, ForeignKey("submissions.id", ondelete = "CASCADE"), primary_key = True)
+)
+
+# Collections Join Table
+collection_items = Table(
+    "collection_items",
+    Base.metadata,
+    Column("collection_id", Integer, ForeignKey("collections.id", ondelete = "CASCADE"), primary_key = True),
+    Column("submission_id", Integer, ForeignKey("submissions.id", ondelete = "CASCADE"), primary_key = True)
+)
+
 # User Model
 class User(Base):
     __tablename__ = "users"
@@ -28,6 +44,8 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
 
     submissions: Mapped[List["Submission"]] = relationship("Submission", back_populates = "author", cascade = "all, delete-orphan")
+    collections = relationship("Collection", back_populates = "owner", cascade = "all, delete-orphan")
+    favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
 
 # Global Equipment Dict Model
 class BaseEquipment(Base):
@@ -62,6 +80,18 @@ class Tag(Base):
         secondary = submission_tags,
         back_populates = "tags"
     )
+
+# Collections Model
+class Collection(Base):
+    __tablename__ = "collections"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), nullable = False)
+    title: Mapped[str] = mapped_column(String(100), nullable = False)
+    created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+
+    owner = relationship("User", back_populates = "collections")
+    items = relationship("Submission", secondary = collection_items, back_populates = "in_collections")
 
 # Submission Image Model
 class SubmissionImage(Base):
@@ -106,6 +136,19 @@ class Submission(Base):
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
     # "pending", "approved", "flagged_for_deletion", "rejected"
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+
+    favorited_by = relationship(
+        "User",
+        secondary = user_favorites,
+        back_populates = "favorite_submissions"
+    
+    )
+
+    in_collections = relationship(
+        "Collection",
+        secondary = collection_items,
+        back_populates = "items"
+    )
 
     author: Mapped["User"] = relationship(
         "User",

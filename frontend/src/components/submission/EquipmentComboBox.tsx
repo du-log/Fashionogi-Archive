@@ -26,7 +26,7 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
         const timerDebounce = setTimeout(async () => {
             if (value.length >= 3) {
                 try {
-                const res = await fetch(`http://localhost:8000/equipment/search?q=${value}&slot=${slot}`);
+                const res = await fetch(`http://localhost:8000/api/equipment?q=${value}&slot=${slot}`);
                 const data = await res.json();
                 setResults(data);
                 setOpen(true);

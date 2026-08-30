@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cropper from "react-easy-crop";
 import getCroppedImg from '../../utilities/CropUtility';
 import PreviewCard from "./PreviewCard";
 import { calculateDefaultCrop } from "../../utilities/CropUtility";
 import EquipmentAccordion from "./EquipmentAccordion";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface UploadImageItem {
     id: number,
@@ -43,11 +44,14 @@ function rgbToHex(r: number, g: number, b: number): string {
 }
 
 function SubmissionUpload() {
+    const auth = useContext(AuthContext);
+    const user = auth?.user ?? null;
+
     const [isLoading, setLoading] = useState<boolean>(true);
 
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [gender, setGender] = useState<string>('');
+    const [gender, setGender] = useState<string>('all');
     const [race, setRace] = useState<string>('all');
 
     const [tags, setTags] = useState<string[]>([]);
@@ -88,8 +92,8 @@ function SubmissionUpload() {
         back: defaultItem('back'),
         tail: defaultItem('tail'),
         face: defaultItem('face'),
-        mainhand: defaultItem('wielded'),
-        offhand: defaultItem('wielded'),
+        mainhand: defaultItem('mainhand'),
+        offhand: defaultItem('offhand'),
         accessory1: defaultItem('accessory'),
         accessory2: defaultItem('accessory')
     })
@@ -272,9 +276,10 @@ function SubmissionUpload() {
                 }
             });
 
-            const res = await fetch('http://localhost:8000/submission/upload', {
+            const res = await fetch('http://localhost:8000/api/submissions', {
                 method: 'post',
                 body: formData,
+                credentials: 'include'
             });
 
             if(res.ok) {
@@ -310,8 +315,8 @@ function SubmissionUpload() {
             back: defaultItem('back'),
             tail: defaultItem('tail'),
             face: defaultItem('face'),
-            mainhand: defaultItem('wielded'),
-            offhand: defaultItem('wielded'),
+            mainhand: defaultItem('mainhand'),
+            offhand: defaultItem('offhand'),
             accessory1: defaultItem('accessory'),
             accessory2: defaultItem('accessory')
         });
@@ -334,7 +339,7 @@ function SubmissionUpload() {
     useEffect(() => {
         document.documentElement.scrollTop = 0;
         setTimeout(() => setLoading(false), 50);
-    }, [])
+    }, [user, navigate])
 
     return (
         <div className={`flex flex-col gap-3 w-full min-h-[80vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
@@ -451,13 +456,13 @@ function SubmissionUpload() {
                         {images.length > 0 && (
                             <div className="flex flex-col gap-3">
                                 <h3>Gallery Card Preview</h3>
-                                <PreviewCard images={images} styleName={title} />
+                                <PreviewCard images={images} styleName={title} username={user?.username} />
                             </div>
                         )}
                         {images.length < 1 && (
                             <div className="flex flex-col gap-3">
                                 <h3 className="text-md">Gallery Card Preview</h3>
-                                <PreviewCard images={[]} styleName={title} />
+                                <PreviewCard images={[]} styleName={title} username={user?.username} />
                             </div>
                         )}
                     </div>

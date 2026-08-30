@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
 import { useSearchParams } from "react-router-dom";
 
@@ -9,33 +9,64 @@ export type GalleryItem = {
     images: string[]
 }
 
+const getPageNumbers = (current: number, total: number) => {
+    if (total <= 5) {
+        return Array.from({ length: total }, (_, i) => i + 1);
+    }
+        
+    if (current <= 3) {
+        return [1, 2, 3, 4, '...', total];
+    }
+        
+    if (current >= total - 2) {
+        return [1, '...', total - 3, total - 2, total - 1, total];
+    }
+        
+    return [1, '...', current - 1, current, current + 1, '...', total];
+};
+
 function Gallery() {
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
     const [pageLoading, setPageLoading] = useState<boolean>(true);
     const [isLoading, setLoading] = useState<boolean>(true);
-    // const [currentPage, setCurrentPage] = useState<number>(1);
-    // const [totalPages, setTotalPages] = useState<number>(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
     const [gender, setGender] = useState<string>("");
     const [race, setRace] = useState<string>("");
     const [sortBy, setSortBy] = useState<string>("newest");
     const [title, setTitle] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [tag, setTag] = useState<string>('');
-    const [, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [totalItems, setTotalItems] = useState<number>(0);
 
-    const fetchGallery = async (queryParams = '') => {
+    const pageNumbers = getPageNumbers(currentPage, totalPages);
+
+    const fetchGallery = useCallback((queryParams = '') => {
         setLoading(true);
-        try {
-            const res = await fetch(`http://localhost:8000/submission/gallery${queryParams}`);
-            const data = await res.json();
-            setGallery(data as GalleryItem[]);
-        } catch (err) {
-            console.error("Failed to fetch gallery:", err);
-        }
-        setTimeout(() => setLoading(false), 500);
+        setTimeout(async () => {
+            try {
+                const res = await fetch(`http://localhost:8000/api/submissions${queryParams}`);
+                const data = await res.json();
+                setGallery(data.items as GalleryItem[]);
+                setCurrentPage(Number(data.current_page));
+            setTotalPages(Number(data.total_pages));
+            setTotalItems(Number(data.total_items));
+                setTimeout(() => setLoading(false), 500);
+            } catch (err) {
+                console.error("Failed to fetch gallery:", err);
+            }
+        }, 500);
+    }, [])
+
+    const handlePageChange = (newPage: number) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('page', newPage.toString());
+        setSearchParams(params);
+        fetchGallery(`?${params.toString()}`);
     }
 
-    const applyFiltersHandler = (e: React.SubmitEvent) => {
+    const applyFiltersHandler = async (e: React.SubmitEvent) => {
         e.preventDefault();
 
         const params = new URLSearchParams();
@@ -45,6 +76,8 @@ function Gallery() {
         if (gender) params.append("gender", gender);
         if (race) params.append("race", race);
         if (sortBy && sortBy !== 'newest') params.append("sortBy", sortBy);
+
+        params.set('page', '1');
 
         setSearchParams(params);
 
@@ -64,23 +97,20 @@ function Gallery() {
         fetchGallery('');
     }
 
-
-
     useEffect(() => {
-        const fetchGallery = async () => {
-            setLoading(true);
-            try {
-            const res = await fetch('http://localhost:8000/submission/gallery');
-            const data = await res.json();
-            setGallery(data as GalleryItem[]);
-            } catch (err) {
-                console.error("Failed to fetch gallery:", err);
-            }
-        }
         document.documentElement.scrollTop = 0;
         setTimeout(() => setPageLoading(false), 100);
-        fetchGallery();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTitle(searchParams.get('title') || '');
+        setUsername(searchParams.get('username') || '');
+        setTag(searchParams.get('tag') || '');
+        setGender(searchParams.get('gender') || '');
+        setRace(searchParams.get('race') || '');
+        setSortBy(searchParams.get('sortBy') || 'newest');
+        const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
+        fetchGallery(queryString);
         setTimeout(() => setLoading(false), 500);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -115,7 +145,7 @@ function Gallery() {
                     </div>
                     <div className="flex gap-2 items-center">
                         <label htmlFor="sort">Sort By</label>
-                        <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)} 
+                        <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}
                         className="text-[#000] bg-[#ffffff90] p-1">
                             <option value="newest">Newest</option>
                             <option value="oldest">Oldest</option>
@@ -135,12 +165,29 @@ function Gallery() {
                 </div>
             )}
             {gallery.length >= 1 && (
+                <>
                 <div className={`grid md:grid-cols-3 xl:grid-cols-5 xl:max-w-[80%] pt-30 gap-5 place-items-center w-full
                 transition-opacity duration-500 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                     {gallery.map((item) => (
                         <GalleryCard key={item.id} item={item} />
                     ))}
                 </div>
+                <div className="flex justify-center items-center gap-3 py-10">
+                    <button className={`btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+                    {pageNumbers.map((num, index) => (
+                        num === '...' ? (
+                            <span key={`ellipsis-${index}`}>...</span>
+                        ) : (
+                            <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-primary cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
+                        )
+                    ))}
+                    <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                </div>
+                <div className="flex flex-col justify-center items-center">
+                    <p className="text-sm">Total Items: {totalItems}</p>
+                    <p>Current Page: {currentPage}</p>
+                </div>
+                </>
             )}
             {!isLoading && gallery.length === 0 && (
                 <div className="absolute flex flex-col items-center justify-center h-[60vh] z-[-10]">

@@ -15,15 +15,15 @@ function Home() {
         const fetchData = async () => {
             setLoading(true);
 
-            const res = await fetch('http://localhost:8000/submission/latest');
+            const res = await fetch('http://localhost:8000/api/submissions/latest');
             const data = await res.json();
             setLatestStyles(data);
 
-            const res3 = await fetch('http://localhost:8000/submission/top');
+            const res3 = await fetch('http://localhost:8000/api/submissions/top');
             const data3 = await res3.json();
             setTopStyles(data3);
 
-            const res2 = await fetch('http://localhost:8000/submission/all/amount')
+            const res2 = await fetch('http://localhost:8000/api/submissions/amount')
             const data2 = await res2.json();
             setTotal(Number(data2.total_submissions))
         }
@@ -43,7 +43,7 @@ function Home() {
             </div>
             <div className="flex flex-col w-full xl:px-[10%]">
                 <h1 className="text-xl text-[#d1d1d1] font-bold">Latest</h1>
-                <div className="grid grid-cols-5 gap-1 xl:gap-3 w-full place-items-center py-10">
+                <div className="grid grid-cols-5 gap-5 w-full place-items-center py-10">
                     {latestStyles.map((item => (
                         <GalleryCard key={item.id} item={item} />
                     )))}
@@ -51,7 +51,7 @@ function Home() {
             </div>
             <div className="flex flex-col w-full xl:px-[10%]">
                 <h1 className="text-xl text-[#d1d1d1] font-bold">Most Favorited</h1>
-                <div className="grid grid-cols-5 gap-1 w-full place-items-center py-10">
+                <div className="grid grid-cols-5 gap-5 w-full place-items-center py-10">
                     {topStyles.map((item => (
                         <GalleryCard key={item.id} item={item} />
                     )))}

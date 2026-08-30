@@ -12,16 +12,18 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
     const displayUrl = hasImages ? `http://localhost:8000${item.images[currentIndex]}` : "";
 
     useEffect(() => {
+            let interval: number | undefined;
             let timer: number | undefined;
             if (isHovered && hasImages && item.images.length > 1) {
-                timer = window.setInterval(() => {
+                interval = window.setInterval(() => {
                     setIndex((prev) => (prev === 1 ? 0 : 1));
                 }, 1000);
             } else {
-                setIndex(0);
+                if (currentIndex !== 0) timer = window.setInterval(() => setIndex(0), 0);
             }
     
             return () => {
+                if (interval !== undefined) window.clearInterval(interval);
                 if (timer !== undefined) window.clearInterval(timer);
             }
         }, [isHovered, hasImages, item.images.length, currentIndex])

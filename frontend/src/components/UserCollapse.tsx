@@ -1,15 +1,20 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 function UserCollapse() {
     const menuRef = useRef<HTMLDivElement | null>(null);
     const [isOpen, setOpen] = useState<boolean>(false);
-    const [isAuth, setAuth] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    const auth = useContext(AuthContext);
+    const isAuth = auth?.isAuth ?? false;
+    const logout = auth?.logout ?? (async () => {});
+    const user = auth?.user ?? null;
+
     const logOutHandle = () => {
-        setAuth(false);
+        logout();
         setOpen(false);
     }
 
@@ -37,7 +42,7 @@ function UserCollapse() {
             {isAuth && (
                 <div className="relative pr-[1rem]" ref={menuRef}>
                     <div className="flex items-center justify-end gap-3">
-                        <h2 className="text-lg hover:cursor-default">Username</h2>
+                        <h2 className="text-lg hover:cursor-default">{user?.username}</h2>
                         <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-4xl hover:cursor-pointer w-8 h-8 outline-2`} onClick={() => setOpen(!isOpen)}>
                             <User size={50} />
                         </div>
