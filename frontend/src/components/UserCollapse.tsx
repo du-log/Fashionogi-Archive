@@ -12,10 +12,13 @@ function UserCollapse() {
     const isAuth = auth?.isAuth ?? false;
     const logout = auth?.logout ?? (async () => {});
     const user = auth?.user ?? null;
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     const logOutHandle = () => {
+        setLoading(true);
         logout();
         setOpen(false);
+        setTimeout(() => setLoading(false), 500);
     }
 
     useEffect(() => {
@@ -30,9 +33,13 @@ function UserCollapse() {
         return () => document.removeEventListener('mousedown', outsideClickHandle);
     }, []);
 
+    useEffect(() => {
+        setTimeout(() => setLoading(false), 500);
+    })
+
 
     return (
-        <div>
+        <div className={`transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
             {!isAuth && (
                 <div className="flex gap-3">
                     <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Sign In</button>
@@ -49,8 +56,8 @@ function UserCollapse() {
                     </div>
                     {isOpen && (
                         <ul className="absolute flex flex-col items-start gap-2 bg-[#505050] p-3 mt-4 sm:text-md xl:text-lg border-1 border-[#daa700] right-0">
-                            <li><p onClick={logOutHandle}>Sign Out</p></li>
-                            <li><p>Settings</p></li>
+                            <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
+                            <li><p className="cursor-pointer">Settings</p></li>
                         </ul>
                     )}
                 </div>
