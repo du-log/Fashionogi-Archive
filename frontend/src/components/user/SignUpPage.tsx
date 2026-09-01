@@ -7,10 +7,10 @@ function SignUpPage() {
         if (!auth) throw new Error('AuthContext not provided');
     const {register} = auth;
 
-    const [username, setUsername] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const [verify, setVerify] = useState<string>('')
+    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [verify, setVerify] = useState<string>('');
 
     const [agree, setAgree] = useState<boolean>(false);
 
@@ -44,8 +44,6 @@ function SignUpPage() {
             const res = await register(username, email, password);
             if (res) {
                 setRegistered(true);
-            } else {
-                alert('');
             }
         } catch (err) {
             console.error('Could not register', err);
