@@ -53,17 +53,46 @@ def logout(response: Response):
     response.delete_cookie(key = 'access_token', samesite = 'lax', secure = False)
     return { 'message': 'Logged out successfully' }
 
-@router.pot('/register')
+@router.post('/register')
 def register(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     stmt = (
         select(models.User)
         .where(models.User.email == form_data.email)
     )
 
-    account = db.execute(stmt).scalars().first()
-    if account:
+    stmt2 = (
+        select(models.User)
+        .where(models.User.username == form_data.username)
+    )
+
+    emailUsed = db.execute(stmt).scalars().first()
+    if emailUsed:
         return {
             'success': False,
             'message': 'Email is already associated with an account',
-            'type': 'accEmailHas'
+            'type': 'AccEmailHas'
         }
+
+    usernameUsed = db.execute(stmt2).scalars(.first)
+    if usernameUsed:
+        return {
+            'success': False,
+            'message': 'Username is already associated with an account',
+            'type': 'AccNameHas'
+        }
+
+    
+
+    try:
+        pw_hash = auth.get_pw_hash(form_data.password)
+        new_user = models.User(username = form_data.username, email =form_data.email, hashed_password = pw_hash)
+        db.add(new_user)
+        db.commit()
+
+        return {
+            'success': True,
+            'message': 'Account successfully registered'
+        }
+    except e:
+        raise HTTPException(status_code = 400, detail = str(e))
+
