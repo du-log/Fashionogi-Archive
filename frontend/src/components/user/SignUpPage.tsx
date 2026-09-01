@@ -6,11 +6,13 @@ function SignUpPage() {
     const [password, setPassword] = useState<string>('')
     const [verify, setVerify] = useState<string>('')
 
+    const [agree, setAgree] = useState<boolean>(false);
+
     const [nameErr, setNameErr] = useState<string>('');
     const [emailErr, setEmailErr] = useState<string>('');
     const [pwErr, setPwErr] = useState<string>('');
 
-    const registerHandler = (e: SubmitEvent) => {
+    const registerHandler = (e: React.SubmitEvent) => {
         e.preventDefault();
 
         setNameErr('');
@@ -39,31 +41,36 @@ function SignUpPage() {
                     <div className="flex flex-col gap-1 w-full">
                         <div className="flex gap-10 items-center justify-between w-full">
                             <label htmlFor="usernameL">Username</label>
-                            <input className="bg-[#fff] text-[#000]" type="text" id="usernameL" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            <input className={`bg-[#fff] text-[#000] ${nameErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="text" id="usernameL" value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
-                        <span>{nameErr}</span>
+                        <span className="text-[#aa0000]">{nameErr}</span>
                     </div>
                     <div className="flex flex-col gap-1 w-full">
                         <div className="flex gap-10 items-center justify-between w-full">
                             <label htmlFor="emailL">Email</label>
-                            <input className="bg-[#fff] text-[#000]" type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input className={`bg-[#fff] text-[#000] ${emailErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
-                        <span>{emailErr}</span>
+                        <span className="text-[#aa0000]">{emailErr}</span>
                     </div>
                     <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-col gap-6">
                             <div className="flex gap-10 items-center justify-between w-full">
                                 <label htmlFor="passwordL">Password</label>
-                                <input className="bg-[#fff] text-[#000]" type="password" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input className={`bg-[#fff] text-[#000] ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
+                                title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, no spaces, and be between 8-16 characters" />
                             </div>
                             <div className="flex gap-10 items-center justify-between w-full">
                                 <label htmlFor="verifyL">Confirm Password</label>
-                                <input className="bg-[#fff] text-[#000]" type="password" id="verifyL" value={verify} onChange={(e) => setVerify(e.target.value)} />
+                                <input className={`bg-[#fff] text-[#000] ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="password" id="verifyL" value={verify} onChange={(e) => setVerify(e.target.value)} required />
                             </div>
                         </div>
-                        <span>{pwErr}</span>
+                        <span className="text-[#ff0000]">{pwErr}</span>
                     </div>
-                    <button type="submit" className="btn btn-xl btn-success">Register</button>
+                    <div className="flex items-center gap-5">
+                        <label>I agree to the Terms and Conditions.</label>
+                        <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+                    </div>
+                    <button type="submit" className={`btn btn-xl btn-success ${!agree ? 'btn-disabled' : ''}`}>Register</button>
                 </form>
             </div>
         </div>

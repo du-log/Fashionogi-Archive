@@ -38,9 +38,11 @@ export default function AuthProvider({children}: {children: ReactNode}) {
 
         try {
             const res = await api.post('/api/auth/login', formData);
-            setUser(res.data.user);
-            setAuth(true);
-            return true;
+            if (res) {
+                setUser(res.data.user);
+                setAuth(true);
+                return true;
+            }
         } catch (err) {
             console.error('Failed to login', err);
             return false;
@@ -58,8 +60,25 @@ export default function AuthProvider({children}: {children: ReactNode}) {
         }
     }
 
+    const register = async (username: string, email: string, password: string) => {
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
+
+        try {
+            const res = await api.post('/api/auth/register', formData);
+            if (res) {
+                return true;
+            }
+        } catch (err) {
+            console.error('Could not register account', err);
+            return false;
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     )

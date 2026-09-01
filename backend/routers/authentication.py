@@ -52,3 +52,18 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
 def logout(response: Response):
     response.delete_cookie(key = 'access_token', samesite = 'lax', secure = False)
     return { 'message': 'Logged out successfully' }
+
+@router.pot('/register')
+def register(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.User)
+        .where(models.User.email == form_data.email)
+    )
+
+    account = db.execute(stmt).scalars().first()
+    if account:
+        return {
+            'success': False,
+            'message': 'Email is already associated with an account',
+            'type': 'accEmailHas'
+        }
