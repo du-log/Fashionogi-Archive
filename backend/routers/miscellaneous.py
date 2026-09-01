@@ -18,10 +18,10 @@ from sqlalchemy import select
 from database import get_db, engine, Base
 import models
 
-router = APIRouter(prefix = '/api/equipment', tags = ['Equipment'])
+router = APIRouter(prefix = '/api/misc', tags = ['Miscellaneous'])
 
 # Equipment Search for ComboBox
-@router.get('')
+@router.get('/equipment')
 def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
     if len(q) < 3:
         return []
@@ -38,3 +38,17 @@ def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
     results = db.execute(stmt).scalars().all()
 
     return[{'id': item.id, 'name': item.name} for item in results]
+
+@router.get('/tags')
+def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.BaseTags)
+        .order_by(models.BaseTags.name.asc())
+    )
+
+    if q:
+        stmt = stmt.where(models.BaseTags.name.ilike(f"%{q}%"))
+
+    results = db.execute(stmt).scalars().all()
+
+    return [{'id': item.id, 'name': item.name} for item in results]

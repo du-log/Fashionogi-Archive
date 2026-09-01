@@ -18,7 +18,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/gallery' element={<Gallery />} />
             <Route path='/upload' element={<SubmissionUpload />} />
-            <Route path='/submission/:id' element={<SubmissionPage />} />
+            <Route path='/fashion/id/:id' element={<SubmissionPage />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />

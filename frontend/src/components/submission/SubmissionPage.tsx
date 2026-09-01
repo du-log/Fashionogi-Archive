@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
 type EquipmentDetail = {
@@ -148,7 +148,7 @@ function SubmissionPage() {
                             <div className="flex gap-2 items-center">
                                 <h2 className="text-md">Tags: </h2> 
                                 {submission.tags.map((tag) => (
-                                    <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
+                                    <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
                                 ))}
                             </div>
                             <div className="flex flex-col gap-2 items-center">

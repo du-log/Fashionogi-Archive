@@ -29,6 +29,7 @@ function Gallery() {
     const [gallery, setGallery] = useState<GalleryItem[]>([]);
     const [pageLoading, setPageLoading] = useState<boolean>(true);
     const [isLoading, setLoading] = useState<boolean>(true);
+    const [resultsLoading, setResultsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [gender, setGender] = useState<string>("");
@@ -44,15 +45,17 @@ function Gallery() {
 
     const fetchGallery = useCallback((queryParams = '') => {
         setLoading(true);
+        setResultsLoading(true);
         setTimeout(async () => {
             try {
                 const res = await fetch(`http://localhost:8000/api/submissions${queryParams}`);
                 const data = await res.json();
+                if(data) setResultsLoading(false);
                 setGallery(data.items as GalleryItem[]);
                 setCurrentPage(Number(data.current_page));
             setTotalPages(Number(data.total_pages));
             setTotalItems(Number(data.total_items));
-                setTimeout(() => setLoading(false), 500);
+                setTimeout(() => setLoading(false), 200);
             } catch (err) {
                 console.error("Failed to fetch gallery:", err);
             }
@@ -99,7 +102,6 @@ function Gallery() {
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;
-        setTimeout(() => setPageLoading(false), 100);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setTitle(searchParams.get('title') || '');
         setUsername(searchParams.get('username') || '');
@@ -109,12 +111,11 @@ function Gallery() {
         setSortBy(searchParams.get('sortBy') || 'newest');
         const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
         fetchGallery(queryString);
-        setTimeout(() => setLoading(false), 500);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        setTimeout(() => setPageLoading(false), 100);
+    }, [fetchGallery, searchParams]);
 
     return (
-        <div className={`flex flex-col items-center w-full min-h-[80vh] px-[20%] transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col items-center w-full min-h-[100vh] px-[20%] transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
@@ -185,11 +186,10 @@ function Gallery() {
                 </div>
                 <div className="flex flex-col justify-center items-center">
                     <p className="text-sm">Total Items: {totalItems}</p>
-                    <p>Current Page: {currentPage}</p>
                 </div>
                 </>
             )}
-            {!isLoading && gallery.length === 0 && (
+            {!isLoading && gallery.length < 1 && !resultsLoading && (
                 <div className="absolute flex flex-col items-center justify-center h-[60vh] z-[-10]">
                     <h1 className="text-lg">No styles found. Try a new search.</h1>
                 </div>

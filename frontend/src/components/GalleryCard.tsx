@@ -30,7 +30,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
 
     return (
         <div className="group relative cursor-pointer w-full h-full outline-3 outline-[#ffffff99] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
-        onClick={() => navigate(`/submission/${item.id}`)}
+        onClick={() => navigate(`/fashion/id/${item.id}`)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
             <img src={hasImages ? displayUrl : ""}

@@ -9,15 +9,23 @@ function LoginPage() {
     const {login} = auth;
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loginMsg, setLoginMsg] = useState<string>('');
+    const [isSuccess, setSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.SubmitEvent) => {
+        setLoginMsg('');
         e.preventDefault();
-        if (!email || !password) return alert('Missing field(s)');
+        if (!email || !password) return setLoginMsg('Missing email or password.');
         try {
+            setLoginMsg('Authenticating...');
             const res = await login(email, password);
             if (res) {
-                navigate('/');
+                setSuccess(true)
+                setLoginMsg('Success! Redirecting...');
+                setTimeout(() => navigate('/'), 1000);
+            } else {
+                setLoginMsg('Invalid email or password.');
             }
         } catch (err) {
             console.log('Could not login', err);
@@ -44,10 +52,13 @@ function LoginPage() {
                         </div>
                         <Link to='/'><p className="text-xs text-[#ffffff90] hover:text-[#a5f500]">Forgot password?</p></Link>
                     </div>
+                    {/*
                     <div className="flex gap-3 items-center">
                         <label className="text-md text-[#eeeeee]">Remember Me</label>
                         <input type="checkbox" className="cursor-pointer w-5 h-5" />
                     </div>
+                    */}
+                    <span className={`text-sm ${isSuccess ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{loginMsg}</span>
                     <button type="submit" className="rounded-lg bg-[#006000] px-2 py-3 cursor-pointer transition-color duration-50 hover:bg-[#008000] font-bold text-[#eeeeee] outline outline-[#ffffff90]">Log In</button>
                 </form>
                 <div className="flex flex-col items-center text-[#eeeeee]">Don't have an account?<Link to='/'><p className="text-md hover:text-[#a5f500]">Register</p></Link></div>

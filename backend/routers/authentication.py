@@ -25,12 +25,15 @@ router = APIRouter(prefix = '/api/auth', tags = ['Authentication'])
 def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     stmt = (
         select(models.User)
-        .where(models.User.email == form_data.username)
+        .where(
+            models.User.email == form_data.username,
+        )
     )
 
     user = db.execute(stmt).scalars().first()
-    if not user:
+    if not user or not auth.verify_pw(form_data.password, user.hashed_password):
         raise HTTPException(status_code = 400, detail = 'Invalid email or password')
+    
     
     access_token = auth.create_token(data = { 'sub': str(user.id) })
 

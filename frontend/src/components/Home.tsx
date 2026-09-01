@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
 import type { GalleryItem } from "./Gallery";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 function Home() {
     const [isLoading, setLoading] = useState<boolean>(true);
     const [latestStyles, setLatestStyles] = useState<GalleryItem[]>([]);
     const [topStyles, setTopStyles] = useState<GalleryItem[]>([]);
     const [total, setTotal] = useState<number>(0);
+
+    const auth = useContext(AuthContext);
+    const user = auth?.user ?? null;
 
     const navigate = useNavigate();
 
@@ -29,11 +34,11 @@ function Home() {
         }
         document.documentElement.scrollTop = 0;
         fetchData();
-        setTimeout(() => setLoading(false), 100);
+        setTimeout(() => setLoading(false), 300);
     }, [])
 
     return (
-        <div className={`flex flex-col gap-20 w-full min-h-[80vh] px-[10%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-20 w-full min-h-[100vh] px-[10%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <div className="flex flex-col w-full gap-10">
                 <div className="flex flex-col gap-5 py-10 border-b border-b-[#ffffff90]">
                     <h1 className="text-7xl text-[#ffd700] leading-tight">Discover your Erinn Style</h1>
@@ -68,7 +73,7 @@ function Home() {
                 </div>
                 <div className="flex gap-3 justify-center">
                     <button onClick={() => navigate('/gallery')} className="h-fit py-2 px-4 btn btn-outline btn-xl hover:btn-accent">Browse the Gallery</button>
-                    <button onClick={() => navigate('/upload')} className="h-fit py-2 px-4 btn btn-outline btn-xl text-[#fff] hover:btn-success hover:text-[#aaff00]">Submit a Style</button>
+                    <button onClick={() => {if (user) {navigate('/upload')} else {navigate('/login')}}} className="h-fit py-2 px-4 btn btn-outline btn-xl text-[#fff] hover:btn-success hover:text-[#aaff00]">Submit a Style</button>
                 </div>
             </div>
         </div>

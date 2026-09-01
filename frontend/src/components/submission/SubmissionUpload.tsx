@@ -6,6 +6,7 @@ import PreviewCard from "./PreviewCard";
 import { calculateDefaultCrop } from "../../utilities/CropUtility";
 import EquipmentAccordion from "./EquipmentAccordion";
 import { AuthContext } from "../../contexts/AuthContext";
+import TagsComboBox from "./TagsComboBox";
 
 interface UploadImageItem {
     id: number,
@@ -55,7 +56,7 @@ function SubmissionUpload() {
     const [race, setRace] = useState<string>('all');
 
     const [tags, setTags] = useState<string[]>([]);
-    const [tagInput, setTagInput] = useState<string>('');
+    // const [tagInput, setTagInput] = useState<string>('');
 
     const [images, setImages] = useState<UploadImageItem[]>([]);
     const [activeCropIndex, setActiveCropIndex] = useState<number>(0);
@@ -134,7 +135,8 @@ function SubmissionUpload() {
         return cleanPayload;
     }
 
-    const tagKeyDownHandler = (e :React.KeyboardEvent<HTMLInputElement>) => {
+    /*
+    const tagHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' || e.key === ',') {
             e.preventDefault();
             const newTag = tagInput.trim().toLowerCase();
@@ -142,6 +144,14 @@ function SubmissionUpload() {
                 setTags([...tags, newTag]);
             }
             setTagInput('');
+        }
+    };
+    */
+
+    const tagHandlerV2 = (value: string) => {
+        const newTag = value.trim();
+        if (newTag && tags.length < 5 && !tags.includes(newTag)) {
+            setTags([...tags, newTag]);
         }
     };
 
@@ -252,7 +262,7 @@ function SubmissionUpload() {
     }
     
     const handleUpload = async () => {
-        if (!images || !title || !description || !equipment || !tags) return alert('One or more fields are missing or empty.');
+        if (images.length < 1 || !title || !description || !equipment || !tags) return alert('One or more fields are missing or empty.');
 
         try {
             const formData = new FormData();
@@ -281,11 +291,11 @@ function SubmissionUpload() {
                 body: formData,
                 credentials: 'include'
             });
-
+            const data = await res.json();
             if(res.ok) {
                 alert('Upload successful!');
                 setTitle('');
-                navigate('/gallery');
+                navigate(`/fashion/id/${data.submission_id}`);
             }
         } catch (err) {
             console.error('Crop or Upload Failed', err);
@@ -300,7 +310,6 @@ function SubmissionUpload() {
         setZoom(1);
         setCrop({x: 1, y: 1});
 
-        setTagInput('');
         setTags([]);
 
         if(fileInputRef.current) {
@@ -342,7 +351,7 @@ function SubmissionUpload() {
     }, [user, navigate])
 
     return (
-        <div className={`flex flex-col gap-3 w-full min-h-[80vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-3 w-full min-h-[100vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"
@@ -384,11 +393,10 @@ function SubmissionUpload() {
                 </select>
             </div>
             <div className="flex flex-col gap-2 w-full">
-                <h2 className="text-xl">Tags</h2>
-                <input className="p-2 border border-[#666666] bg-[#666666] w-full text-md text-[#ffffff] rounded" type="text"
-                placeholder={tags.length < 5 ? "Add at least 1 tag, up to 5 tags (No spaces, separate with ' , ' or 'Enter')" : "Tag limit reached"}
-                value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={tagKeyDownHandler}
-                disabled={tags.length >= 5} maxLength={20} />
+                <h1 className="text-xl">Tags</h1>
+                <p className="text-sm text-[#990000]">At least one tag required.</p>
+                <TagsComboBox tags={tags} onSelect={tagHandlerV2} />
+                <p className="text-sm text-[#ffffff90]">Search filters based on text entered. Hit space to show all tags.</p>
                 <div className="flex flex-wrap gap-2">
                     {tags.map((tag, index) => (
                         <span key={index} className="flex items-center gap-2 bg-[#008000] text-white text-sm px-3 py-1 rounded-full">
@@ -401,6 +409,7 @@ function SubmissionUpload() {
                     ))}
                 </div>
             </div>
+
             {images[activeCropIndex] && (
                 <dialog id='crop_modal' className="modal backdrop-blur-sm py-2">
                     <div className="modal-box max-w-full">
