@@ -68,8 +68,10 @@ export default function AuthProvider({children}: {children: ReactNode}) {
 
         try {
             const res = await api.post('/api/auth/register', formData);
-            if (res) {
+            if (res.data.success) {
                 return true;
+            } else {
+                return {'success': res.data.success, 'message': res.data.message, 'type': res.data.type};
             }
         } catch (err) {
             console.error('Could not register account', err);

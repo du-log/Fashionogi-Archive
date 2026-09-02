@@ -161,11 +161,13 @@ def get_latest_ten(db: Session = Depends(get_db)):
     results = []
     for sub in submissions:
         sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        favorites_count = len(sub.favorited_by)
         results.append({
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'favorites': favorites_count
         })
     
     return results
@@ -190,11 +192,13 @@ def get_top_five(db: Session = Depends(get_db)):
     results = []
     for sub in submissions:
         sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        favorites_count = len(sub.favorited_by)
         results.append({
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'favorites': favorites_count
         })
     
     return results
@@ -271,11 +275,13 @@ def get_submission_gallery(
     results = []
     for sub in submissions:
         sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        favorites_count = len(sub.favorited_by)
         results.append({
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'favorites': favorites_count
         })
     
     return {
@@ -303,6 +309,13 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
     sub = db.execute(stmt).scalars().first()
     if not sub:
         raise HTTPException(status_code = 404, detail = 'Submission not found.')
+
+    if sub.status != 'approved':
+        if not current_user:
+            raise HTTPException(status_code = 404, detail = 'Submission not found.')
+        
+        if not current_user.is_admin and current_user.id != sub.user_id:
+            raise HTTPException(status_code = 404, detail = 'Submission not found.')
 
     sorted_images = sorted(sub.images, key=lambda x: x.display_order)
 

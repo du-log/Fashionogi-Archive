@@ -6,7 +6,8 @@ export type GalleryItem = {
     id: number,
     title: string,
     author: string,
-    images: string[]
+    images: string[],
+    favorites: number
 }
 
 const getPageNumbers = (current: number, total: number) => {

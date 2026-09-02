@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
 type EquipmentDetail = {
@@ -38,6 +38,8 @@ function SubmissionPage() {
 
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
+
+    const navigate = useNavigate();
 
     const formattedDate: string = submission ? new Date(submission.created_at).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -130,9 +132,10 @@ function SubmissionPage() {
                         ))}
                     </div>
                     <div className="flex justify-between w-full py-2">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">
+                            <h1 className="text-lg">Description</h1>
                             {submission.description && (
-                                <div className="w-full text-wrap">Description: {submission.description}</div>
+                                <div className="bg-[#40404090]  w-full text-wrap">{submission.description}</div>
                             )}
                         </div>
                         <div className="flex flex-col items-end gap-2">
@@ -151,8 +154,8 @@ function SubmissionPage() {
                                     <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
                                 ))}
                             </div>
-                            <div className="flex flex-col gap-2 items-center">
-                                <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorited: {submission.favorites_count}</h2>
+                            <div className="flex flex-col gap-2 items-end">
+                                <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorites: {submission.favorites_count}</h2>
                                 <button onClick={toggleFavorite} className={`btn ${user ? '' : 'btn-disabled'} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>{submission.is_favorited ? 'Unfavorite' : 'Favorite'}</button>
                             </div>
                         </div>
@@ -218,8 +221,9 @@ function SubmissionPage() {
                 </div>
             )} 
             {!submission && !isLoading && (
-                <div className="flex w-full min-h-[80vh] justify-center items-center">
-                    <h1 className="text-xl">Submission not found.</h1>
+                <div className="flex flex-col gap-5 w-full min-h-[80vh] justify-center items-center">
+                    <h1 className="text-xl">Submission not found or not available.</h1>
+                    <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-md xl:text-lg" onClick={() => navigate('/gallery')}>Back to Gallery</button>
                 </div>
             )}
         </div>

@@ -38,7 +38,8 @@ function LoginPage() {
                 <h1 className="text-4xl text-[#ffffff] italic">Fashionogi</h1>
                 <h5 className="text-lg text-[#ffd700] italic">Discover your Erinn Style</h5>
             </div>
-            <div className="flex flex-col items-center px-20 py-10 rounded-lg outline outline-[#ffffff90] bg-[#00660070] gap-5">
+            <div className="relative flex flex-col items-center px-20 py-10 rounded-lg outline outline-[#ffffff90] bg-[#00660070] gap-5">
+                <button className="absolute top-1 left-1 cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => history.back()}>{'<-'} Back</button>
                 <h1 className="text-4xl text-[#eeeeee] font-bold py-10">Sign In</h1>
                 <form method="POST" onSubmit={(e) => handleLogin(e)} className="flex flex-col gap-5 text-md">
                     <div className="flex gap-2 items-center">
@@ -61,7 +62,7 @@ function LoginPage() {
                     <span className={`text-sm ${isSuccess ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{loginMsg}</span>
                     <button type="submit" className="rounded-lg bg-[#006000] px-2 py-3 cursor-pointer transition-color duration-50 hover:bg-[#008000] font-bold text-[#eeeeee] outline outline-[#ffffff90]">Log In</button>
                 </form>
-                <div className="flex flex-col items-center text-[#eeeeee]">Don't have an account?<Link to='/'><p className="text-md hover:text-[#a5f500]">Register</p></Link></div>
+                <div className="flex flex-col items-center text-[#eeeeee]">Don't have an account?<Link to='/register'><p className="text-md hover:text-[#a5f500]">Register here!</p></Link></div>
                 <div className="flex flex-col items-center text-[#eeeeee] gap-3">
                     Or sign up with:
                     <div className="flex justify-center gap-10">

@@ -21,6 +21,11 @@ import auth
 
 router = APIRouter(prefix = '/api/auth', tags = ['Authentication'])
 
+class RegisterParams(BaseModel):
+    username: str
+    email: str
+    password: str
+
 @router.post('/login')
 def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     stmt = (
@@ -54,15 +59,15 @@ def logout(response: Response):
     return { 'message': 'Logged out successfully' }
 
 @router.post('/register')
-def register(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def register(response: Response, username = Form(...), email = Form(...), password = Form(...), db: Session = Depends(get_db)):
     stmt = (
         select(models.User)
-        .where(models.User.email == form_data.email)
+        .where(models.User.email == email)
     )
 
     stmt2 = (
         select(models.User)
-        .where(models.User.username == form_data.username)
+        .where(models.User.username == username)
     )
 
     emailUsed = db.execute(stmt).scalars().first()
@@ -73,7 +78,7 @@ def register(response: Response, form_data: OAuth2PasswordRequestForm = Depends(
             'type': 'AccEmailHas'
         }
 
-    usernameUsed = db.execute(stmt2).scalars(.first)
+    usernameUsed = db.execute(stmt2).scalars().first()
     if usernameUsed:
         return {
             'success': False,
@@ -84,8 +89,8 @@ def register(response: Response, form_data: OAuth2PasswordRequestForm = Depends(
     
 
     try:
-        pw_hash = auth.get_pw_hash(form_data.password)
-        new_user = models.User(username = form_data.username, email =form_data.email, hashed_password = pw_hash)
+        pw_hash = auth.get_pw_hash(password)
+        new_user = models.User(username = username, email = email, hashed_password = pw_hash)
         db.add(new_user)
         db.commit()
 

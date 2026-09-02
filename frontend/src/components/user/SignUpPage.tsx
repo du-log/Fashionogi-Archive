@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -28,27 +28,58 @@ function SignUpPage() {
         setPwErr('');
 
         if (username.length === 0 ) {
-            setNameErr('Field required.')
+            setNameErr('Field required.');
+            return;
         }
         if (email.length === 0 ) {
-            setEmailErr('Field required.')
+            setEmailErr('Field required.');
+            return;
         }
         if (password.length === 0 ) {
-            setPwErr('Field required.')
+            setPwErr('Field required.');
+            return;
         }
         if (verify !== password) {
             setPwErr('Passwords do not match.')
         }
 
+        if (!username || !email || !password || verify !== password) return;
+
         try {
             const res = await register(username, email, password);
-            if (res) {
+            const success = typeof res === 'boolean' ? res : res.success;
+            const message = typeof res === 'boolean' ? '' : res.message;
+            const type = typeof res === 'boolean' ? '' : res.type;
+            if (success) {
                 setRegistered(true);
+            } else {
+                if (type === 'AccEmailHas') {
+                    setEmailErr(message);
+                    return;
+                } else if (type === 'AccNameHas') {
+                    setNameErr(message);
+                    return;
+                }
             }
         } catch (err) {
             console.error('Could not register', err);
         }
     }
+
+    useEffect(() => {
+        const timerDebounce = setTimeout(async () => {
+            if (password.length >= 8 && verify.length > 0) {
+                if (verify !== password) {
+                    setPwErr('Passwords do not match.')
+                } else {
+                    setPwErr('');
+                }
+            } else {
+                setPwErr('');
+            }
+        }, 0);
+        return () => clearTimeout(timerDebounce);
+    }, [password, verify])
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-lg">

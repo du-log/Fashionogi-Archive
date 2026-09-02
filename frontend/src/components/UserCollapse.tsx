@@ -15,10 +15,8 @@ function UserCollapse() {
     const [isLoading, setLoading] = useState<boolean>(true);
 
     const logOutHandle = () => {
-        setLoading(true);
-        logout();
-        setOpen(false);
-        setTimeout(() => setLoading(false), 500);
+        logout(); 
+        navigate('/login');
     }
 
     useEffect(() => {
@@ -56,8 +54,8 @@ function UserCollapse() {
                     </div>
                     {isOpen && (
                         <ul className="absolute flex flex-col items-start gap-2 bg-[#505050] p-3 mt-4 sm:text-md xl:text-lg border-1 border-[#daa700] right-0">
-                            <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
                             <li><p className="cursor-pointer">Settings</p></li>
+                            <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
                         </ul>
                     )}
                 </div>
