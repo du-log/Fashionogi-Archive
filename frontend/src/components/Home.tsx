@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import GalleryCard from "./GalleryCard";
-import type { GalleryItem } from "./Gallery";
+import GalleryCard from "./gallery/GalleryCard";
+import type { GalleryItem } from "./gallery/Gallery";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";

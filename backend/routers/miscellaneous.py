@@ -43,6 +43,7 @@ def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
 def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     stmt = (
         select(models.BaseTags)
+        .where(models.BaseTags.is_active == True)
         .order_by(models.BaseTags.name.asc())
     )
 

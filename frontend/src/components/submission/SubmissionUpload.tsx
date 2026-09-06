@@ -56,7 +56,6 @@ function SubmissionUpload() {
     const [race, setRace] = useState<string>('all');
 
     const [tags, setTags] = useState<string[]>([]);
-    // const [tagInput, setTagInput] = useState<string>('');
 
     const [images, setImages] = useState<UploadImageItem[]>([]);
     const [activeCropIndex, setActiveCropIndex] = useState<number>(0);
@@ -135,25 +134,12 @@ function SubmissionUpload() {
         return cleanPayload;
     }
 
-    /*
-    const tagHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' || e.key === ',') {
-            e.preventDefault();
-            const newTag = tagInput.trim().toLowerCase();
-            if (newTag && tags.length < 5 && !tags.includes(newTag)) {
-                setTags([...tags, newTag]);
-            }
-            setTagInput('');
-        }
-    };
-    */
-
     const tagHandlerV2 = (value: string) => {
         const newTag = value.trim();
         if (newTag && tags.length < 5 && !tags.includes(newTag)) {
             setTags([...tags, newTag]);
         }
-    };
+    }
 
     const removeTag = (indexToRemove: number) => {
         setTags(tags.filter((_, index) => index !== indexToRemove));
@@ -346,6 +332,8 @@ function SubmissionUpload() {
     ];
 
     useEffect(() => {
+        if (!user) navigate('/');
+
         document.documentElement.scrollTop = 0;
         setTimeout(() => setLoading(false), 50);
     }, [user, navigate])
@@ -430,7 +418,7 @@ function SubmissionUpload() {
                         <input className="w-full"
                         type="range"
                         value={zoom}
-                        min={1} max={2} step={0.01}
+                        min={1} max={3} step={0.05}
                         onChange={(e) => setZoom(Number(e.target.value))}
                         />
                     </div>
@@ -525,7 +513,7 @@ function SubmissionUpload() {
             </div>
             <div className="flex justify-center gap-3">
                 <button onClick={handleUpload} className={`btn btn-soft btn-success p-3 ${images.length === 0 ? "btn-disabled" : ""}`}>Submit</button>
-                <button onClick={resetParams} className="btn btn-soft btn-error p-3">Reset</button>
+                <button onClick={() => {resetParams(); document.documentElement.scrollTop = 0}} className="btn btn-soft btn-error p-3">Reset</button>
             </div>
         </div>
     )

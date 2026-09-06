@@ -31,4 +31,4 @@ router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
 
 @router.get('/me')
 def get_user_me(current_user: models.User = Depends(auth.get_current_user)):
-    return { 'id': current_user.id, 'username': current_user.username }
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin }

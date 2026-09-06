@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
 import { useSearchParams } from "react-router-dom";
+import TagsComboBox from "./TagsComboBox";
 
 export type GalleryItem = {
     id: number,
@@ -54,8 +55,8 @@ function Gallery() {
                 if(data) setResultsLoading(false);
                 setGallery(data.items as GalleryItem[]);
                 setCurrentPage(Number(data.current_page));
-            setTotalPages(Number(data.total_pages));
-            setTotalItems(Number(data.total_items));
+                setTotalPages(Number(data.total_pages));
+                setTotalItems(Number(data.total_items));
                 setTimeout(() => setLoading(false), 200);
             } catch (err) {
                 console.error("Failed to fetch gallery:", err);
@@ -103,16 +104,22 @@ function Gallery() {
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setTitle(searchParams.get('title') || '');
-        setUsername(searchParams.get('username') || '');
-        setTag(searchParams.get('tag') || '');
-        setGender(searchParams.get('gender') || '');
-        setRace(searchParams.get('race') || '');
-        setSortBy(searchParams.get('sortBy') || 'newest');
+
         const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
-        fetchGallery(queryString);
-        setTimeout(() => setPageLoading(false), 100);
+
+        const timeoutId = window.setTimeout(() => {
+            setTitle(searchParams.get('title') || '');
+            setUsername(searchParams.get('username') || '');
+            setTag(searchParams.get('tag') || '');
+            setGender(searchParams.get('gender') || '');
+            setRace(searchParams.get('race') || '');
+            setSortBy(searchParams.get('sortBy') || 'newest');
+
+            fetchGallery(queryString);
+            setPageLoading(false);
+        }, 100);
+
+        return () => window.clearTimeout(timeoutId);
     }, [fetchGallery, searchParams]);
 
     return (
@@ -120,9 +127,9 @@ function Gallery() {
             <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Title" />
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Username" />
-                    <input type="text" value={tag} onChange={(e) => setTag(e.target.value)} className="p-1 bg-[#ffffff90] w-30 text-[#000]" placeholder="Tag" />
+                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Title" />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Username" />
+                    <TagsComboBox tag={tag} setTag={setTag} />
                 </div>
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Filter By:</h1>

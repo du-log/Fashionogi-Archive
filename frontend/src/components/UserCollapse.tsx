@@ -54,6 +54,9 @@ function UserCollapse() {
                     </div>
                     {isOpen && (
                         <ul className="absolute flex flex-col items-start gap-2 bg-[#505050] p-3 mt-4 sm:text-md xl:text-lg border-1 border-[#daa700] right-0">
+                            {user?.is_admin && (
+                                <li><p className="cursor-pointer" onClick={() => navigate('/admin')}>Admin Dashboard</p></li>
+                            )}
                             <li><p className="cursor-pointer">Settings</p></li>
                             <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
                         </ul>

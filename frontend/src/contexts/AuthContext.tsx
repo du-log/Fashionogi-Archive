@@ -2,7 +2,8 @@ import { createContext } from "react"
 
 export type User = {
     id: number,
-    username: string
+    username: string,
+    is_admin: boolean
 }
 
 type AuthContextType = {

@@ -35,6 +35,7 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), default = uuid.uuid4, unique = True, nullable = False)
     username: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
     email: Mapped[str] = mapped_column(String(255), unique = True, index = True, nullable = False)
@@ -53,7 +54,7 @@ class BaseEquipment(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
 
-    name: Mapped[str] = mapped_column(String(100), unique = True, index = True, nullable = False)
+    name: Mapped[str] = mapped_column(String(200), unique = True, index = True, nullable = False)
     slot: Mapped[str] = mapped_column(String(20), index = True, nullable = False)
 
     submission_instances: Mapped[List["SubmissionEquipment"]] = relationship(
@@ -66,13 +67,16 @@ class BaseTags(Base):
     __tablename__ = "base_tags"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     name: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
 
 # Tag Model
 class Tag(Base):
     __tablename__ = "tags"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     name: Mapped[str] = mapped_column(String(50), unique = True, nullable = False)
 
     submissions: Mapped[List["Submission"]] = relationship(
@@ -86,6 +90,7 @@ class Collection(Base):
     __tablename__ = "collections"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), nullable = False)
     title: Mapped[str] = mapped_column(String(100), nullable = False)
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
@@ -98,9 +103,11 @@ class SubmissionImage(Base):
     __tablename__ = "submission_images"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     image_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), default = uuid.uuid4, unique = True, nullable = False)
     submission_id: Mapped[int] = mapped_column(Integer, ForeignKey("submissions.id", ondelete = "CASCADE"), nullable = False)
     display_order: Mapped[int] = mapped_column(Integer, default = 0, nullable = False)
+
     submission: Mapped["Submission"] = relationship("Submission", back_populates = "images")
 
 # Submission Equipment Model
@@ -128,6 +135,7 @@ class Submission(Base):
     __tablename__ = "submissions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), nullable = False)
     title: Mapped[str] = mapped_column(String(100), index = True, nullable = False)
     description: Mapped[Optional[str]] = mapped_column(TEXT, nullable = True)
@@ -141,7 +149,6 @@ class Submission(Base):
         "User",
         secondary = user_favorites,
         back_populates = "favorite_submissions"
-    
     )
 
     in_collections = relationship(
