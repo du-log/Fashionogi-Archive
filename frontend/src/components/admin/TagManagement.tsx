@@ -42,6 +42,7 @@ function TagManagement() {
     return (
         <div className="flex flex-col w-full max-h-[70vh] p-2 outline-2 rounded gap-2">
             <form className="flex outline p-2 items-center justify-center gap-10">
+                <p>Total Tags: {tags.length}</p>
                 <input type="text" maxLength={20} value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Add a new tag if needed." className="outline text-lg p-2" />
                 <button type="submit" className="btn">Add Tag</button>
             </form>

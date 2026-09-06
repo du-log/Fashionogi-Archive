@@ -23,7 +23,7 @@ function LoginPage() {
             if (res) {
                 setSuccess(true)
                 setLoginMsg('Success! Redirecting...');
-                setTimeout(() => navigate('/'), 1000);
+                setTimeout(() => {navigate('/'); location.reload()}, 1000);
             } else {
                 setLoginMsg('Invalid email or password.');
             }

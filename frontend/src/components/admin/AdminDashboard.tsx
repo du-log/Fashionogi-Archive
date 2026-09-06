@@ -17,6 +17,7 @@ function AdminDashboard() {
     return (
         <div className="relative flex flex-col items-center w-full h-[100vh] px-[10%] py-20 gap-10 bg-[#aaaaaa10]">
             <h1 className="text-4xl font-bold text-[#daa520]">Admin Dashboard</h1>
+            {/*
             <div className="flex w-full h-fit bg-[#00800030]">
                 <div className="stat">
                     <div className="stat-title">Pending Reviews</div>
@@ -31,6 +32,7 @@ function AdminDashboard() {
                     <div className="stat-value text-info">--</div>
                 </div>
             </div>
+            */}
             <div className="flex w-full h-fit items-center justify-center gap-10 text-md xl:text-lg outline outline-1 outline-[#ffffff90]">
                 <Link to='/admin/pending' className={`px-5 py-2 ${location.pathname.includes('pending') ? 'bg-[#5a5a5a90]' : 'hover:bg-[#5a5a5a70] hover:text-[#daa520]'}`}>Pending Submissions</Link>
                 <Link to='/admin/deletion' className={`px-5 py-2 ${location.pathname.includes('deletion') ? 'bg-[#5a5a5a90]' : 'hover:bg-[#5a5a5a70] hover:text-[#daa520]'}`}>Pending Deletion</Link>
