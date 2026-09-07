@@ -46,15 +46,15 @@ function TagManagement() {
                 <input type="text" maxLength={20} value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Add a new tag if needed." className="outline text-lg p-2" />
                 <button type="submit" className="btn">Add Tag</button>
             </form>
-            <div className="w-full grid grid-cols-4 items-center place-items-start text-lg font-bold p-2">
-                <p>Index</p>
+            <div className="w-full grid grid-cols-4 items-center place-items-center text-lg font-bold p-2">
+                <p>Tag Index</p>
                 <p>Tag Name</p>
                 <p>Tag Status</p>
-                <p>Option</p>
+                <p>Tag Option</p>
             </div>
             <div className="flex flex-col w-full overflow-y-auto py-2 gap-1">
                 {tags.map((tag, index) => (
-                    <div key={tag.id} className="w-full grid grid-cols-4 items-center place-items-start border border-[#ffffff90] px-5 py-2 text-lg">
+                    <div key={tag.id} className="w-full grid grid-cols-4 items-center place-items-center border border-[#ffffff90] px-2 py-2 text-lg">
                         <p>{index + 1}.</p>
                         <p>{tag.name}</p>
                         <p>{tag.is_active ? 'Active' : 'Inactive'}</p>

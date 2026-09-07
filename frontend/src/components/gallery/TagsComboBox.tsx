@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 type Tag = {
     id: number,
@@ -15,6 +16,7 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
     const [results, setResults] = useState([]);
     const [isOpen, setOpen] = useState<boolean>(false);
     const skipSearch = useRef<boolean>(false);
+    const location = useLocation();
 
     useEffect(() => {
         if (skipSearch.current) {
@@ -25,21 +27,23 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
         const timerDebounce = setTimeout(async () => {
             if (tag.length >= 0) {
                 try {
-                const res = await fetch(`http://localhost:8000/api/misc/tags?q=${tag}`);
-                const data = await res.json();
-                setResults(data);
-                if(tag.length > 0) {
-                    setOpen(true);
-                } else {
-                    setOpen(false);
-                }
+                    const res = await fetch(`http://localhost:8000/api/misc/tags?q=${tag}`);
+                    const data = await res.json();
+                    setResults(data);
+                    const urlParam = new URLSearchParams(location.search);
+                    const tagFromUrl = urlParam.get("tag")
+                    if(tag.length > 0 && tag !== tagFromUrl) {
+                        setOpen(true);
+                    } else {
+                        setOpen(false);
+                    }
                 } catch (err) {
                     console.error("Search failed", err);
                 }
             }
         }, 0);
         return () => clearTimeout(timerDebounce);
-    }, [tag, isOpen])
+    }, [tag, location.search])
 
     return (
         <div className="relative w-40">

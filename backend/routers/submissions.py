@@ -147,7 +147,7 @@ async def upload_submission(
 def get_latest_ten(db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission)
-        #.where(models.Submission.status == 'approved')
+        .where(models.Submission.status == 'approved')
         .options(
             joinedload(models.Submission.author),
             selectinload(models.Submission.images)
@@ -179,7 +179,7 @@ def get_top_five(db: Session = Depends(get_db)):
         .outerjoin(models.user_favorites, models.Submission.id == models.user_favorites.c.submission_id)
         .group_by(models.Submission.id)
         .order_by(desc(func.count(models.user_favorites.c.user_id)))
-        #.where(models.Submission.status == 'approved')
+        .where(models.Submission.status == 'approved')
         .options(
             selectinload(models.Submission.author),
             selectinload(models.Submission.images)
@@ -207,7 +207,7 @@ def get_top_five(db: Session = Depends(get_db)):
 def get_submissions_amount(db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission.id)
-        #.where(models.Submission.status == 'approved')
+        .where(models.Submission.status == 'approved')
         )
 
     submissions = db.execute(stmt).scalars().unique().all()
@@ -228,7 +228,7 @@ def get_submission_gallery(
 ):
     stmt = (
         select(models.Submission)
-        #.where(models.Submission.status == 'approved')
+        .where(models.Submission.status == 'approved')
         .options(
             selectinload(models.Submission.author),
             selectinload(models.Submission.images),

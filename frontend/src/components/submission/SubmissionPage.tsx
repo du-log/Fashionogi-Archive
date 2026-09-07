@@ -156,7 +156,10 @@ function SubmissionPage() {
                             </div>
                             <div className="flex flex-col gap-2 items-end">
                                 <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorites: {submission.favorites_count}</h2>
-                                <button onClick={toggleFavorite} className={`btn ${user ? '' : 'btn-disabled'} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>{submission.is_favorited ? 'Unfavorite' : 'Favorite'}</button>
+                                <button onClick={toggleFavorite}
+                                className={`btn ${user ? '' : 'btn-disabled'} ${user?.username === submission.author ? 'btn-disabled' : ''} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>
+                                    {submission.is_favorited ? 'Unfavorite' : 'Favorite'}
+                                </button>
                             </div>
                         </div>
                     </div>

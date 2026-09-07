@@ -33,7 +33,7 @@ function AdminDashboard() {
                 </div>
             </div>
             */}
-            <div className="flex w-full h-fit items-center justify-center gap-10 text-md xl:text-lg outline outline-1 outline-[#ffffff90]">
+            <div className="flex w-full h-fit items-center justify-center text-md xl:text-lg outline outline-1 outline-[#ffffff90]">
                 <Link to='/admin/pending' className={`px-5 py-2 ${location.pathname.includes('pending') ? 'bg-[#5a5a5a90]' : 'hover:bg-[#5a5a5a70] hover:text-[#daa520]'}`}>Pending Submissions</Link>
                 <Link to='/admin/deletion' className={`px-5 py-2 ${location.pathname.includes('deletion') ? 'bg-[#5a5a5a90]' : 'hover:bg-[#5a5a5a70] hover:text-[#daa520]'}`}>Pending Deletion</Link>
                 <Link to='/admin/tags' className={`px-5 py-2 ${location.pathname.includes('tags') ? 'bg-[#5a5a5a90]' : 'hover:bg-[#5a5a5a70] hover:text-[#daa520]'}`}>Manage Tags</Link>

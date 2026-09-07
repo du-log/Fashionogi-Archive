@@ -44,7 +44,7 @@ def admin_toggle_tag(tag_id: int, db: Session = Depends(get_db)):
     tag.is_active = not tag.is_active
     db.commit()
 
-    return{'id': tag.id, 'is_active': tag.is_active}
+    return {'id': tag.id, 'is_active': tag.is_active}
 
 @router.get('/pending')
 def admin_get_pending(db: Session = Depends(get_db)):
@@ -71,4 +71,40 @@ def admin_get_pending(db: Session = Depends(get_db)):
             'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
         })
 
-    return results
+    return {'items': results}
+
+@router.patch('/pending/{sub_id}/approve')
+def admin_approve_sub(sub_id: int, db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        .where(
+            models.Submission.id == sub_id,
+            models.Submission.status == 'pending'
+        )
+    )
+    submission = db.execute(stmt).scalars().first()
+    if not submission:
+        raise HTTPException(status_code = 404, detail = 'Submission not found.')
+
+    submission.status = 'approved'
+    db.commit()
+
+    return {'message': 'Approved submission', 'id': submission.id, 'status': submission.status}
+
+@router.patch('/pending/{sub_id}/reject')
+def admin_reject_sub(sub_id: int, db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission.id, models.Submission.status)
+        .where(
+            models.Submission.id == sub_id,
+            models.Submission.status == 'pending'
+        )
+    )
+    submission = db.execute(stmt).scalars().first()
+    if not submission:
+        raise HTTPException(status_code = 404, detail = 'Submission not found or not in pending status.')
+
+    submission.status = 'rejected'
+    db.commit()
+
+    return {'message': 'Rejected submission', 'id': submission.id, 'status': submission.status}
