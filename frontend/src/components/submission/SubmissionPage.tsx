@@ -35,6 +35,7 @@ function SubmissionPage() {
     const [submission, setSubmission] = useState<SubmissionDetail | null>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [isVisible, setVisible] = useState<boolean>(false);
+    const [inflateImg, setInflateImg] = useState<string | null>(null);
 
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
@@ -114,7 +115,7 @@ function SubmissionPage() {
             {submission && (
                 <div className={`flex flex-col items-start w-full min-h-[80vh] gap-5 p-5 xl:px-[20%] mx-auto transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex justify-between w-full">
-                        <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => history.back()}>{'<-'} Back</button>
+                        <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => navigate('/gallery')}>{'<-'} Back</button>
                         {submission.status === 'pending' && (
                             <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
                         )}
@@ -128,14 +129,24 @@ function SubmissionPage() {
                     <h1 className="sm:text-3xl xl:text-4xl bold">{submission.title}</h1>
                     <div className="flex w-full gap-3 py-5 justify-center border-b border-[#ffffff90] bg-[#41414130]">
                         {submission.images.map((image) => (
-                            <img key={image} src={`http://localhost:8000${image}`} alt={submission.title} className="aspect-[9/16] sm:w-[15%] xl:w-[20%] outline outline-[#ffffff90] rounded-lg shadow-lg hover:scale-105" />
+                            <img key={image} src={`http://localhost:8000${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
                         ))}
                     </div>
+                    {inflateImg && (
+                        <dialog className="modal modal-open">
+                            <div className="modal-box">
+                                <img src={`http://localhost:8000${inflateImg}`} className="aspect-[9/16]" />
+                            </div>
+                            <form method="dialog" className="modal-backdrop">
+                                <button onClick={() => setInflateImg(null)}></button>
+                            </form>
+                        </dialog>  
+                    )}
                     <div className="flex justify-between w-full py-2">
                         <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">
                             <h1 className="text-lg">Description</h1>
                             {submission.description && (
-                                <div className="bg-[#40404090]  w-full text-wrap">{submission.description}</div>
+                                <div className="bg-[#40404090]  w-full text-wrap p-1">{submission.description}</div>
                             )}
                         </div>
                         <div className="flex flex-col items-end gap-2">

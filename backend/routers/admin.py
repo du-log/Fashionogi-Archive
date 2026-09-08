@@ -55,7 +55,8 @@ def admin_get_pending(db: Session = Depends(get_db)):
         .options(
             selectinload(models.Submission.author),
             selectinload(models.Submission.images),
-            selectinload(models.Submission.tags)
+            selectinload(models.Submission.tags),
+            selectinload(models.Submission.equipment).joinedload(models.SubmissionEquipment.base_item)
         )
     )
 
@@ -64,10 +65,29 @@ def admin_get_pending(db: Session = Depends(get_db)):
     results = []
     for sub in submissions:
         sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        equipment_data = []
+        for eq in sub.equipment:
+            equipment_data.append({
+                'slot': eq.base_item.slot,
+                'name': eq.base_item.name,
+                'dyeable': eq.dyeable,
+                'partA': eq.part_a,
+                'partB': eq.part_b,
+                'partC': eq.part_c,
+                'partD': eq.part_d,
+                'partE': eq.part_e,
+                'partF': eq.part_f,
+            })
+
         results.append({
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
+            'description': sub.description,
+            'gender': sub.gender,
+            'race': sub.race,
+            'created_at': sub.created_at,
+            'equipment': equipment_data,
             'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
         })
 
