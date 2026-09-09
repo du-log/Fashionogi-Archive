@@ -48,6 +48,28 @@ class User(Base):
     collections = relationship("Collection", back_populates = "owner", cascade = "all, delete-orphan")
     favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
 
+    profile: Mapped[Optional["UserProfile"]] = relationship("UserProfile", back_populates = "user", useList = False, cascade = "all, delete-orphan")
+
+# User Profile Model
+class UserProfile(Base):
+    __tablename__ = "user_profiles"
+
+    id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True, index = True)
+
+    bio: Mapped[Optional[str]] = mapped_column(TEXT, index = True, nullable = True)
+    server: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
+    guild: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
+    in_game_name: Mapped[Optional[str]] = mapped_column(String(30), index = True, nullable = True)
+    main_race: Mapped[Optional[str]] = mapped_column(String(10), index = True, nullable = True)
+    main_gender: Mapped[Optional[str]] = mapped_column(String(10), index = True, nullable = True)
+
+    discord_username: Mapped[Optional[str]] = mapped_column(String(50), index = True, nullable = True)
+    twitter_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
+    twitch_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
+    youtube_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
+
+    user: Mapped["User"] = relationship("User", back_populates = "profile")
+
 # Global Equipment Dict Model
 class BaseEquipment(Base):
     __tablename__ = "base_equipment"

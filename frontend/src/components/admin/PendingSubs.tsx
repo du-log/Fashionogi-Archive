@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { CheckIcon, XIcon } from "lucide-react";
 
 type EquipmentDetail = {
     name: string,

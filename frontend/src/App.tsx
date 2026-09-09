@@ -24,6 +24,7 @@ function App() {
             <Route path='/gallery' element={<Gallery />} />
             <Route path='/upload' element={<SubmissionUpload />} />
             <Route path='/fashion/id/:id' element={<SubmissionPage />} />
+            <Route path='/users/id/:id' />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />
