@@ -1,10 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function UserDashboard() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!user) navigate('/login');
+    }, [user, navigate])
+    
     return (
         <div>
 

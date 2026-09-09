@@ -13,6 +13,9 @@ import PendingSubs from './components/admin/PendingSubs';
 import TagManagement from './components/admin/TagManagement';
 import DeletionSubs from './components/admin/DeletionSubs';
 import EquipManagement from './components/admin/EquipManagement';
+import UserProfile from './components/user/UserProfile';
+import UserDashboard from './components/user/UserDashboard';
+import AccountSettings from './components/user/AcountSettings';
 
 function App() {
   return (
@@ -24,7 +27,9 @@ function App() {
             <Route path='/gallery' element={<Gallery />} />
             <Route path='/upload' element={<SubmissionUpload />} />
             <Route path='/fashion/id/:id' element={<SubmissionPage />} />
-            <Route path='/users/id/:id' />
+            <Route path='/users/id/:id' element={<UserProfile />} />
+            <Route path='/account/dashboard' element={<UserDashboard />} />
+            <Route path='/account/settings' element={<AccountSettings />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />

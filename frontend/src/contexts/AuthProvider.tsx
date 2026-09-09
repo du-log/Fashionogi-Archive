@@ -79,8 +79,22 @@ export default function AuthProvider({children}: {children: ReactNode}) {
         }
     }
 
+    const checkSession = async () => {
+        try {
+            const res = await api.get('/api/users/me');
+            if (res) {
+                setUser(res.data);
+                setAuth(true);
+            }
+        } catch (err) {
+            console.error('No session', err);
+            setUser(null);
+            setAuth(false);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout, register }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register, checkSession }}>
             {children}
         </AuthContext.Provider>
     )
