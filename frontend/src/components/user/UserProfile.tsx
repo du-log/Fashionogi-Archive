@@ -3,17 +3,17 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useParams } from "react-router-dom";
 
 type userProfile = {
-    id: number | null | undefined,
-    bio: string | null | undefined,
-    server: string | null | undefined,
-    guild: string | null | undefined,
-    in_game_name: string | null | undefined,
-    main_race: string | null | undefined,
-    main_gender: string | null | undefined,
-    discord_username: string | null | undefined,
-    twitter_link: string | null | undefined,
-    twitch_link: string | null | undefined,
-    youtube_link: string | null | undefined
+    id?: number,
+    bio?: string,
+    server?: string,
+    guild?: string,
+    in_game_name?: string,
+    main_race?: string,
+    main_gender?: string,
+    discord_username?: string,
+    twitter_link?: string,
+    twitch_link?: string,
+    youtube_link?: string
 }
 
 function UserProfile() {
