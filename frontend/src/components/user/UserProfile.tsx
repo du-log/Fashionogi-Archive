@@ -127,6 +127,18 @@ function UserProfile() {
                                 <textarea className="outline w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
                                 <p className="absolute top-1 right-1">{bio && 200 - bio.length}</p>
                             </div>
+                            <div className="flex flex-col">
+                                <h1>Server/Region</h1>
+                                <input className="p-1 w-50" value={server || ''} onChange={(e) => setServer(e.target.value)} />
+                            </div>
+                            <div className="flex flex-col">
+                                <h1>IGN</h1>
+                                <input className="p-1 w-50" value={ign || ''} onChange={(e) => setIgn(e.target.value)} />
+                            </div>
+                            <div className="flex flex-col">
+                                <h1>Discord</h1>
+                                <input className="p-1 w-50" value={discord || ''} onChange={(e) => setDiscord(e.target.value)} />
+                            </div>
                         </div>
                         <div className="modal-action justify-center">
                             <button className="btn btn-success" onClick={handleProfileUpdate}>Update</button>
