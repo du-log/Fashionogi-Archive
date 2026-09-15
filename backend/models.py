@@ -48,7 +48,7 @@ class User(Base):
     collections = relationship("Collection", back_populates = "owner", cascade = "all, delete-orphan")
     favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
 
-    profile: Mapped[Optional["UserProfile"]] = relationship("UserProfile", back_populates = "user", useList = False, cascade = "all, delete-orphan")
+    profile: Mapped[Optional["UserProfile"]] = relationship("UserProfile", back_populates = "user", uselist = False, cascade = "all, delete-orphan")
 
 # User Profile Model
 class UserProfile(Base):

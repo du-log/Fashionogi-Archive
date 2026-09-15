@@ -37,7 +37,7 @@ function TagsComboBox ( {tags, onSelect} :  ComboBoxProps) {
                     console.error("Search failed", err);
                 }
             }
-        }, 0);
+        }, 200);
         return () => clearTimeout(timerDebounce);
     }, [value, tags, isOpen])
 

@@ -14,23 +14,6 @@ export default function AuthProvider({children}: {children: ReactNode}) {
     const [isAuth, setAuth] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const res = await api.get('/api/users/me');
-                if (res) {
-                    setUser(res.data);
-                    setAuth(true);
-                }
-            } catch (err) {
-                console.error('No session', err);
-                setUser(null);
-                setAuth(false);
-            }
-        }
-        checkSession();
-    }, [])
-
     const login = async (email: string, password: string) => {
         const formData = new URLSearchParams();
         formData.append('username', email);
@@ -79,22 +62,26 @@ export default function AuthProvider({children}: {children: ReactNode}) {
         }
     }
 
-    const checkSession = async () => {
-        try {
-            const res = await api.get('/api/users/me');
-            if (res) {
-                setUser(res.data);
-                setAuth(true);
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const res = await api.get('/api/users/me');
+                if (res) {
+                    setUser(res.data);
+                    setAuth(true);
+                }
+            } catch (err) {
+                console.error('No session', err);
+                setUser(null);
+                setAuth(false);
+                logout();
             }
-        } catch (err) {
-            console.error('No session', err);
-            setUser(null);
-            setAuth(false);
         }
-    }
+        checkSession();
+    }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout, register, checkSession }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     )

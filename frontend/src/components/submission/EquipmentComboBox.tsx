@@ -42,7 +42,7 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
             } else {
                 setOpen(false);
             }
-        }, 0);
+        }, 200);
         return () => clearTimeout(timerDebounce);
     }, [value, slot])
 

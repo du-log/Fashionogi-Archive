@@ -9,7 +9,7 @@ from models import User
 from config import SECRET_KEY
 
 ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_MINUTES = 600
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080
 
 pw_context = CryptContext(schemes = ['bcrypt'], deprecated = 'auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = 'login')
@@ -52,7 +52,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 def get_optional_current_user(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
-        print('Token does not exist')
+        #print('Token does not exist')
         return None
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

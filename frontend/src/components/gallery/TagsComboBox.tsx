@@ -41,7 +41,7 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
                     console.error("Search failed", err);
                 }
             }
-        }, 0);
+        }, 200);
         return () => clearTimeout(timerDebounce);
     }, [tag, location.search])
 

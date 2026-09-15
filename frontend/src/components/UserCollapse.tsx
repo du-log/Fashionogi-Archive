@@ -15,8 +15,9 @@ function UserCollapse() {
     const [isLoading, setLoading] = useState<boolean>(true);
 
     const logOutHandle = () => {
+        setLoading(true);
         logout(); 
-        navigate('/login');
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -46,18 +47,20 @@ function UserCollapse() {
             )}
             {isAuth && (
                 <div className="relative pr-[1rem]" ref={menuRef}>
-                    <div className="flex items-center justify-end gap-3">
+                    <div className="flex items-center justify-end gap-3 outline outline-[#ffffff50] rounded-lg p-2">
                         <h2 className="text-lg hover:cursor-default">{user?.username}</h2>
-                        <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-4xl hover:cursor-pointer w-8 h-8 outline-2`} onClick={() => setOpen(!isOpen)}>
+                        <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-md cursor-pointer w-10 h-10 outline-2 hover:outline-[#afb8c090]`} onClick={() => setOpen(!isOpen)}>
                             <User size={50} />
                         </div>
                     </div>
                     {isOpen && (
-                        <ul className="absolute flex flex-col items-start gap-2 bg-[#505050] p-3 mt-4 sm:text-md xl:text-lg border-1 border-[#daa700] right-0">
+                        <ul className="absolute flex flex-col items-start gap-2 bg-[#505050] p-3 mt-4 sm:text-md xl:text-lg border-1 border-[#daa700] right-0 w-40">
+                            <li><p className="cursor-pointer" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>View Profile</p></li>
+                            <li><p className="cursor-pointer" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
+                            <li><p className="cursor-pointer" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>
                             {user?.is_admin && (
                                 <li><p className="cursor-pointer" onClick={() => navigate('/admin')}>Admin Dashboard</p></li>
                             )}
-                            <li><p className="cursor-pointer">Settings</p></li>
                             <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
                         </ul>
                     )}

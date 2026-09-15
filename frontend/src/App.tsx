@@ -27,7 +27,7 @@ function App() {
             <Route path='/gallery' element={<Gallery />} />
             <Route path='/upload' element={<SubmissionUpload />} />
             <Route path='/fashion/id/:id' element={<SubmissionPage />} />
-            <Route path='/users/id/:id' element={<UserProfile />} />
+            <Route path='/profile/:username' element={<UserProfile />} />
             <Route path='/account/dashboard' element={<UserDashboard />} />
             <Route path='/account/settings' element={<AccountSettings />} />
           </Route>

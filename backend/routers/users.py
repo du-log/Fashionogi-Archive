@@ -29,6 +29,94 @@ os.makedirs(AVATARS_DIR, exist_ok = True)
 
 router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
 
+class UserProfileUpdate(BaseModel):
+    bio: Optional[str] = None
+    server: Optional[str] = None
+    guild: Optional[str] = None
+    in_game_name: Optional[str] = None
+    main_race: Optional[str] = None
+    main_gender: Optional[str] = None
+    discord_username: Optional[str] = None
+    twitter_link: Optional[str] = None
+    twitch_link: Optional[str] = None
+    youtube_link: Optional[str] = None
+
+class UserProfileResponse(UserProfileUpdate):
+    id: int
+
+    class Config:
+        from_attributes: True
+
 @router.get('/me')
 def get_user_me(current_user: models.User = Depends(auth.get_current_user)):
     return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin }
+
+@router.get('/profiles/{username}', response_model = UserProfileResponse)
+def get_public_profile(username: str, db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 404, detail = 'User not found')
+
+    if not user.profile:
+        return {
+            'id': user.id,
+            'bio': None,
+            'server': None,
+            'guild': None,
+            'in_game_name': None,
+            'main_race': None,
+            'main_gender': None,
+            'discord_username': None,
+            'twitter_link': None,
+            'twitch_link': None,
+            'youtube_link': None
+        }
+
+    return user.profile
+
+@router.patch('/profiles/me/update', response_model = UserProfileResponse)
+def update_profile(profile_data: UserProfileUpdate, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    profile = current_user.profile
+    if not profile:
+        profile = models.UserProfile(id = current_user.id)
+        db.add(profile)
+
+    update_fields = profile_data.model_dump(exclude_unset = True)
+    for key, value in update_fields.items():
+        setattr(profile, key, value)
+    
+    db.commit()
+    db.refresh(profile)
+
+    return profile
+
+@router.get('/username/check/{username}')
+def check_username_availability(username: str, db: Session = Depends(get_db)):
+    stmt = (
+        select(models.User)
+        .where(models.User.username == username)
+    )
+    user = db.execute(stmt).scalars().first()
+    if user:
+        return {'success': False, 'message': f'{username} is already taken.'}
+    
+    return {'success': True, 'message': f'{username} is available!'}
+
+@router.patch('/username/update/{username}')
+def update_username(username: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.User)
+        .where(models.User.username == username)
+    )
+    user = db.execute(stmt).scalars().first()
+    if user:
+        raise HTTPException(status_code = 400, detail = 'Requested username already taken. Possible attempt to bypass through intrusive action.')
+
+    user_me = current_user
+    if not user_me:
+        raise HTTPException(status_code = 403, detail = 'Unauthorized action.')
+
+    user_me.username = username
+    db.commit()
+
+    return {'message': 'Username successfully changed.', 'new_username': current_user.username}

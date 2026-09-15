@@ -146,31 +146,34 @@ function SubmissionPage() {
                         <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">
                             <h1 className="text-lg">Description</h1>
                             {submission.description && (
-                                <div className="bg-[#40404090]  w-full text-wrap p-1">{submission.description}</div>
+                                <div className="bg-[#40404090]  xl:w-full sm:w-[75%] text-wrap p-1">{submission.description}</div>
                             )}
                         </div>
                         <div className="flex flex-col items-end gap-2">
                             <h2 className="text-sm p-2 rounded bg-[#90909030] h-fit">Submitted: {formattedDate}</h2>
-                            <div className="flex gap-2 items-center">
-                                For:
-                                <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.gender}</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                Fits:
-                                <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.race}</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <h2 className="text-md">Tags: </h2> 
-                                {submission.tags.map((tag) => (
-                                    <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
-                                ))}
-                            </div>
-                            <div className="flex flex-col gap-2 items-end">
-                                <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorites: {submission.favorites_count}</h2>
-                                <button onClick={toggleFavorite}
-                                className={`btn ${user ? '' : 'btn-disabled'} ${user?.username === submission.author ? 'btn-disabled' : ''} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>
-                                    {submission.is_favorited ? 'Unfavorite' : 'Favorite'}
-                                </button>
+                            <div className="flex flex-col items-end gap-2 outline-1 outline-[#ffffff90] bg-[#41414150] rounded-md p-3">
+                                <h1 className="text-lg text-start">Outfit Information</h1>
+                                <div className="flex gap-2 items-center">
+                                    For:
+                                    <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.gender}</p>
+                                </div>
+                                <div className="flex gap-2 items-center">
+                                    Fits:
+                                    <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.race}</p>
+                                </div>
+                                <div className="flex gap-2 items-center justify-end flex-wrap max-w-60">
+                                    <h2 className="text-md">Tags: </h2> 
+                                    {submission.tags.map((tag) => (
+                                        <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
+                                    ))}
+                                </div>
+                                <div className="flex flex-col gap-2 items-end">
+                                    <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorites: {submission.favorites_count}</h2>
+                                    <button onClick={toggleFavorite}
+                                    className={`btn ${user ? '' : 'btn-disabled'} ${user?.username === submission.author ? 'btn-disabled' : ''} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>
+                                        {submission.is_favorited ? 'Unfavorite' : 'Favorite'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
