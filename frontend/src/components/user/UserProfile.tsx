@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useParams } from "react-router-dom";
+import { UserIcon } from "lucide-react";
 
 type userProfile = {
     id?: number,
@@ -99,15 +100,41 @@ function UserProfile() {
     return (
         <div className="flex flex-col w-full min-h-[70vh]">
             {userData && (
-                <div className={`flex flex-col w-full sm:px-[5%] xl:px-[20%] py-10 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div className="flex flex-col w-full outline rounded-xl p-5">
-                        <div className="flex justify-between items-center">
-                            <h1 className="text-3xl">{username}</h1>
-                            {user && user.username === username && (
-                                <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
-                            )}
+                <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                    <div className="flex flex-col gap-15 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
+                        <div className="flex gap-10 w-full">
+                            <div className="outline outline-[#ffffff90] rounded-xl p-5">
+                                <UserIcon size={80} />
+                            </div>
+                            <div className="flex gap-5 justify-between items-center w-full">
+                                <h1 className="text-4xl">{username}</h1>
+                                {user && user.username === username && (
+                                    <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
+                                )}
+                            </div>
                         </div>
-                        <p className="text-wrap">{userData.bio ? userData.bio : 'No bio.'}</p>
+                        <div className="gap-2 pt-10 border-t">
+                            <p className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2">{userData.bio ? userData.bio : 'No bio.'}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">
+                        <div className="flex flex-col gap-2 p-1">
+                            <h1 className="text-xl">User Info</h1>
+                            <div className="flex flex-col gap-4 outline outline-[#ffffff90] rounded p-4">
+                                <div className="flex gap-2">
+                                    <h1 className="text">Server/Region:</h1>
+                                    <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <h1 className="text">IGN:</h1>
+                                    <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <h1 className="text">Discord:</h1>
+                                    <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

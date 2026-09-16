@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import UserNameplate from "../user/UserNameplate";
 
 type EquipmentDetail = {
     name: string,
@@ -127,6 +128,12 @@ function SubmissionPage() {
                         )}
                     </div>
                     <h1 className="sm:text-3xl xl:text-4xl bold">{submission.title}</h1>
+                    <div className="flex gap-2 items-center justify-end">
+                        <h2 className="text-md">Tags: </h2> 
+                        {submission.tags.map((tag) => (
+                            <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
+                        ))}
+                    </div>
                     <div className="flex w-full gap-3 py-5 justify-center border-b border-[#ffffff90] bg-[#41414130]">
                         {submission.images.map((image) => (
                             <img key={image} src={`http://localhost:8000${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
@@ -161,12 +168,6 @@ function SubmissionPage() {
                                     Fits:
                                     <p className="rounded bg-[#008000] text-[#ffffff] text-md py-1 px-2">{submission.race}</p>
                                 </div>
-                                <div className="flex gap-2 items-center justify-end flex-wrap max-w-60">
-                                    <h2 className="text-md">Tags: </h2> 
-                                    {submission.tags.map((tag) => (
-                                        <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p></Link>
-                                    ))}
-                                </div>
                                 <div className="flex flex-col gap-2 items-end">
                                     <h2 className="text-md py-1 px-2 rounded bg-[#550000] w-fit h-fit">Favorites: {submission.favorites_count}</h2>
                                     <button onClick={toggleFavorite}
@@ -174,6 +175,10 @@ function SubmissionPage() {
                                         {submission.is_favorited ? 'Unfavorite' : 'Favorite'}
                                     </button>
                                 </div>
+                            </div>
+                            <div className="flex flex-col gap-2 p-4 outline outline-[#ffffff90] rounded">
+                                <h1 className="text-xl text-start">Outfit Creator</h1>
+                            <UserNameplate username={submission.author} />
                             </div>
                         </div>
                     </div>

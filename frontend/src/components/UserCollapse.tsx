@@ -41,8 +41,8 @@ function UserCollapse() {
         <div className={`transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
             {!isAuth && (
                 <div className="flex gap-3">
-                    <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Sign In</button>
-                    <button className="cursor-pointer bg-[#bb00bb90] hover:bg-[#800080] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/register')}>Sign Up</button>
+                    <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Log In</button>
+                    <button className="cursor-pointer bg-[#bb00bb90] hover:bg-[#800080] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/register')}>Register</button>
                 </div>
             )}
             {isAuth && (
@@ -61,7 +61,7 @@ function UserCollapse() {
                             {user?.is_admin && (
                                 <li><p className="cursor-pointer" onClick={() => navigate('/admin')}>Admin Dashboard</p></li>
                             )}
-                            <li><p className="cursor-pointer" onClick={logOutHandle}>Sign Out</p></li>
+                            <li><p className="cursor-pointer" onClick={logOutHandle}>Log Out</p></li>
                         </ul>
                     )}
                 </div>

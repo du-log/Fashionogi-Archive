@@ -75,9 +75,9 @@ function UserDashboard() {
     
     return (
         <div className={`flex flex-col gap-2 w-full min-h-[70vh] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <h1 className="text-2xl text-center">Welcome back, {user?.username}.</h1>
+            <h1 className="text-2xl text-center">Your Dashboard</h1>
             <div className="flex justify-center gap-5 px-3 outline outline-[#ffffff90] text-lg">
-                <p className={`cursor-pointer p-3 ${tab === 'submissions' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('submissions')}>My Submissions</p>
+                <p className={`cursor-pointer p-3 ${tab === 'submissions' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('submissions')}>My Styles</p>
                 <p className={`cursor-pointer p-3 ${tab === 'favorites' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('favorites')}>Favorites</p>
             </div>
             {tab === 'submissions' && (
@@ -90,16 +90,21 @@ function UserDashboard() {
                         </div>
                     ))}
                     {queue.length === 0 && (
-                        <div className="text-center justify-center text-xl">You have not submitted any outfits yet.</div>
+                        <div className="text-center justify-center text-xl">You have not submitted any styles yet.</div>
                     )}
                 </div>
             )}
             {tab === 'favorites' && (
+                <>
                 <div className="grid sm:grid-cols-3 xl:grid-cols-5 gap-5 py-10 px-[20%] max-h-[50vh] place-items-center">
                     {favorites.map((item) => (
                         <GalleryCard key={item.id} item={item} />
                     ))}
                 </div>
+                {favorites.length === 0 && (
+                    <div className="text-center justify-center text-xl">You have not favorited any styles yet.</div>
+                )}
+                </>
             )}
         </div>
     )
