@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type tag = {
     id: number,
@@ -7,6 +8,8 @@ type tag = {
 }
 
 function TagManagement() {
+    const auth = useContext(AuthContext);
+    const user = auth?.user ?? null;
     const [tags, setTags] = useState<tag[]>([]);
     const [newTag, setNewTag] = useState<string>('');
 
@@ -29,6 +32,7 @@ function TagManagement() {
     }
 
     useEffect(() => {
+        if (!user || !user.is_admin) return;
         const fetchTags = async () => {
             const res = await fetch('http://localhost:8000/api/admin/tags');
             const data = await res.json();
@@ -37,7 +41,7 @@ function TagManagement() {
             }
         }
         fetchTags();
-    }, [])
+    }, [user])
 
     return (
         <div className="flex flex-col w-full max-h-[70vh] p-2 outline-2 rounded gap-2">

@@ -13,6 +13,7 @@ const api = axios.create({
 export default function AuthProvider({children}: {children: ReactNode}) {
     const [isAuth, setAuth] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setLoading] = useState<boolean>(true);
 
     const login = async (email: string, password: string) => {
         const formData = new URLSearchParams();
@@ -74,14 +75,15 @@ export default function AuthProvider({children}: {children: ReactNode}) {
                 console.error('No session', err);
                 setUser(null);
                 setAuth(false);
-                logout();
+            } finally {
+                setLoading(false);
             }
         }
         checkSession();
     }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout, register }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register, isLoading }}>
             {children}
         </AuthContext.Provider>
     )

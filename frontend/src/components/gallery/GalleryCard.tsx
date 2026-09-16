@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { GalleryItem } from "./Gallery";
 import { useState, useEffect } from "react";
 import { HeartIcon } from "lucide-react";
+import { formatFavorites } from "../../utilities/MiscUtility";
 
 function GalleryCard( {item} : {item: GalleryItem} ) {
     const navigate = useNavigate();
@@ -40,9 +41,19 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
                 <h3 className="font-bold sm:text-sm xl:text-lg text-transparent truncate transition-[0.5s] group-hover:text-[#faa920]">{item.title}</h3>
                 <div className="flex justify-between items-center">
                     <h5 className="sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">{item.author}</h5>
-                    <div className="relative flex items-center justify-center gap-1 text-transparent transition-[0.5s] group-hover:text-[#fefefe]">
-                        <p>{item.favorites}</p>
-                        <HeartIcon size={20} />
+                    <div className="relative flex items-center justify-center gap-1 sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">
+                        {item.favorites !== undefined && (
+                            <>
+                                <p>{formatFavorites(item.favorites)}</p>
+                                <HeartIcon size={20} />
+                            </>
+                        )}
+                        {item.favorites === undefined && (
+                            <>
+                                <p>{formatFavorites(275000)}</p>
+                                <HeartIcon size={20} />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

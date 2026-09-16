@@ -5,14 +5,15 @@ import { AuthContext } from "../../contexts/AuthContext";
 function AdminDashboard() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
+    const isLoading = auth?.isLoading ?? true;
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user?.is_admin) {
+        if ((!user || !user.is_admin) && !isLoading) {
             navigate('/');
         }
-    }, [user, navigate])
+    }, [user, isLoading, navigate])
 
     return (
         <div className="relative flex flex-col items-center w-full h-[100vh] px-[10%] py-20 gap-10 bg-[#aaaaaa10]">

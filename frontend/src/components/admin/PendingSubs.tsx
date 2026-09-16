@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type EquipmentDetail = {
     name: string,
@@ -24,6 +25,8 @@ type Submission = {
 }
 
 function PendingSubs() {
+    const auth = useContext(AuthContext);
+    const user = auth?.user ?? null;
     const [subs, setSubs] = useState<Submission[]>([]);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [selectedSub, setSelectedSub] = useState<Submission | null>(null);
@@ -55,6 +58,7 @@ function PendingSubs() {
     }
 
     useEffect(() => {
+        if (!user || !user.is_admin) return;
         const fetchSubmissions = async () => {
             const res = await fetch('http://localhost:8000/api/admin/pending');
             const data = await res.json();
@@ -62,7 +66,7 @@ function PendingSubs() {
             setTimeout(() => setLoading(false), 100);
         }
         fetchSubmissions();
-    }, [])
+    }, [user])
 
     return (
         <div className="flex flex-col w-full max-h-[70vh] p-2 outline-2 rounded gap-2">

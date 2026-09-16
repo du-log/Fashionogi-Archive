@@ -47,6 +47,7 @@ function rgbToHex(r: number, g: number, b: number): string {
 function SubmissionUpload() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
+    const userLoading = auth?.isLoading ?? true;
 
     const [isLoading, setLoading] = useState<boolean>(true);
 
@@ -332,11 +333,11 @@ function SubmissionUpload() {
     ];
 
     useEffect(() => {
-        if (!user) navigate('/');
+        if (!user && !userLoading) navigate('/');
 
         document.documentElement.scrollTop = 0;
-        setTimeout(() => setLoading(false), 50);
-    }, [user, navigate])
+        setTimeout(() => {setLoading(false)}, 50);
+    }, [user, userLoading, navigate])
 
     return (
         <div className={`flex flex-col gap-3 w-full min-h-[100vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>

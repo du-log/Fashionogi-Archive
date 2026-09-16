@@ -120,3 +120,42 @@ def update_username(username: str, current_user: models.User = Depends(auth.get_
     db.commit()
 
     return {'message': 'Username successfully changed.', 'new_username': current_user.username}
+
+@router.get('/dashboard/queue')
+def get_my_submissions(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission.id, models.Submission.title, models.Submission.status, models.Submission.created_at)
+        .where(models.Submission.user_id == current_user.id)
+        .order_by(models.Submission.created_at.desc())
+    )
+
+    results = db.execute(stmt).mappings().all()
+
+    return [dict(row) for row in results]
+
+@router.get('/dashboard/favorites')
+def get_my_favorites(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.favorited_by.any(id = current_user.id))
+        .options(
+            joinedload(models.Submission.author),
+            selectinload(models.Submission.images)
+        )
+        .order_by(models.Submission.created_at.desc())
+    )
+
+    favorited = db.execute(stmt).scalars().unique().all()
+
+    results = []
+    for sub in favorited:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+
+        results.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author.username,
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+        })
+
+    return results
