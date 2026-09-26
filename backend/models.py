@@ -1,6 +1,6 @@
 import uuid
 from typing import Optional, List
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table, DateTime, UniqueConstraint, Date, Text
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID, TEXT
 from sqlalchemy.orm import relationship, mapped_column, Mapped
@@ -19,7 +19,8 @@ user_favorites = Table(
     "user_favorites",
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True),
-    Column("submission_id", Integer, ForeignKey("submissions.id", ondelete = "CASCADE"), primary_key = True)
+    Column("submission_id", Integer, ForeignKey("submissions.id", ondelete = "CASCADE"), primary_key = True),
+    Column("created_at", DateTime(timezone = True), server_default = func.now())
 )
 
 # Collections Join Table
@@ -44,6 +45,10 @@ class User(Base):
     is_admin: Mapped[bool] = mapped_column(Boolean, default = False, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
 
+    created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+    last_login = mapped_column(DateTime(timezone = True), nullable = True)
+    last_active = mapped_column(DateTime(timezone = True), nullable = True)
+
     submissions: Mapped[List["Submission"]] = relationship("Submission", back_populates = "author", cascade = "all, delete-orphan")
     collections = relationship("Collection", back_populates = "owner", cascade = "all, delete-orphan")
     favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
@@ -56,7 +61,7 @@ class UserProfile(Base):
 
     id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True, index = True)
 
-    bio: Mapped[Optional[str]] = mapped_column(TEXT, index = True, nullable = True)
+    bio: Mapped[Optional[str]] = mapped_column(Text, index = True, nullable = True)
     server: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
     guild: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
     in_game_name: Mapped[Optional[str]] = mapped_column(String(30), index = True, nullable = True)
@@ -164,7 +169,7 @@ class Submission(Base):
     gender: Mapped[str] = mapped_column(String(6), index = True, nullable = False)
     race: Mapped[str] = mapped_column(String(5), index = True, nullable = False)
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
-    # "pending", "approved", "flagged_for_deletion", "rejected"
+    # "pending", "approved", "flagged", "rejected", "unlisted"
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
 
     favorited_by = relationship(
@@ -201,4 +206,27 @@ class Submission(Base):
         "SubmissionEquipment",
         back_populates = "submission",
         cascade = "all, delete-orphan"
+    )
+
+class News(Base):
+    __tablename__ = "news_announcements"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+    title: Mapped[str] = mapped_column(String(255), index = True, nullable = False)
+    context = mapped_column(Text, nullable = False)
+    created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+    author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = True)
+    author = relationship("User")
+
+class DailyVisitor(Base):
+    __tablename__ = "daily_visitors"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+
+    visit_date = mapped_column(Date, server_default = func.current_date(), index = True)
+    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), nullable = False, index = True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = True, index = True)
+
+    __table_args__ = (
+        UniqueConstraint("visit_date", "session_id", name = "uix_daily_session"),
     )

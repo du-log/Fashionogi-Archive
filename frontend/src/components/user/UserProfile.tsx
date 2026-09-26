@@ -5,6 +5,7 @@ import { UserIcon } from "lucide-react";
 
 type userProfile = {
     id?: number,
+    joined?: string,
     bio?: string,
     server?: string,
     guild?: string,
@@ -35,6 +36,12 @@ function UserProfile() {
     const [twitter, setTwitter] = useState<string | null | undefined>('');
     const [twitch, setTwitch] = useState<string | null | undefined>('');
     const [youtube, setYoutube] = useState<string | null | undefined>('');
+
+    const formattedDate: string = userData ? new Date(userData.joined ?? new Date().toString()).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    }) : "";
 
     const setModalData = async () => {
         setBio(userData?.bio);
@@ -98,7 +105,7 @@ function UserProfile() {
     }, [username])
 
     return (
-        <div className="flex flex-col w-full min-h-[70vh]">
+        <div className="flex flex-col w-full min-h-[85vh]">
             {userData && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-15 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
@@ -115,6 +122,10 @@ function UserProfile() {
                         </div>
                         <div className="gap-2 pt-10 border-t">
                             <p className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2">{userData.bio ? userData.bio : 'No bio.'}</p>
+                        </div>
+                        <div className="flex flex-col items-end text-sm rounded-lg outline outline-[#ffffff90] w-fit p-1">
+                            Joined:
+                            <p>{formattedDate}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">

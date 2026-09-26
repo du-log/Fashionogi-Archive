@@ -10,7 +10,7 @@ function AccountSettings() {
     const [isLoading, setLoading] = useState<boolean>(true);
     
     const navigate = useNavigate();
-    const [currentTab, setTab] = useState<string>('profile');
+    const [currentTab, setTab] = useState<string>('personal');
     const [username, setUsername] = useState<string>('');
     const [isAvailable, setAvailable] = useState<boolean>(false);
     const [availMsg, setAvailMsg] = useState<string>('');
@@ -57,13 +57,12 @@ function AccountSettings() {
             )}
             <div className={`flex gap-10 w-full min-h-[70vh] sm:px-[5%] xl:px-[20%] pt-10 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                 <div className="flex flex-1 flex-col gap-3 outline rounded-xl text-lg p-5">
-                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('profile')}>User Settings</p>
-                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('account')}>Account Settings</p>
+                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('personal')}>User Settings</p>
                     <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('notif')}>Notifications</p>
                     <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('other')}>Other</p>
                 </div>
                 <div className="flex flex-3 flex-col w-full px-10 py-5 outline rounded-xl overflow-y-auto">
-                    {currentTab === 'profile' && (
+                    {currentTab === 'personal' && (
                         <div className="flex flex-col p-2">
                             <h1 className="text-2xl border-b border-[#ffffff50] pb-2">User Settings</h1>
                             <div className="flex flex-col gap-2 py-2 w-full">
@@ -82,11 +81,6 @@ function AccountSettings() {
                             </div>
                         </div>
                     )}
-                    {currentTab === 'account' && (
-                        <div className="flex flex-col p-2">
-                            <h1 className="text-2xl border-b border-[#ffffff50] pb-2">Account Settings</h1>
-                        </div>
-                    )}
                     {currentTab === 'notif' && (
                         <div className="flex flex-col p-2">
                             <h1 className="text-2xl border-b border-[#ffffff50] pb-2">Notification Settings</h1>
@@ -97,9 +91,9 @@ function AccountSettings() {
                         <div className="flex flex-col p-2">
                             <h1 className="text-2xl border-b border-[#ffffff50] pb-2">Other Settings</h1>
                             <div className="flex flex-col gap-2 py-2 w-full">
-                                <h1 className="text-xl">Deactivate Account</h1>
+                                <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
                                 <p>If you wish to have your account deactivated, please click the button below.</p>
-                                <button className="btn btn-error">Request Account Deactivation</button>
+                                <button className="btn btn-error btn-disabled">Request Account Deactivation</button>
                             </div>
                         </div>
                     )}

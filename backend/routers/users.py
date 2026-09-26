@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 
 from sqlalchemy.orm import Session, joinedload, selectinload
 from sqlalchemy import select
+from sqlalchemy.sql import func
 
 from database import get_db, engine, Base
 import models, auth
@@ -48,7 +49,11 @@ class UserProfileResponse(UserProfileUpdate):
         from_attributes: True
 
 @router.get('/me')
-def get_user_me(current_user: models.User = Depends(auth.get_current_user)):
+def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.username == current_user.username)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    user.last_active = func.now()
     return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin }
 
 @router.get('/profiles/{username}', response_model = UserProfileResponse)
@@ -60,6 +65,7 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
     if not user.profile:
         return {
             'id': user.id,
+            'joined': user.created_at,
             'bio': None,
             'server': None,
             'guild': None,

@@ -31,7 +31,7 @@ export interface EquipmentItem {
     partF: string | null
 }
 
-export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'mainhand' | 'offhand' | 'accessory1' | 'accessory2';
+export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'accessory1' | 'accessory2';
 
 type cropDimen = {
     x: number,
@@ -93,8 +93,8 @@ function SubmissionUpload() {
         back: defaultItem('back'),
         tail: defaultItem('tail'),
         face: defaultItem('face'),
-        mainhand: defaultItem('mainhand'),
-        offhand: defaultItem('offhand'),
+        //mainhand: defaultItem('mainhand'),
+        //offhand: defaultItem('offhand'),
         accessory1: defaultItem('accessory'),
         accessory2: defaultItem('accessory')
     })
@@ -311,8 +311,8 @@ function SubmissionUpload() {
             back: defaultItem('back'),
             tail: defaultItem('tail'),
             face: defaultItem('face'),
-            mainhand: defaultItem('mainhand'),
-            offhand: defaultItem('offhand'),
+            //mainhand: defaultItem('mainhand'),
+            //offhand: defaultItem('offhand'),
             accessory1: defaultItem('accessory'),
             accessory2: defaultItem('accessory')
         });
@@ -326,8 +326,8 @@ function SubmissionUpload() {
         { title: "Robe / Wings / Cape", key: "back" },
         { title: "Tail", key: "tail" },
         {title: "Face", key: "face"},
-        { title: "Mainhand", key: "mainhand" },
-        { title: "Offhand", key: "offhand" },
+        //{ title: "Mainhand", key: "mainhand" },
+        //{ title: "Offhand", key: "offhand" },
         { title: "Accessory 1", key: "accessory1" },
         { title: "Accessory 2", key: "accessory2" },
     ];

@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 
 from sqlalchemy.orm import Session, joinedload, selectinload
 from sqlalchemy import select
+from sqlalchemy.sql import func
 
 from database import get_db, engine, Base
 import models
@@ -38,7 +39,8 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
     user = db.execute(stmt).scalars().first()
     if not user or not auth.verify_pw(form_data.password, user.hashed_password):
         raise HTTPException(status_code = 400, detail = 'Invalid email or password')
-    
+    user.last_login = func.now()
+    db.commit()
     
     access_token = auth.create_token(data = { 'sub': str(user.id) })
 
@@ -46,7 +48,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
         key = 'access_token',
         value = access_token,
         httponly = True,
-        max_age = 604800,
+        max_age = 604800, # 7 days token life
         samesite = 'lax',
         secure = False
     )
