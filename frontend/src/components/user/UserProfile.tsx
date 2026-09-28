@@ -110,22 +110,21 @@ function UserProfile() {
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-15 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
                         <div className="flex gap-10 w-full">
-                            <div className="outline outline-[#ffffff90] rounded-xl p-5">
+                            <div className="outline outline-[#ffffff90] rounded-xl p-5 w-fit h-fit">
                                 <UserIcon size={80} />
                             </div>
-                            <div className="flex gap-5 justify-between items-center w-full">
-                                <h1 className="text-4xl">{username}</h1>
-                                {user && user.username === username && (
-                                    <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
-                                )}
+                            <div className="flex flex-col w-full gap-10">
+                                <div className="flex gap-5 justify-between items-center w-full">
+                                    <h1 className="text-4xl">{username}</h1>
+                                    {user && user.username === username && (
+                                        <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
+                                    )}
+                                </div>
+                                <p className="text-2xl">Placeholder Title</p>
                             </div>
                         </div>
                         <div className="gap-2 pt-10 border-t">
                             <p className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2">{userData.bio ? userData.bio : 'No bio.'}</p>
-                        </div>
-                        <div className="flex flex-col items-end text-sm rounded-lg outline outline-[#ffffff90] w-fit p-1">
-                            Joined:
-                            <p>{formattedDate}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">
@@ -167,15 +166,15 @@ function UserProfile() {
                             </div>
                             <div className="flex flex-col">
                                 <h1>Server/Region</h1>
-                                <input className="p-1 w-50" value={server || ''} onChange={(e) => setServer(e.target.value)} />
+                                <input className="outline p-1 w-50" value={server || ''} onChange={(e) => setServer(e.target.value)} />
                             </div>
                             <div className="flex flex-col">
                                 <h1>IGN</h1>
-                                <input className="p-1 w-50" value={ign || ''} onChange={(e) => setIgn(e.target.value)} />
+                                <input className="outline p-1 w-50" value={ign || ''} onChange={(e) => setIgn(e.target.value)} />
                             </div>
                             <div className="flex flex-col">
                                 <h1>Discord</h1>
-                                <input className="p-1 w-50" value={discord || ''} onChange={(e) => setDiscord(e.target.value)} />
+                                <input className="outline p-1 w-50" value={discord || ''} onChange={(e) => setDiscord(e.target.value)} />
                             </div>
                         </div>
                         <div className="modal-action justify-center">
