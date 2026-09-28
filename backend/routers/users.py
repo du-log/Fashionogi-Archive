@@ -13,7 +13,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 
 from sqlalchemy.orm import Session, joinedload, selectinload
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.sql import func
 
 from database import get_db, engine, Base
@@ -79,6 +79,72 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
         }
 
     return user.profile
+
+@router.get('/profiles/{username}/styles')
+def get_user_styles(username: str, db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 404, detail = 'User not found')
+    stmtOne = (
+        select(models.Submission)
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.user_id == user.id
+        )
+        .options(
+            joinedload(models.Submission.author),
+            selectinload(models.Submission.images)
+        )
+        .order_by(models.Submission.created_at.desc())
+        .limit(10)
+    )
+
+    latest = db.execute(stmtOne).scalars().unique().all()
+
+    resultsL = []
+    for sub in latest:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        resultsL.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author.username,
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+        })
+
+    stmtTwo = (
+        select(models.Submission)
+        .outerjoin(models.user_favorites, models.Submission.id == models.user_favorites.c.submission_id)
+        .group_by(models.Submission.id)
+        .order_by(desc(func.count(models.user_favorites.c.user_id)))
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.user_id == user.id
+        )
+        .options(
+            selectinload(models.Submission.author),
+            selectinload(models.Submission.images)
+        )
+        .limit(3)
+    )
+
+    submissions = db.execute(stmtTwo).scalars().unique().all()
+
+    resultsT = []
+    for sub in submissions:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        favorites_count = len(sub.favorited_by)
+        resultsT.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author.username,
+            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'favorites': favorites_count
+        })
+    
+    stmtThree = (select(models.Submission.title, models.Submission.id).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
+    total = db.execute(stmtThree).scalars().unique().all()
+    
+    return {'latest': resultsL, 'top': resultsT, 'total': len(total)}
 
 @router.patch('/profiles/me/update', response_model = UserProfileResponse)
 def update_profile(profile_data: UserProfileUpdate, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):

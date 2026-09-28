@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { USERS_URL } from "../../utilities/MiscUtility";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
@@ -16,7 +17,7 @@ function AccountSettings() {
     const [availMsg, setAvailMsg] = useState<string>('');
 
     const handleNameCheck = async (username: string) => {
-        const res = await fetch(`http://localhost:8000/api/users/username/check/${username}`);
+        const res = await fetch(`${USERS_URL}/username/check/${username}`);
         const data = await res.json();
 
         setAvailable(data.success);
@@ -30,7 +31,7 @@ function AccountSettings() {
     }
 
     const handleNameChange = async (username: string) => {
-        const res = await fetch(`http://localhost:8000/api/users/username/update/${username}`, {
+        const res = await fetch(`${USERS_URL}/username/update/${username}`, {
             method: 'PATCH',
             credentials: 'include'
         })
@@ -55,13 +56,13 @@ function AccountSettings() {
                     <span className="loading loading-spinner loading-xl"></span>
                 </div>
             )}
-            <div className={`flex gap-10 w-full min-h-[70vh] sm:px-[5%] xl:px-[20%] pt-10 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-                <div className="flex flex-1 flex-col gap-3 outline rounded-xl text-lg p-5">
-                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('personal')}>User Settings</p>
-                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('notif')}>Notifications</p>
-                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#00008030]" onClick={() => setTab('other')}>Other</p>
+            <div className={`flex gap-10 w-full min-h-[86vh] sm:px-[5%] xl:px-[20%] pt-10 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                <div className="flex flex-1 flex-col gap-3 outline rounded-xl text-lg p-5 h-fit bg-[#3E454090]">
+                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('personal')}>User Settings</p>
+                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('notif')}>Notifications</p>
+                    <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('other')}>Other</p>
                 </div>
-                <div className="flex flex-3 flex-col w-full px-10 py-5 outline rounded-xl overflow-y-auto">
+                <div className="flex flex-3 flex-col w-full px-10 py-5 outline rounded-xl overflow-y-auto bg-[#3E454090]">
                     {currentTab === 'personal' && (
                         <div className="flex flex-col p-2">
                             <h1 className="text-2xl border-b border-[#ffffff50] pb-2">User Settings</h1>

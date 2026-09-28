@@ -74,36 +74,45 @@ function UserDashboard() {
     }, [user, userLoading, navigate])
     
     return (
-        <div className={`flex flex-col gap-2 w-full min-h-[70vh] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <h1 className="text-2xl text-center">Your Dashboard</h1>
-            <div className="flex justify-center gap-5 px-3 outline outline-[#ffffff90] text-lg">
-                <p className={`cursor-pointer p-3 ${tab === 'submissions' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('submissions')}>My Styles</p>
-                <p className={`cursor-pointer p-3 ${tab === 'favorites' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('favorites')}>Favorites</p>
+        <div className={`flex flex-col w-full min-h-[86vh] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="fixed flex flex-col gap-2 w-full bg-[#004000] py-5">
+                <h1 className="text-2xl text-center">Your Dashboard</h1>
+                <div className="flex justify-center gap-5 px-3 bg-[#3a3a3a] outline outline-[#ffffff90] text-lg">
+                    <p className={`cursor-pointer p-3 ${tab === 'submissions' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('submissions')}>My Styles</p>
+                    <p className={`cursor-pointer p-3 ${tab === 'favorites' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('favorites')}>Favorites</p>
+                </div>
             </div>
             {tab === 'submissions' && (
-                <div className="flex flex-col gap-2 px-[20%] py-10 max-h-[50vh]">
-                    {queue.map((sub) => (
-                        <div className="grid grid-cols-3 p-2 place-items-center w-full outline rounded text-lg">
-                            <Link to={`/fashion/id/${sub.id}`}><p>{sub.title}</p></Link>
-                            <p className={`badge ${getStatusBadge(sub.status)}`}>{sub.status.toUpperCase()}</p>
-                            <p>{formattedDate(sub.created_at)}</p>
-                        </div>
-                    ))}
+                <>
+                    <div className="px-[20%] fixed mt-28 grid grid-cols-3 p-2 place-items-center w-full outline text-lg bg-[#3E4540]">
+                        <p>Title</p>
+                        <p>Status</p>
+                        <p>Submitted</p>
+                    </div>
+                    <div className="flex flex-col gap-2 px-[20%] mt-35 py-10 max-h-[50vh]">
+                        {queue.map((sub) => (
+                            <div className="grid grid-cols-3 p-2 place-items-center w-full outline rounded text-lg">
+                                <Link to={`/fashion/id/${sub.id}`}><p>{sub.title}</p></Link>
+                                <p className={`badge ${getStatusBadge(sub.status)}`}>{sub.status.toUpperCase()}</p>
+                                <p>{formattedDate(sub.created_at)}</p>
+                            </div>
+                        ))}
+                    </div>
                     {queue.length === 0 && (
                         <div className="text-center justify-center text-xl">You have not submitted any styles yet.</div>
                     )}
-                </div>
+                </>
             )}
             {tab === 'favorites' && (
                 <>
-                <div className="grid sm:grid-cols-3 xl:grid-cols-5 gap-5 py-10 px-[20%] max-h-[50vh] place-items-center">
-                    {favorites.map((item) => (
-                        <GalleryCard key={item.id} item={item} />
-                    ))}
-                </div>
-                {favorites.length === 0 && (
-                    <div className="text-center justify-center text-xl">You have not favorited any styles yet.</div>
-                )}
+                    <div className="grid sm:grid-cols-3 xl:grid-cols-5 gap-5 mt-20 py-10 px-[20%] max-h-[50vh] place-items-center">
+                        {favorites.map((item) => (
+                            <GalleryCard key={item.id} item={item} />
+                        ))}
+                    </div>
+                    {favorites.length === 0 && (
+                        <div className="text-center justify-center text-xl">You have not favorited any styles yet.</div>
+                    )}
                 </>
             )}
         </div>

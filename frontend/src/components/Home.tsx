@@ -4,6 +4,7 @@ import type { GalleryItem } from "./gallery/Gallery";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { SUBS_URL } from "../utilities/MiscUtility";
 
 function Home() {
     const [isLoading, setLoading] = useState<boolean>(true);
@@ -20,15 +21,15 @@ function Home() {
         const fetchData = async () => {
             setLoading(true);
 
-            const res = await fetch('http://localhost:8000/api/submissions/latest');
+            const res = await fetch(`${SUBS_URL}/latest`);
             const data = await res.json();
             setLatestStyles(data);
 
-            const res3 = await fetch('http://localhost:8000/api/submissions/top');
+            const res3 = await fetch(`${SUBS_URL}/top`);
             const data3 = await res3.json();
             setTopStyles(data3);
 
-            const res2 = await fetch('http://localhost:8000/api/submissions/amount')
+            const res2 = await fetch(`${SUBS_URL}/amount`)
             const data2 = await res2.json();
             setTotal(Number(data2.total_submissions))
         }
@@ -38,7 +39,7 @@ function Home() {
     }, [])
 
     return (
-        <div className={`flex flex-col gap-20 w-full min-h-[100vh] px-[10%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-20 w-full min-h-[86vh] px-[10%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <div className="flex flex-col w-full gap-10">
                 <div className="flex flex-col gap-5 py-10 border-b border-b-[#ffffff90]">
                     <h1 className="text-7xl text-[#ffd700] leading-tight">Discover your Erinn Style</h1>

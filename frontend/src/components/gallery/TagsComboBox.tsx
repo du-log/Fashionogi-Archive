@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { MISC_URL } from "../../utilities/MiscUtility";
 
 type Tag = {
     id: number,
@@ -27,7 +28,7 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
         const timerDebounce = setTimeout(async () => {
             if (tag.length >= 0) {
                 try {
-                    const res = await fetch(`http://localhost:8000/api/misc/tags?q=${tag}`);
+                    const res = await fetch(`${MISC_URL}/tags?q=${tag}`);
                     const data = await res.json();
                     setResults(data);
                     const urlParam = new URLSearchParams(location.search);

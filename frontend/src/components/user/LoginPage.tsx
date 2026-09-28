@@ -51,7 +51,7 @@ function LoginPage() {
                             <label><KeyIcon size={25} /></label>
                             <input type="password" className="bg-[#ffffff] text-[#000000] p-1" autoComplete="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
-                        <Link to='/'><p className="text-xs text-[#ffffff90] hover:text-[#a5f500]">Forgot password?</p></Link>
+                        {/*<Link to='/'><p className="text-xs text-[#ffffff90] hover:text-[#a5f500]">Forgot password?</p></Link>*/}
                     </div>
                     {/*
                     <div className="flex gap-3 items-center">
@@ -62,7 +62,8 @@ function LoginPage() {
                     <span className={`text-sm ${isSuccess ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{loginMsg}</span>
                     <button type="submit" className="rounded-lg bg-[#006000] px-2 py-3 cursor-pointer transition-color duration-50 hover:bg-[#008000] font-bold text-[#eeeeee] outline outline-[#ffffff90]">Log In</button>
                 </form>
-                <div className="flex flex-col items-center text-[#eeeeee]">Don't have an account?<Link to='/register'><p className="text-md hover:text-[#a5f500]">Register here!</p></Link></div>
+                <div className="flex flex-col items-center text-[#eeeeee]">Don't have an account?<Link to='/register'><p className="text-md text-[#7CC96B] hover:text-[#a5f500]">Register here!</p></Link></div>
+                {/*
                 <div className="flex flex-col items-center text-[#eeeeee] gap-3">
                     Or sign up with:
                     <div className="flex justify-center gap-10">
@@ -70,6 +71,7 @@ function LoginPage() {
                         <Link to='/'><p className="px-3 py-1 rounded-xl bg-[#ab0000] text-lg hover:bg-[#cd0000] outline outline-[#ffffff90]">Google</p></Link>
                     </div>
                 </div>
+                */}
             </div>
         </div>
     )

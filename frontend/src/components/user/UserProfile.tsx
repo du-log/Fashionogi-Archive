@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserIcon } from "lucide-react";
+import type { GalleryItem } from "../gallery/Gallery";
+import GalleryCard from "../gallery/GalleryCard";
+import { USERS_URL } from "../../utilities/MiscUtility";
 
-type userProfile = {
+export type userProfile = {
     id?: number,
     joined?: string,
     bio?: string,
@@ -22,9 +25,16 @@ function UserProfile() {
     const { username } = useParams();
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
+
+    const navigate = useNavigate();
+
     const [userData, setUserData] = useState<userProfile | null | undefined>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    const [topStyles, setTopStyles] = useState<GalleryItem[]>([]);
+    const [latestStyles, setLatestStyles] = useState<GalleryItem[]>([]);
+    const [total, setTotal] = useState<number>(0);
 
     const [bio, setBio] = useState<string | null | undefined>('');
     const [server, setServer] = useState<string | null | undefined>('');
@@ -72,7 +82,7 @@ function UserProfile() {
         }
 
         try {
-            const res = await fetch('http://localhost:8000/api/users/profiles/me/update', {
+            const res = await fetch(`${USERS_URL}/profiles/me/update`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -94,21 +104,29 @@ function UserProfile() {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const res = await fetch(`http://localhost:8000/api/users/profiles/${username}`);
+            const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
                 setUserData(data);
             }
+            const imgRes = await fetch(`${USERS_URL}/profiles/${username}/styles`);
+            if (imgRes.ok) {
+                const galleryData = await imgRes.json();
+                setTopStyles(galleryData.top);
+                setLatestStyles(galleryData.latest);
+                setTotal(Number(galleryData.total));
+            }
+            document.documentElement.scrollTop = 0;
             setTimeout(() => setLoading(false), 200);
         }
         if (username) fetchProfile();
     }, [username])
 
     return (
-        <div className="flex flex-col w-full min-h-[85vh]">
+        <div className="flex flex-col w-full min-h-[86vh]">
             {userData && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div className="flex flex-col gap-15 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
+                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
                         <div className="flex gap-10 w-full">
                             <div className="outline outline-[#ffffff90] rounded-xl p-5 w-fit h-fit">
                                 <UserIcon size={80} />
@@ -120,7 +138,17 @@ function UserProfile() {
                                         <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
                                     )}
                                 </div>
-                                <p className="text-2xl">Placeholder Title</p>
+                                <p className="text-2xl py-1 px-2 rounded-lg outline outline-[#ffffff90] w-fit cursor-default">Member</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-5">
+                            <div className="flex flex-col gap-1 p-2 outline rounded">
+                                <p>Styles Created:</p>
+                                <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
+                            </div>
+                            <div className="flex flex-col gap-1 p-2 outline rounded">
+                                <p>Joined:</p>
+                                <p>{formattedDate}</p>
                             </div>
                         </div>
                         <div className="gap-2 pt-10 border-t">
@@ -128,8 +156,8 @@ function UserProfile() {
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">
-                        <div className="flex flex-col gap-2 p-1">
-                            <h1 className="text-xl">User Info</h1>
+                        <div className="flex flex-col gap-5 p-1">
+                            <h1 className="text-xl xl:text-2xl pb-2 border-b">User Info</h1>
                             <div className="flex flex-col gap-4 outline outline-[#ffffff90] rounded p-4">
                                 <div className="flex gap-2">
                                     <h1 className="text">Server/Region:</h1>
@@ -145,6 +173,25 @@ function UserProfile() {
                                 </div>
                             </div>
                         </div>
+                        <div className="flex flex-col gap-5 p-1">
+                            <h1 className="text-xl xl:text-2xl pb-2 border-b">Most Popular Styles</h1>
+                            <div className="grid grid-cols-3 gap-5 place-items-center py-5">
+                                {topStyles.map((style) => (
+                                    <GalleryCard key={style.id} item={style} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-5 w-full xl:w-[80%]">
+                        <h1 className="text-xl xl:text-2xl border-b pb-2">Latest Styles</h1>
+                        <div className="w-full grid grid-cols-5 gap-5 place-items-center py-5">
+                            {latestStyles.map((style) => (
+                                <GalleryCard key={style.id} item={style} />
+                            ))}
+                        </div>
+                        {latestStyles.length === 10 && (
+                            <p className="py-1 px-2 outline outline-[#ffffff90] rounded w-fit cursor-pointer" onClick={() => navigate(`/gallery?username=${username}`)}>See more by {username}</p>
+                        )}
                     </div>
                 </div>
             )}

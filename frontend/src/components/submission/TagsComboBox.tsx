@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { MISC_URL } from "../../utilities/MiscUtility";
 
 type Tag = {
     id: number,
@@ -25,7 +26,7 @@ function TagsComboBox ( {tags, onSelect} :  ComboBoxProps) {
         const timerDebounce = setTimeout(async () => {
             if (value.length >= 0) {
                 try {
-                const res = await fetch(`http://localhost:8000/api/misc/tags?q=${value}`);
+                const res = await fetch(`${MISC_URL}/tags?q=${value}`);
                 const data = await res.json();
                 setResults(data);
                 if(value.length > 0) {

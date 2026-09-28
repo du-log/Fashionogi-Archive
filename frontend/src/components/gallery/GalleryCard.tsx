@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { GalleryItem } from "./Gallery";
 import { useState, useEffect } from "react";
 import { HeartIcon } from "lucide-react";
-import { formatFavorites } from "../../utilities/MiscUtility";
+import { BASE_URL, formatFavorites } from "../../utilities/MiscUtility";
 
 function GalleryCard( {item} : {item: GalleryItem} ) {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
 
     const hasImages = item.images && item.images.length > 0;
 
-    const displayUrl = hasImages ? `http://localhost:8000${item.images[currentIndex]}` : "";
+    const displayUrl = hasImages ? `${BASE_URL}${item.images[currentIndex]}` : "";
 
     useEffect(() => {
             let interval: number | undefined;
@@ -31,7 +31,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
         }, [isHovered, hasImages, item.images.length, currentIndex])
 
     return (
-        <div className="group relative cursor-pointer w-full h-full outline-3 outline-[#ffffff99] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
+        <div className="group relative cursor-pointer w-full h-full outline-2 outline-[#758277] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
         onClick={() => navigate(`/fashion/id/${item.id}`)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
@@ -45,12 +45,6 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
                         {item.favorites !== undefined && (
                             <>
                                 <p>{formatFavorites(item.favorites)}</p>
-                                <HeartIcon size={20} />
-                            </>
-                        )}
-                        {item.favorites === undefined && (
-                            <>
-                                <p>{formatFavorites(275000)}</p>
                                 <HeartIcon size={20} />
                             </>
                         )}

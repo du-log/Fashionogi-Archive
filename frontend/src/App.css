@@ -4,7 +4,15 @@
     overflow-y: scroll;
 }
 
-.Navbar p:hover {
-    transition: 0.2s;
-    color: #daa520;
+li {
+    p {
+        color: #E4E7E5;
+    }
+    p:hover {
+        color: #B59E6D;
+        background-color: #2A2F2C;
+    }
+}
+ul {
+    background-color: #3E4540;
 }

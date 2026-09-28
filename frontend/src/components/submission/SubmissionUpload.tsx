@@ -7,6 +7,7 @@ import { calculateDefaultCrop } from "../../utilities/CropUtility";
 import EquipmentAccordion from "./EquipmentAccordion";
 import { AuthContext } from "../../contexts/AuthContext";
 import TagsComboBox from "./TagsComboBox";
+import { SUBS_URL } from "../../utilities/MiscUtility";
 
 interface UploadImageItem {
     id: number,
@@ -273,7 +274,7 @@ function SubmissionUpload() {
                 }
             });
 
-            const res = await fetch('http://localhost:8000/api/submissions', {
+            const res = await fetch(`${SUBS_URL}`, {
                 method: 'post',
                 body: formData,
                 credentials: 'include'
@@ -340,7 +341,7 @@ function SubmissionUpload() {
     }, [user, userLoading, navigate])
 
     return (
-        <div className={`flex flex-col gap-3 w-full min-h-[100vh] sm:px-[15%] xl:px-[20%] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import GalleryCard from "./GalleryCard";
 import { useSearchParams } from "react-router-dom";
 import TagsComboBox from "./TagsComboBox";
+import { SUBS_URL } from "../../utilities/MiscUtility";
 
 export type GalleryItem = {
     id: number,
@@ -50,7 +51,7 @@ function Gallery() {
         setResultsLoading(true);
         setTimeout(async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/submissions${queryParams}`);
+                const res = await fetch(`${SUBS_URL}${queryParams}`);
                 const data = await res.json();
                 if(data) setResultsLoading(false);
                 setGallery(data.items as GalleryItem[]);
@@ -123,8 +124,8 @@ function Gallery() {
     }, [fetchGallery, searchParams]);
 
     return (
-        <div className={`flex flex-col items-center w-full min-h-[100vh] px-[20%] transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3">
+        <div className={`flex flex-col items-center w-full min-h-[86vh] px-[20%] pt-5 transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-[#758277]">
                 <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                     <h1 className="font-bold">Search By:</h1>
                     <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Title" />

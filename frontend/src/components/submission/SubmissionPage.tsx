@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserNameplate from "../user/UserNameplate";
+import { BASE_URL, SUBS_URL } from "../../utilities/MiscUtility";
 
 type EquipmentDetail = {
     name: string,
@@ -51,7 +52,7 @@ function SubmissionPage() {
 
     const fetchSubmission = async () => {
         try {
-            const res = await fetch(`http://localhost:8000/api/submissions/id/${id}`, {
+            const res = await fetch(`${SUBS_URL}/id/${id}`, {
                 credentials: 'include'
             });
             if (res.ok) {
@@ -68,7 +69,7 @@ function SubmissionPage() {
     const toggleFavorite = async () => {
         if (!user) return;
         try {
-            const res = await fetch(`http://localhost:8000/api/submissions/id/${id}/favorite`, {
+            const res = await fetch(`${SUBS_URL}/id/${id}/favorite`, {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -85,7 +86,7 @@ function SubmissionPage() {
     useEffect(() => {
         const fetchSubmission = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/submissions/id/${id}`, {
+                const res = await fetch(`${SUBS_URL}/id/${id}`, {
                     credentials: 'include'
                 });
                 if (res.ok) {
@@ -108,15 +109,15 @@ function SubmissionPage() {
     return (
         <div>
             {!isVisible && (
-                <div className={`flex flex-col items-center justify-center min-h-[70vh] w-full transition-opacity duration-200 ease-in-out ${!isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className={`flex flex-col items-center justify-center min-h-[90vh] w-full transition-opacity duration-200 ease-in-out ${!isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <span className="text-[#ffffff90]">Loading...</span>
                     <span className="loading loading-ring loading-xl" />
                 </div>
             )}
             {submission && (
-                <div className={`flex flex-col items-start w-full min-h-[80vh] gap-5 p-5 xl:px-[20%] mx-auto transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className={`flex flex-col items-start w-full min-h-[86vh] gap-5 p-5 xl:px-[20%] mx-auto transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex justify-between w-full">
-                        <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => navigate('/gallery')}>{'<-'} Back</button>
+                        <button className="cursor-pointer outline outline-[#aaff0050] py-1 px-2 rounded text-[#ffffff90] hover:text-[#aaff0090] sm:text-sm xl:text-md" onClick={() => navigate('/gallery')}>{'<-'} Gallery</button>
                         {submission.status === 'pending' && (
                             <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
                         )}
@@ -136,13 +137,13 @@ function SubmissionPage() {
                     </div>
                     <div className="flex w-full gap-3 py-5 justify-center border-b border-[#ffffff90] bg-[#41414130]">
                         {submission.images.map((image) => (
-                            <img key={image} src={`http://localhost:8000${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
+                            <img key={image} src={`${BASE_URL}${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
                         ))}
                     </div>
                     {inflateImg && (
                         <dialog className="modal modal-open">
                             <div className="modal-box">
-                                <img src={`http://localhost:8000${inflateImg}`} className="aspect-[9/16]" />
+                                <img src={`${BASE_URL}${inflateImg}`} className="aspect-[9/16]" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>
@@ -156,7 +157,7 @@ function SubmissionPage() {
                                 <div className="bg-[#40404090]  xl:w-full sm:w-[75%] text-wrap p-1">{submission.description}</div>
                             )}
                         </div>
-                        <div className="flex flex-col items-end gap-2">
+                        <div className="flex flex-col items-end gap-10">
                             <h2 className="text-sm p-2 rounded bg-[#90909030] h-fit">Submitted: {formattedDate}</h2>
                             <div className="flex flex-col items-end gap-2 outline-1 outline-[#ffffff90] bg-[#41414150] rounded-md p-3">
                                 <h1 className="text-lg text-start">Outfit Information</h1>

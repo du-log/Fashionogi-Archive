@@ -10,14 +10,14 @@ function Navigation() {
     const navigate = useNavigate();
 
     return (
-        <div className="Navbar flex fixed w-[100%] bg-[#00660090] justify-center gap-[1rem] px-[1rem] h-[80px] backdrop-blur-sm hover:bg-[#00800090] transition-[0.5s] z-100">
+        <div className="Navbar flex fixed w-full bg-[#3E4540] justify-center gap-4 px-4 h-22 z-100 border-b-1 border-[#758277]">
             <div className="left flex flex-1 gap-5 items-center justify-end text-md">
-                <Link to='/'><p>Home</p></Link>
-                <Link to='/gallery'><p>Gallery</p></Link>
-                <Link to={user ? '/upload' : '/login'}><p>Upload</p></Link>
+                <Link to='/'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Home</p></Link>
+                <Link to='/gallery'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Gallery</p></Link>
+                <Link to={user ? '/upload' : '/login'}><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Upload</p></Link>
             </div>
             <div className="middle flex flex-col flex-1 justify-center items-center cursor-pointer" onClick={() => navigate('/')}>
-                <h2 className="text-3xl italic font-bold text-[#ffffff]">Fashionogi</h2>
+                <h2 className="text-3xl italic font-bold text-[#fff]">Fashionogi</h2>
                 <h5 className="italic text-sm text-[#ffd700]">Discover your Erinn Style</h5>
             </div>
             <div className="right flex flex-1 justify-start items-center">

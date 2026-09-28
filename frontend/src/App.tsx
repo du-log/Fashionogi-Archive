@@ -15,7 +15,7 @@ import DeletionSubs from './components/admin/DeletionSubs';
 import EquipManagement from './components/admin/EquipManagement';
 import UserProfile from './components/user/UserProfile';
 import UserDashboard from './components/user/UserDashboard';
-import AccountSettings from './components/user/AcountSettings';
+import AccountSettings from './components/user/AccountSettings';
 
 function App() {
   return (
