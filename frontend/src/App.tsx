@@ -16,6 +16,10 @@ import EquipManagement from './components/admin/EquipManagement';
 import UserProfile from './components/user/UserProfile';
 import UserDashboard from './components/user/UserDashboard';
 import AccountSettings from './components/user/AccountSettings';
+import PrivacyPolicy from './components/static/PrivacyPolicy';
+import TermsConditions from './components/static/TermsConditions';
+import About from './components/static/About';
+import Rules from './components/static/Rules';
 
 function App() {
   return (
@@ -30,6 +34,10 @@ function App() {
             <Route path='/profile/:username' element={<UserProfile />} />
             <Route path='/account/dashboard' element={<UserDashboard />} />
             <Route path='/account/settings' element={<AccountSettings />} />
+            <Route path='/privacy' element={<PrivacyPolicy />} />
+            <Route path='/terms' element={<TermsConditions />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/guidelines' element={<Rules />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />

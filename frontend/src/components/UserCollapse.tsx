@@ -54,7 +54,7 @@ function UserCollapse() {
                         </div>
                     </div>
                     {isOpen && (
-                        <ul className="absolute flex flex-col items-start bg-[#3E4540] mt-4 sm:text-md xl:text-lg outline-1 outline-[#DAA700] right-0 w-40">
+                        <ul id="Collapse" className="absolute flex flex-col items-start bg-[#3E4540] mt-4 sm:text-md xl:text-lg outline-1 outline-[#DAA700] right-0 w-40">
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>View Profile</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>

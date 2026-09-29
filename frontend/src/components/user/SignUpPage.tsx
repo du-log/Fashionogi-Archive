@@ -37,7 +37,8 @@ function SignUpPage() {
     const [verify, setVerify] = useState<string>('');
 
     const [showPw, setShowPw] = useState<boolean>(false);
-    const [agree, setAgree] = useState<boolean>(false);
+    const [termsAgree, setTermsAgree] = useState<boolean>(false);
+    const [privacyAgree, setPrivacyAgree] = useState<boolean>(false);
 
     const [nameErr, setNameErr] = useState<string>('');
     const [emailErr, setEmailErr] = useState<string>('');
@@ -278,10 +279,14 @@ function SignUpPage() {
                             <span className="text-[#ff0000]">{pwErr}</span>
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I agree to the Terms and Conditions.</label>
-                            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+                            <label>I have read the <a href="/privacy" target="_blank">Privacy Policy</a>.</label>
+                            <input type="checkbox" checked={privacyAgree} onChange={(e) => setPrivacyAgree(e.target.checked)} />
                         </div>
-                        <button type="submit" className={`btn btn-xl btn-success ${!agree ? 'btn-disabled' : ''}`}>Register</button>
+                        <div className="flex items-center gap-5">
+                            <label>I agree to the <a href="/terms" target="_blank">Terms and Conditions</a>.</label>
+                            <input type="checkbox" checked={termsAgree} onChange={(e) => setTermsAgree(e.target.checked)} />
+                        </div>
+                        <button type="submit" className={`btn btn-xl btn-success ${(!privacyAgree || !termsAgree) ? 'btn-disabled' : ''}`}>Register</button>
                         <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-[#7CC96B] hover:text-[#a5f500]" onClick={() => navigate('/login')}>Return to Login</p>
                         <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-[#7CC96B] hover:text-[#a5f500]" onClick={() => navigate('/')}>Return to Home</p>
                     </form>
