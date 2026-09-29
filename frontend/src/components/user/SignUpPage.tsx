@@ -279,11 +279,11 @@ function SignUpPage() {
                             <span className="text-[#ff0000]">{pwErr}</span>
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I have read the <a href="/privacy" target="_blank">Privacy Policy</a>.</label>
+                            <label>I have read the <a href="/privacy" target="_blank" className="hover:text-[#a5f500]">Privacy Policy</a>.</label>
                             <input type="checkbox" checked={privacyAgree} onChange={(e) => setPrivacyAgree(e.target.checked)} />
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I agree to the <a href="/terms" target="_blank">Terms and Conditions</a>.</label>
+                            <label>I agree to the <a href="/terms" target="_blank" className="hover:text-[#a5f500]">Terms and Conditions</a>.</label>
                             <input type="checkbox" checked={termsAgree} onChange={(e) => setTermsAgree(e.target.checked)} />
                         </div>
                         <button type="submit" className={`btn btn-xl btn-success ${(!privacyAgree || !termsAgree) ? 'btn-disabled' : ''}`}>Register</button>
