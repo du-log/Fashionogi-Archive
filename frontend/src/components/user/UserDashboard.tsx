@@ -44,7 +44,7 @@ function UserDashboard() {
         const fetchQueue = async () => {
             try {
                 const res = await fetch('http://localhost:8000/api/users/dashboard/queue', {
-                credentials: 'include'
+                    credentials: 'include'
                 })
                 if (res.ok) {
                     const data = await res.json();
@@ -105,7 +105,7 @@ function UserDashboard() {
             )}
             {tab === 'favorites' && (
                 <>
-                    <div className="grid sm:grid-cols-3 xl:grid-cols-5 gap-5 mt-20 py-10 px-[20%] max-h-[50vh] place-items-center">
+                    <div className="grid sm:grid-cols-3 xl:grid-cols-5 gap-5 mt-30 py-10 px-[20%] max-h-[50vh] place-items-center">
                         {favorites.map((item) => (
                             <GalleryCard key={item.id} item={item} />
                         ))}

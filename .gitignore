@@ -23,6 +23,7 @@ dist-ssr
 *.webp
 **/__pycache__/
 **.pyc
+some.txt
 
 package-lock.json
 

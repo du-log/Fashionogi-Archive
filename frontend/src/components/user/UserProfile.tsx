@@ -5,6 +5,9 @@ import { UserIcon } from "lucide-react";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
 import { USERS_URL } from "../../utilities/MiscUtility";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 
 export type userProfile = {
     id?: number,
@@ -123,12 +126,12 @@ function UserProfile() {
     }, [username])
 
     return (
-        <div className="flex flex-col w-full min-h-[86vh]">
+        <div className="flex flex-col w-full min-h-[86vh] text-[#E4E7E5]">
             {userData && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline rounded-xl px-5 py-10">
+                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-[#758277] rounded-xl px-5 py-10 bg-[#3E4540]">
                         <div className="flex gap-10 w-full">
-                            <div className="outline outline-[#ffffff90] rounded-xl p-5 w-fit h-fit">
+                            <div className="outline outline-[#758277] rounded-xl p-5 w-fit h-fit">
                                 <UserIcon size={80} />
                             </div>
                             <div className="flex flex-col w-full gap-10">
@@ -138,27 +141,27 @@ function UserProfile() {
                                         <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
                                     )}
                                 </div>
-                                <p className="text-2xl py-1 px-2 rounded-lg outline outline-[#ffffff90] w-fit cursor-default">Member</p>
+                                <p className="text-2xl py-1 px-2 rounded-lg outline outline-[#758277] w-fit cursor-default">Member</p>
                             </div>
                         </div>
                         <div className="flex gap-5">
-                            <div className="flex flex-col gap-1 p-2 outline rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
                                 <p>Styles Created:</p>
                                 <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
                                 <p>Joined:</p>
                                 <p>{formattedDate}</p>
                             </div>
                         </div>
                         <div className="gap-2 pt-10 border-t">
-                            <p className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2">{userData.bio ? userData.bio : 'No bio.'}</p>
+                            <div className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2 max-h-40 overflow-y-auto"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{userData.bio ? userData.bio : 'No bio.'}</Markdown></div>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">
                         <div className="flex flex-col gap-5 p-1">
                             <h1 className="text-xl xl:text-2xl pb-2 border-b">User Info</h1>
-                            <div className="flex flex-col gap-4 outline outline-[#ffffff90] rounded p-4">
+                            <div className="flex flex-col gap-4 outline outline-[#758277] rounded p-4 bg-[#3E4540]">
                                 <div className="flex gap-2">
                                     <h1 className="text">Server/Region:</h1>
                                     <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
@@ -207,6 +210,7 @@ function UserProfile() {
                         <div className="flex flex-col gap-2">
                             <h1 className="text-3xl font-bold text-center">Edit Profile</h1>
                             <h1 className="text-xl">Bio</h1>
+                            <p className="text-sm">This uses Markdown conventions for formatting.</p>
                             <div className="relative w-full">
                                 <textarea className="outline w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
                                 <p className="absolute top-1 right-1">{bio && 200 - bio.length}</p>

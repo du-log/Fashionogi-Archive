@@ -20,7 +20,7 @@ function UserNameplate( {username} : {username: string} ) {
     }, [username])
 
     return (
-        <div className="flex gap-4 min-w-50 p-4 outline-2 outline-[#fa531690] rounded-xl">
+        <div className="flex justify-between gap-4 min-w-50 p-4 outline-2 outline-[#fa531690] rounded-xl bg-[#2A2F2C]">
             <div className="flex flex-col gap justify-start">
                 <h1 className="cursor-pointer text-lg hover:text-[#00ab80]" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
                 <p>{userData?.server ? userData.server : ''}</p>

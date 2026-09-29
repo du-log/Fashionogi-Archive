@@ -21,7 +21,11 @@ import models, auth
 router = APIRouter(prefix = '/api/admin', tags = ['Administrator'])
 
 @router.get('/tags')
-def admin_get_tags(db: Session = Depends(get_db)):
+def admin_get_tags(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
     stmt = (
         select(models.BaseTags)
         .order_by(models.BaseTags.name.asc())
@@ -32,7 +36,11 @@ def admin_get_tags(db: Session = Depends(get_db)):
     return [{'id': item.id, 'name': item.name, 'is_active': item.is_active} for item in results]
 
 @router.patch('/tags/{tag_id}/toggle')
-def admin_toggle_tag(tag_id: int, db: Session = Depends(get_db)):
+def admin_toggle_tag(tag_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
     stmt = (
         select(models.BaseTags)
         .where(models.BaseTags.id == tag_id)
@@ -47,7 +55,11 @@ def admin_toggle_tag(tag_id: int, db: Session = Depends(get_db)):
     return {'id': tag.id, 'is_active': tag.is_active}
 
 @router.get('/pending')
-def admin_get_pending(db: Session = Depends(get_db)):
+def admin_get_pending(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
     stmt = (
         select(models.Submission)
         .where(models.Submission.status == 'pending')
@@ -94,7 +106,11 @@ def admin_get_pending(db: Session = Depends(get_db)):
     return {'items': results}
 
 @router.patch('/pending/{sub_id}/approve')
-def admin_approve_sub(sub_id: int, db: Session = Depends(get_db)):
+def admin_approve_sub(sub_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
     stmt = (
         select(models.Submission)
         .where(
@@ -112,7 +128,11 @@ def admin_approve_sub(sub_id: int, db: Session = Depends(get_db)):
     return {'message': 'Approved submission', 'id': submission.id, 'status': submission.status}
 
 @router.patch('/pending/{sub_id}/reject')
-def admin_reject_sub(sub_id: int, db: Session = Depends(get_db)):
+def admin_reject_sub(sub_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
     stmt = (
         select(models.Submission.id, models.Submission.status)
         .where(

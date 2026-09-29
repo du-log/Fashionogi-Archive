@@ -17,6 +17,8 @@ from sqlalchemy import select, func, desc
 
 from jose import JWTError, jwt
 
+from datetime import datetime, timedelta, timezone
+
 from database import get_db, engine, Base
 import models
 import auth
@@ -56,18 +58,18 @@ async def upload_submission(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user)
 ):
-    # Dummy User - REMOVE BEFORE PRODUCTION
-    dev_user = db.query(models.User).first()
-    if not dev_user:
-        pw_hash = auth.get_pw_hash('mock')
-        dev_user = models.User(username = 'TestUser', email ='test@test.com', hashed_password = pw_hash)
-        db.add(dev_user)
-        db.flush()
-
     user = db.query(models.User).filter(models.User.id == current_user.id).first()
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
 
+    twenty_four_hr_ago = datetime.now(timezone.utc) - timedelta(hours = 24)
+    recent_subs_count = db.query(models.Submission).filter(
+        models.Submission.user_id == user.id,
+        models.Submission.created_at >= twenty_four_hr_ago
+    ).count()
+    if recent_subs_count >= 7:
+        raise HTTPException(status_code = status.HTTP_429_TOO_MANY_REQUESTS, detail = 'You have reached the limit of 7 submissions per 24 hours. Please try again later.')
+    
     # Parsing data
     parsed_tags: List[str] = json.loads(tags)
     raw_equipment = json.loads(equipment)

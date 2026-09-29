@@ -14,7 +14,9 @@ function TagManagement() {
     const [newTag, setNewTag] = useState<string>('');
 
     const fetchTags = async () => {
-        const res = await fetch('http://localhost:8000/api/admin/tags');
+        const res = await fetch('http://localhost:8000/api/admin/tags', {
+            credentials: 'include'
+        });
         const data = await res.json();
         if (data) {
             setTags(data);
@@ -23,7 +25,8 @@ function TagManagement() {
 
     const tagToggleHandler = async (id: number) => {
         const res = await fetch (`http://localhost:8000/api/admin/tags/${id}/toggle`, {
-            method: 'PATCH'
+            method: 'PATCH',
+            credentials: 'include'
         });
         const data = await res.json();
         if (data) {
@@ -34,7 +37,9 @@ function TagManagement() {
     useEffect(() => {
         if (!user || !user.is_admin) return;
         const fetchTags = async () => {
-            const res = await fetch('http://localhost:8000/api/admin/tags');
+            const res = await fetch('http://localhost:8000/api/admin/tags', {
+                credentials: 'include'
+            });
             const data = await res.json();
             if (data) {
                 setTags(data);

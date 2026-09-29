@@ -193,6 +193,18 @@ def update_username(username: str, current_user: models.User = Depends(auth.get_
 
     return {'message': 'Username successfully changed.', 'new_username': current_user.username}
 
+@router.get('/email/check/{email}')
+def check_email_availability(email: str, db: Session = Depends(get_db)):
+    stmt = (
+        select(models.User)
+        .where(models.User.email == email)
+    )
+    user = db.execute(stmt).scalars().first()
+    if user:
+        return {'success': False, 'message': f'{email} is already in use.'}
+    
+    return {'success': True, 'message': f'{email} is not in use.'}
+
 @router.get('/dashboard/queue')
 def get_my_submissions(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     stmt = (

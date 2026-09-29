@@ -10,7 +10,7 @@ function Navigation() {
     const navigate = useNavigate();
 
     return (
-        <div className="Navbar flex fixed w-full bg-[#3E4540] justify-center gap-4 px-4 h-22 z-100 border-b-1 border-[#758277]">
+        <div className="Navbar flex fixed w-full bg-[#006600] justify-center gap-4 px-4 h-22 z-100">
             <div className="left flex flex-1 gap-5 items-center justify-end text-md">
                 <Link to='/'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Home</p></Link>
                 <Link to='/gallery'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Gallery</p></Link>

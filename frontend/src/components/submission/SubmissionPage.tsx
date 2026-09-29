@@ -3,6 +3,9 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserNameplate from "../user/UserNameplate";
 import { BASE_URL, SUBS_URL } from "../../utilities/MiscUtility";
+import Markdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
 
 type EquipmentDetail = {
     name: string,
@@ -154,12 +157,12 @@ function SubmissionPage() {
                         <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">
                             <h1 className="text-lg">Description</h1>
                             {submission.description && (
-                                <div className="bg-[#40404090]  xl:w-full sm:w-[75%] text-wrap p-1">{submission.description}</div>
+                                <div className="bg-[#40404090]  xl:w-full sm:w-[75%] text-wrap p-1"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{submission.description}</Markdown></div>
                             )}
                         </div>
                         <div className="flex flex-col items-end gap-10">
                             <h2 className="text-sm p-2 rounded bg-[#90909030] h-fit">Submitted: {formattedDate}</h2>
-                            <div className="flex flex-col items-end gap-2 outline-1 outline-[#ffffff90] bg-[#41414150] rounded-md p-3">
+                            <div className="flex flex-col items-end gap-2 outline-1 outline-[#B59E6D] bg-[#3E4540] rounded-md p-3">
                                 <h1 className="text-lg text-start">Outfit Information</h1>
                                 <div className="flex gap-2 items-center">
                                     For:
@@ -177,7 +180,7 @@ function SubmissionPage() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 p-4 outline outline-[#ffffff90] rounded">
+                            <div className="flex flex-col gap-2 p-4 outline outline-[#B59E6D] rounded bg-[#3E4540]">
                                 <h1 className="text-xl text-start">Outfit Creator</h1>
                             <UserNameplate username={submission.author} />
                             </div>

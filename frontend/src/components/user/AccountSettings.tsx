@@ -17,6 +17,15 @@ function AccountSettings() {
     const [availMsg, setAvailMsg] = useState<string>('');
 
     const handleNameCheck = async (username: string) => {
+        setAvailable(false);
+        if (username.length > 15) {
+            setAvailMsg('Username is over 15 characters.');
+            return;
+        }
+        if (/\s/.test(username)) {
+            setAvailMsg('Username cannot contain spaces.');
+            return;
+        }
         const res = await fetch(`${USERS_URL}/username/check/${username}`);
         const data = await res.json();
 
@@ -69,7 +78,7 @@ function AccountSettings() {
                             <div className="flex flex-col gap-2 py-2 w-full">
                                 <h1 className="text-xl">Username</h1>
                                 <div className="flex gap-5 items-center">
-                                    <input type="text" className="bg-[#ffffff90] p-1" maxLength={20} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user?.username} />
+                                    <input type="text" className="bg-[#ffffff90] p-1" maxLength={15} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user?.username} />
                                     <button className={`btn btn-warning w-fit ${username.length < 3 || username === user?.username ? 'btn-disabled' : ''}`} onClick={() => handleNameCheck(username)}>Check</button>
                                     <button className="btn btn-secondary btn-soft" onClick={handleNameReset}>Clear</button>
                                 </div>

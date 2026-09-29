@@ -284,9 +284,12 @@ function SubmissionUpload() {
                 alert('Upload successful!');
                 setTitle('');
                 navigate(`/fashion/id/${data.submission_id}`);
+            } else {
+                alert(data.detail || 'You have reached the limit for uploads within 24 hours. Please try again later.');
             }
         } catch (err) {
-            console.error('Crop or Upload Failed', err);
+            console.error('Upload Failed', err);
+            alert('Upload failed. Server may be down.');
         }
     }
 
@@ -346,7 +349,7 @@ function SubmissionUpload() {
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md rounded"
                 type="text"
-                placeholder="Title... (Required)"
+                placeholder="Style Name... (Required)"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 maxLength={100}
@@ -355,14 +358,7 @@ function SubmissionUpload() {
                 <p className="absolute bottom-0 right-1 text-[#ffffff90] text-xs">{100 - title.length < 100 ? 100 - title.length : ""}</p>
             </div>
             <div className="relative flex w-full">
-                <input className="p-3 border-1 w-full text-md rounded"
-                type="text"
-                placeholder="Description... (Required)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                maxLength={200}
-                required
-                />
+                <textarea className="p-3 outline w-full text-md rounded resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
                 <p className="absolute bottom-0 right-1 text-[#ffffff90] text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
             </div>
             <div className="flex w-fit gap-3 items-center text-md">

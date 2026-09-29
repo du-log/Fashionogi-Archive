@@ -50,7 +50,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
         httponly = True,
         max_age = 604800, # 7 days token life
         samesite = 'lax',
-        secure = False
+        secure = True
     )
 
     return { 'message': 'Logged in successfully', 'user': { 'id': user.id, 'username': user.username, 'user_id': user.user_id } }

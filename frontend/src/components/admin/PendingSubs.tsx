@@ -32,14 +32,17 @@ function PendingSubs() {
     const [selectedSub, setSelectedSub] = useState<Submission | null>(null);
 
     const fetchSubmissions = async () => {
-        const res = await fetch ('http://localhost:8000/api/admin/pending');
+        const res = await fetch ('http://localhost:8000/api/admin/pending', {
+            credentials: 'include'
+        });
         const data = await res.json();
         setSubs(data.items as Submission[]);
     }
 
     const approveHandler = async (id: number) => {
         const res = await fetch(`http://localhost:8000/api/admin/pending/${id}/approve`, {
-            method: 'PATCH'
+            method: 'PATCH',
+            credentials: 'include'
         });
         if (res) {
             fetchSubmissions();
@@ -49,7 +52,8 @@ function PendingSubs() {
 
     const rejectHandler = async (id: number) => {
         const res = await fetch(`http://localhost:8000/api/admin/pending/${id}/reject`, {
-            method: 'PATCH'
+            method: 'PATCH',
+            credentials: 'include'
         });
         if (res) {
             fetchSubmissions();
@@ -60,7 +64,9 @@ function PendingSubs() {
     useEffect(() => {
         if (!user || !user.is_admin) return;
         const fetchSubmissions = async () => {
-            const res = await fetch('http://localhost:8000/api/admin/pending');
+            const res = await fetch('http://localhost:8000/api/admin/pending', {
+                credentials: 'include'
+            });
             const data = await res.json();
             setSubs(data.items as Submission[]);
             setTimeout(() => setLoading(false), 100);

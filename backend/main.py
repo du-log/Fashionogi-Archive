@@ -8,12 +8,17 @@ from routers import authentication, miscellaneous, submissions, users, admin
 
 Base.metadata.create_all(bind = engine)
 
+origins = [
+    'http://localhost:5173',
+    'https://fashionogi-project.vercel.app'
+]
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ['http://localhost:5173'],
+    allow_origins = origins,
     allow_credentials = True,
-    allow_methods = ['*'],
+    allow_methods = ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allow_headers = ['*'],
 )
 
