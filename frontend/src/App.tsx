@@ -21,6 +21,7 @@ import TermsConditions from './components/static/TermsConditions';
 import About from './components/static/About';
 import Rules from './components/static/Rules';
 import NewsPage from './components/news/NewsPage';
+import ArticlePage from './components/news/ArticlePage';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path='/about' element={<About />} />
             <Route path='/guidelines' element={<Rules />} />
             <Route path='/news' element={<NewsPage />} />
+            <Route path='/news/article/:id' element={<ArticlePage />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />

@@ -217,8 +217,7 @@ class News(Base):
     type: Mapped[str] = mapped_column(String(50), index = True, nullable = False)
     context = mapped_column(Text, nullable = False)
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
-    author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = True)
-    author = relationship("User")
+    author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = False)
 
 class DailyVisitor(Base):
     __tablename__ = "daily_visitors"
