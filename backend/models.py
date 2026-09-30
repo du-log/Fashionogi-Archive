@@ -213,6 +213,8 @@ class News(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
     title: Mapped[str] = mapped_column(String(255), index = True, nullable = False)
+    description: Mapped[str] = mapped_column(String(255), index = True, nullable = False)
+    type: Mapped[str] = mapped_column(String(50), index = True, nullable = False)
     context = mapped_column(Text, nullable = False)
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
     author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = True)

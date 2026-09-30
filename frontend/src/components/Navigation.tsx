@@ -15,6 +15,7 @@ function Navigation() {
                 <Link to='/'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Home</p></Link>
                 <Link to='/gallery'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Gallery</p></Link>
                 <Link to={user ? '/upload' : '/login'}><p className="text-[#E4E7E5] hover:text-[#B59E6D]">Upload</p></Link>
+                <Link to='/news'><p className="text-[#E4E7E5] hover:text-[#B59E6D]">News</p></Link>
             </div>
             <div className="middle flex flex-col flex-1 justify-center items-center cursor-pointer" onClick={() => navigate('/')}>
                 <h2 className="text-3xl italic font-bold text-[#fff]">Fashionogi</h2>

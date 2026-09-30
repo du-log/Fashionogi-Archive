@@ -20,6 +20,7 @@ import PrivacyPolicy from './components/static/PrivacyPolicy';
 import TermsConditions from './components/static/TermsConditions';
 import About from './components/static/About';
 import Rules from './components/static/Rules';
+import NewsPage from './components/news/NewsPage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path='/terms' element={<TermsConditions />} />
             <Route path='/about' element={<About />} />
             <Route path='/guidelines' element={<Rules />} />
+            <Route path='/news' element={<NewsPage />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />
