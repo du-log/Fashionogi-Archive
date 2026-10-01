@@ -136,7 +136,7 @@ def admin_reject_sub(sub_id: int, current_user: models.User = Depends(auth.get_c
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (
-        select(models.Submission.id, models.Submission.status)
+        select(models.Submission)
         .where(
             models.Submission.id == sub_id,
             models.Submission.status == 'pending'
