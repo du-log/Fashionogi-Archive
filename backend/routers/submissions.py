@@ -4,6 +4,9 @@ import os
 import shutil
 import uuid
 import json
+import boto3
+
+from botocore.config import Config
 
 from pydantic import BaseModel
 from typing import List, Optional
@@ -25,14 +28,25 @@ import auth
 
 router = APIRouter(prefix = '/api/submissions', tags = ['Submissions'])
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
+#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+#UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
 
-SUBMISSIONS_DIR = os.path.join(UPLOAD_DIR, 'submissions')
+#SUBMISSIONS_DIR = os.path.join(UPLOAD_DIR, 'submissions')
 
-os.makedirs(SUBMISSIONS_DIR, exist_ok = True)
+#os.makedirs(SUBMISSIONS_DIR, exist_ok = True)
 
-router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
+#router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
+
+R2_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME')
+R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
+s3_client = boto3.client(
+    's3',
+    endpoint_url = os.environ.get('R2_ENDPOINT_URL'),
+    aws_access_key_id = os.environ.get('R2_ACCESS_KEY'),
+    aws_secret_access_key = os.environ.get('R2_SECRET_ACCESS'),
+    config = Config(signature_version = 's3v4'),
+    region_name = 'auto'
+)
 
 # For upload_submission
 class EquipmentPayload(BaseModel):
@@ -120,10 +134,18 @@ async def upload_submission(
     
     for index, file in enumerate(files):
         image_uuid = uuid.uuid4()
+        r2_object_key = f'submissions/{image_uuid.hex}.webp'
 
-        file_path = os.path.join(SUBMISSIONS_DIR, f'{image_uuid.hex}.webp')
-        with open(file_path, 'wb') as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        s3_client.upload_fileobj(
+            file.file,
+            R2_BUCKET_NAME,
+            r2_object_key,
+            ExtraArgs={'ContentType': 'image/webp'}
+        )
+
+        #file_path = os.path.join(SUBMISSIONS_DIR, f'{image_uuid.hex}.webp')
+        #with open(file_path, 'wb') as buffer:
+        #    shutil.copyfileobj(file.file, buffer)
 
         new_image = models.SubmissionImage(
             image_id = image_uuid,
@@ -168,7 +190,8 @@ def get_latest_ten(db: Session = Depends(get_db)):
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -199,7 +222,8 @@ def get_top_five(db: Session = Depends(get_db)):
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -282,7 +306,8 @@ def get_submission_gallery(
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -350,7 +375,8 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
         'created_at': sub.created_at,
         'status': sub.status,
         'tags': [tag.name for tag in sub.tags],
-        'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+        #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+        'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
         'equipment': equipment_data,
         'favorites_count': favorites_count,
         'is_favorited': is_favorited

@@ -59,7 +59,7 @@ function Home() {
             <div className="relative flex flex-col gap-5 w-full xl:px-[10%]">
                 <h1 className="text-xl text-[#E4E7E5] font-bold">News and Announcements</h1>
                 <div className="grid max-rows-5 gap-3 w-full place-items-start p-3 outline-2 outline-[#758277] rounded-lg bg-[#3E4540]">
-                    {latestArticles.map((item) => (
+                    {latestArticles?.map((item) => (
                         <NewsPanel key={item.id} article={item} />
                     ))}
                 </div>

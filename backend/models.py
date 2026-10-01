@@ -41,6 +41,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
     email: Mapped[str] = mapped_column(String(255), unique = True, index = True, nullable = False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable = False)
+    avatar_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), default = uuid.uuid4, unique = True, nullable = True)
 
     is_admin: Mapped[bool] = mapped_column(Boolean, default = False, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)

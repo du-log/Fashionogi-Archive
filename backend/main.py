@@ -10,7 +10,8 @@ Base.metadata.create_all(bind = engine)
 
 origins = [
     'http://localhost:5173',
-    'https://fashionogi-project.vercel.app'
+    'https://fashionogi-archive.vercel.app',
+    'https://fashionogi-archive.app'
 ]
 
 app = FastAPI()

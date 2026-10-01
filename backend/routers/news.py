@@ -57,10 +57,6 @@ def get_all_articles(db: Session = Depends(get_db)):
 
     results = []
     for article in articles:
-        author = db.execute(select(models.User.username).where(models.User.id == article.author_id)).scalars().first()
-        if not author:
-            raise HTTPException(status_code = 404, detail = 'Author not found. Break.')
-
         results.append({
             'id': article.id,
             'title': article.title,
@@ -82,10 +78,6 @@ def get_latest_five_articles(db: Session = Depends(get_db)):
 
     results = []
     for article in articles:
-        author = db.execute(select(models.User.username).where(models.User.id == article.author_id)).scalars().first()
-        if not author:
-            raise HTTPException(status_code = 404, detail = 'Author not found. Break.')
-
         results.append({
             'id': article.id,
             'title': article.title,
