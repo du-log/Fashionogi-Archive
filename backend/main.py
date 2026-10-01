@@ -10,6 +10,7 @@ Base.metadata.create_all(bind = engine)
 
 origins = [
     'http://localhost:5173',
+    'http://localhost:3000',
     'https://fashionogi-archive.vercel.app',
     'https://fashionogi-archive.app'
 ]
@@ -19,7 +20,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins = origins,
     allow_credentials = True,
-    allow_methods = ['GET', 'POST', 'PATCH', 'OPTIONS'],
+    allow_methods = ['*'],
     allow_headers = ['*'],
 )
 
