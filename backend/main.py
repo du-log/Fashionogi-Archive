@@ -12,7 +12,8 @@ origins = [
     'http://localhost:5173',
     'http://localhost:3000',
     'https://fashionogi-archive.vercel.app',
-    'https://fashionogi-archive.app'
+    'https://fashionogi-archive.app',
+    'https://www.fashionogi-archive.app'
 ]
 
 app = FastAPI()
