@@ -21,6 +21,8 @@ import models, auth
 
 router = APIRouter(prefix = '/api/users', tags = ['Users'])
 
+R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
+
 #BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 #UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
 
@@ -108,7 +110,7 @@ def get_user_styles(username: str, db: Session = Depends(get_db)):
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images]
         })
 
     stmtTwo = (
@@ -137,7 +139,7 @@ def get_user_styles(username: str, db: Session = Depends(get_db)):
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -239,7 +241,7 @@ def get_my_favorites(current_user: models.User = Depends(auth.get_current_user),
             'id': sub.id,
             'title': sub.title,
             'author': sub.author.username,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images]
         })
 
     return results

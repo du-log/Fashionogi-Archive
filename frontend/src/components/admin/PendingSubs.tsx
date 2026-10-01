@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ADMIN_URL, BASE_URL } from "../../utilities/MiscUtility";
+import { ADMIN_URL } from "../../utilities/MiscUtility";
 
 type EquipmentDetail = {
     name: string,
@@ -111,7 +111,7 @@ function PendingSubs() {
                             <p>Fits: {selectedSub.race}</p>
                             <div className="flex flex-wrap w-full gap-3 py-5 justify-center">
                                 {selectedSub.images.map((image) => (
-                                    <img key={image} src={`${BASE_URL}${image}`} alt={selectedSub.title} className="aspect-[9/16] w-[25%] outline outline-[#ffffff90] rounded-lg" />
+                                    <img key={image} src={`${image}`} alt={selectedSub.title} className="aspect-[9/16] w-[25%] outline outline-[#ffffff90] rounded-lg" />
                                 ))}
                             </div>
                             <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">

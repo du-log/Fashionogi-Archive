@@ -20,6 +20,8 @@ import models, auth
 
 router = APIRouter(prefix = '/api/admin', tags = ['Administrator'])
 
+R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
+
 @router.get('/tags')
 def admin_get_tags(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
@@ -100,7 +102,7 @@ def admin_get_pending(current_user: models.User = Depends(auth.get_current_user)
             'race': sub.race,
             'created_at': sub.created_at,
             'equipment': equipment_data,
-            'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images]
         })
 
     return {'items': results}

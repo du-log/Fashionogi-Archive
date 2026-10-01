@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserNameplate from "../user/UserNameplate";
-import { BASE_URL, SUBS_URL } from "../../utilities/MiscUtility";
+import { SUBS_URL } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
@@ -140,13 +140,13 @@ function SubmissionPage() {
                     </div>
                     <div className="flex w-full gap-3 py-5 justify-center border-b border-[#ffffff90] bg-[#41414130]">
                         {submission.images.map((image) => (
-                            <img key={image} src={`${BASE_URL}${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
+                            <img key={image} src={`${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
                         ))}
                     </div>
                     {inflateImg && (
                         <dialog className="modal modal-open">
                             <div className="modal-box">
-                                <img src={`${BASE_URL}${inflateImg}`} className="aspect-[9/16] place-self-center" />
+                                <img src={`${inflateImg}`} className="aspect-[9/16] place-self-center" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>
