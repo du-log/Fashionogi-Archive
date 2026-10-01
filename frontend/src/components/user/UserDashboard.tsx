@@ -3,6 +3,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
+import { USERS_URL } from "../../utilities/MiscUtility";
 
 type QueueItem = {
     id: number,
@@ -43,7 +44,7 @@ function UserDashboard() {
         if (!user && !userLoading) navigate('/login');
         const fetchQueue = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/users/dashboard/queue', {
+                const res = await fetch(`${USERS_URL}/dashboard/queue`, {
                     credentials: 'include'
                 })
                 if (res.ok) {
@@ -56,7 +57,7 @@ function UserDashboard() {
         }
         const fetchFavorites = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/users/dashboard/favorites', {
+                const res = await fetch(`${USERS_URL}/dashboard/favorites`, {
                     credentials: 'include'
                 })
                 if (res.ok) {

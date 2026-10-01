@@ -27,16 +27,14 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
         const timerDebounce = setTimeout(async () => {
             if (value.length >= 3) {
                 try {
-                    /*
                     let replace;
-                    if (slot == 'mainhand' || slot =='offhand') {
-                        replace = 'wielded'
+                    if (slot == 'accessory1' || slot =='accessory2') {
+                        replace = 'accessory'
                     } else {
                         replace = slot;
-                    };
-                    */
-                    //const res = await fetch(`${MISC_URL}/equipment?q=${value}&slot=${replace}`);
-                    const res = await fetch(`${MISC_URL}/equipment?q=${value}&slot=${slot}`);
+                    }
+                    
+                    const res = await fetch(`${MISC_URL}/equipment?q=${value}&slot=${replace}`);
                     const data = await res.json();
                     setResults(data);
                     setOpen(true);

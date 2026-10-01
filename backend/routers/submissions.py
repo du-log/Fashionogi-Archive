@@ -191,7 +191,7 @@ def get_latest_ten(db: Session = Depends(get_db)):
             'title': sub.title,
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/{R2_BUCKET_NAME}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -223,7 +223,7 @@ def get_top_five(db: Session = Depends(get_db)):
             'title': sub.title,
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/{R2_BUCKET_NAME}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -307,7 +307,7 @@ def get_submission_gallery(
             'title': sub.title,
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'images': [f'{R2_PUBLIC_URL}/{R2_BUCKET_NAME}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count
         })
     
@@ -376,7 +376,7 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
         'status': sub.status,
         'tags': [tag.name for tag in sub.tags],
         #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-        'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+        'images': [f'{R2_PUBLIC_URL}/{R2_BUCKET_NAME}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
         'equipment': equipment_data,
         'favorites_count': favorites_count,
         'is_favorited': is_favorited
