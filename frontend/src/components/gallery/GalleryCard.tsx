@@ -40,7 +40,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00000099] to-transparent rounded-b-lg pb-2 px-4 pt-2 transition-[0.5s] group-hover:bg-[#00000090]">
                 <h3 className="font-bold sm:text-sm xl:text-lg text-transparent truncate transition-[0.5s] group-hover:text-[#faa920]">{item.title}</h3>
                 <div className="flex justify-between items-center">
-                    <h5 className="sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">{item.author}</h5>
+                    <h5 className="sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe] truncate">{item.author}</h5>
                     <div className="relative flex items-center justify-center gap-1 sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">
                         {item.favorites !== undefined && (
                             <>
