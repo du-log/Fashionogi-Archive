@@ -51,7 +51,7 @@ function PreviewCard({images, styleName, username} : {images: UploadImageItem[],
             ${isHovered ? "transition-opacity duration-200 ease-in-out" : ""}`} alt={"Preview"}></img>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00000099] to-transparent rounded-b-lg pb-2 px-4 pt-2 transition-[0.5s] group-hover:bg-[#00000090]">
                 <h3 className="font-bold text-md text-transparent truncate transition-[0.5s] group-hover:text-[#faa920]">{hasImages ? styleName : "Select image(s) first"}</h3>
-                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe]">{hasImages ? username : "Actual dimensions may vary"}</h5>
+                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe] truncate">{hasImages ? username : "Actual dimensions may vary"}</h5>
             </div>
         </div>
     )
