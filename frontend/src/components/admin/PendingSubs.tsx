@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ADMIN_URL, BASE_URL } from "../../utilities/MiscUtility";
 
 type EquipmentDetail = {
     name: string,
@@ -32,7 +33,7 @@ function PendingSubs() {
     const [selectedSub, setSelectedSub] = useState<Submission | null>(null);
 
     const fetchSubmissions = async () => {
-        const res = await fetch ('http://localhost:8000/api/admin/pending', {
+        const res = await fetch (`${ADMIN_URL}/pending`, {
             credentials: 'include'
         });
         const data = await res.json();
@@ -40,7 +41,7 @@ function PendingSubs() {
     }
 
     const approveHandler = async (id: number) => {
-        const res = await fetch(`http://localhost:8000/api/admin/pending/${id}/approve`, {
+        const res = await fetch(`${ADMIN_URL}/pending/${id}/approve`, {
             method: 'PATCH',
             credentials: 'include'
         });
@@ -51,7 +52,7 @@ function PendingSubs() {
     }
 
     const rejectHandler = async (id: number) => {
-        const res = await fetch(`http://localhost:8000/api/admin/pending/${id}/reject`, {
+        const res = await fetch(`${ADMIN_URL}/pending/${id}/reject`, {
             method: 'PATCH',
             credentials: 'include'
         });
@@ -64,7 +65,7 @@ function PendingSubs() {
     useEffect(() => {
         if (!user || !user.is_admin) return;
         const fetchSubmissions = async () => {
-            const res = await fetch('http://localhost:8000/api/admin/pending', {
+            const res = await fetch(`${ADMIN_URL}/pending`, {
                 credentials: 'include'
             });
             const data = await res.json();
@@ -110,7 +111,7 @@ function PendingSubs() {
                             <p>Fits: {selectedSub.race}</p>
                             <div className="flex flex-wrap w-full gap-3 py-5 justify-center">
                                 {selectedSub.images.map((image) => (
-                                    <img key={image} src={`http://localhost:8000${image}`} alt={selectedSub.title} className="aspect-[9/16] w-[25%] outline outline-[#ffffff90] rounded-lg" />
+                                    <img key={image} src={`${BASE_URL}${image}`} alt={selectedSub.title} className="aspect-[9/16] w-[25%] outline outline-[#ffffff90] rounded-lg" />
                                 ))}
                             </div>
                             <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">

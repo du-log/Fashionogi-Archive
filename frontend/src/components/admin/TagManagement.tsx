@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ADMIN_URL } from "../../utilities/MiscUtility";
 
 type tag = {
     id: number,
@@ -14,7 +15,7 @@ function TagManagement() {
     const [newTag, setNewTag] = useState<string>('');
 
     const fetchTags = async () => {
-        const res = await fetch('http://localhost:8000/api/admin/tags', {
+        const res = await fetch(`${ADMIN_URL}/tags`, {
             credentials: 'include'
         });
         const data = await res.json();
@@ -24,7 +25,7 @@ function TagManagement() {
     }
 
     const tagToggleHandler = async (id: number) => {
-        const res = await fetch (`http://localhost:8000/api/admin/tags/${id}/toggle`, {
+        const res = await fetch (`${ADMIN_URL}/tags/${id}/toggle`, {
             method: 'PATCH',
             credentials: 'include'
         });
@@ -37,7 +38,7 @@ function TagManagement() {
     useEffect(() => {
         if (!user || !user.is_admin) return;
         const fetchTags = async () => {
-            const res = await fetch('http://localhost:8000/api/admin/tags', {
+            const res = await fetch(`${ADMIN_URL}/tags`, {
                 credentials: 'include'
             });
             const data = await res.json();
