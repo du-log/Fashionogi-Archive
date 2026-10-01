@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { GalleryItem } from "./Gallery";
 import { useState, useEffect } from "react";
 import { HeartIcon } from "lucide-react";
-import { BASE_URL, formatFavorites } from "../../utilities/MiscUtility";
+import { formatFavorites } from "../../utilities/MiscUtility";
 
 function GalleryCard( {item} : {item: GalleryItem} ) {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
 
     const hasImages = item.images && item.images.length > 0;
 
-    const displayUrl = hasImages ? `${BASE_URL}${item.images[currentIndex]}` : "";
+    const displayUrl = hasImages ? `${item.images[currentIndex]}` : "";
 
     useEffect(() => {
             let interval: number | undefined;
