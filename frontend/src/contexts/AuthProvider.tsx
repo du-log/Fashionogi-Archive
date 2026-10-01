@@ -41,6 +41,7 @@ export default function AuthProvider({children}: {children: ReactNode}) {
         } finally {
             setAuth(false);
             setUser(null);
+            window.location.reload();
         }
     }
 

@@ -16,8 +16,7 @@ function UserCollapse() {
 
     const logOutHandle = () => {
         setLoading(true);
-        logout(); 
-        window.location.reload();
+        logout();
     }
 
     useEffect(() => {
