@@ -49,7 +49,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
         value = access_token,
         httponly = True,
         max_age = 604800, # 7 days token life
-        samesite = 'lax',
+        samesite = 'none',
         secure = True
     )
 
