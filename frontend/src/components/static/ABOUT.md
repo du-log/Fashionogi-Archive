@@ -1,4 +1,4 @@
-# About Fashionogi
+# About Us
 ### If there is one true endgame in Mabinogi, it’s **Fashionogi**.
 
 Welcome to the Fashionogi Archive, a dedicated fashion archive built entirely for the Mabinogi community. The goal here is simple: to create a centralized, easily searchable hub where players can share their creative outfits, show off unique dye combinations, and find inspiration for their next look.

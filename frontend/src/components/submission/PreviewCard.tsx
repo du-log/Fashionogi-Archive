@@ -42,7 +42,7 @@ function PreviewCard({images, styleName, username} : {images: UploadImageItem[],
     }, [isHovered, hasImages, images.length, currentIndex])
 
     return (
-        <div className="group relative w-fit h-fit max-w-[225px] outline-3 outline-[#ffffff99] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
+        <div className="group relative w-fit h-fit max-w-[225px] outline-2 outline-[#758277] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
             <img src={hasImages ? displayUrl : ''}

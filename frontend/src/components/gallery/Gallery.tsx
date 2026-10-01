@@ -124,85 +124,87 @@ function Gallery() {
     }, [fetchGallery, searchParams]);
 
     return (
-        <div className={`flex flex-col items-center w-full min-h-[86vh] px-[20%] pt-5 transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-[#758277]">
-                <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
-                    <h1 className="font-bold">Search By:</h1>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Title" />
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Username" />
-                    <TagsComboBox tag={tag} setTag={setTag} />
-                </div>
-                <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
-                    <h1 className="font-bold">Filter By:</h1>
-                    <div className="flex gap-2 items-center">
-                        <label htmlFor="gender">Gender</label>
-                        <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} 
-                        className="text-[#000] bg-[#ffffff90] p-1">
-                            <option value="">All</option>
-                            <option value="female">Female</option>
-                            <option value="male">Male</option>
-                        </select>
+        <div className={`flex flex-col items-center w-full min-h-[86vh] px-[10%] xl:px-[20%] py-10 transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="flex flex-col items-center w-full min-h-[86vh] px-[10%] py-10 bg-[#3E4540] rounded-2xl">
+                <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-[#758277] bg-[#2A2F2C] z-[10]">
+                    <div className="flex gap-5 pt-3 pb-5 w-fit sm:text-md xl:text-lg items-center justify-center">
+                        <h1 className="font-bold">Search By:</h1>
+                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Title" />
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Username" />
+                        <TagsComboBox tag={tag} setTag={setTag} />
                     </div>
-                    <div className="flex gap-2 items-center">
-                        <label htmlFor="race">Race</label>
-                        <select id="race" value={race} onChange={(e) => setRace(e.target.value)} 
-                        className="text-[#000] bg-[#ffffff90] p-1">
-                            <option value="">All</option>
-                            <option value="elf">Elf</option>
-                            <option value="human">Human</option>
-                            <option value="giant">Giant</option>
-                        </select>
+                    <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
+                        <h1 className="font-bold">Filter By:</h1>
+                        <div className="flex gap-2 items-center">
+                            <label htmlFor="gender">Gender</label>
+                            <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} 
+                            className="text-[#000] bg-[#ffffff90] p-1">
+                                <option value="">All</option>
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                            </select>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <label htmlFor="race">Race</label>
+                            <select id="race" value={race} onChange={(e) => setRace(e.target.value)} 
+                            className="text-[#000] bg-[#ffffff90] p-1">
+                                <option value="">All</option>
+                                <option value="elf">Elf</option>
+                                <option value="human">Human</option>
+                                <option value="giant">Giant</option>
+                            </select>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <label htmlFor="sort">Sort By</label>
+                            <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}
+                            className="text-[#000] bg-[#ffffff90] p-1">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="favorites">Favorites</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="flex gap-2 items-center">
-                        <label htmlFor="sort">Sort By</label>
-                        <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-                        className="text-[#000] bg-[#ffffff90] p-1">
-                            <option value="newest">Newest</option>
-                            <option value="oldest">Oldest</option>
-                            <option value="favorites">Favorites</option>
-                        </select>
+                    <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
+                        <button type="submit" className="btn btn-success btn-soft">Apply Filters</button>
+                        <button type="button" onClick={resetFiltersHandler} className="btn btn-error btn-soft">Reset Filters</button>
                     </div>
-                </div>
-                <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
-                    <button type="submit" className="btn btn-success btn-soft">Apply Filters</button>
-                    <button type="button" onClick={resetFiltersHandler} className="btn btn-error btn-soft">Reset Filters</button>
-                </div>
-            </form>
-            {isLoading && (
-                <div className="absolute flex flex-col items-center justify-center h-[60vh] w-full z-[-10]">
-                    <span className="text-[#ffffff90]">Loading...</span>
-                    <span className="loading loading-ring loading-xl" />
-                </div>
-            )}
-            {gallery.length >= 1 && (
-                <>
-                <div className={`grid md:grid-cols-3 xl:grid-cols-5 xl:max-w-[80%] pt-30 gap-5 place-items-center w-full
-                transition-opacity duration-500 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-                    {gallery.map((item) => (
-                        <GalleryCard key={item.id} item={item} />
-                    ))}
-                </div>
-                <div className="flex justify-center items-center gap-3 py-10">
-                    <button className={`btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
-                    {pageNumbers.map((num, index) => (
-                        num === '...' ? (
-                            <span key={`ellipsis-${index}`}>...</span>
-                        ) : (
-                            <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-primary cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
-                        )
-                    ))}
-                    <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
-                </div>
-                <div className="flex flex-col justify-center items-center">
-                    <p className="text-sm">Total Items: {totalItems}</p>
-                </div>
-                </>
-            )}
-            {!isLoading && gallery.length < 1 && !resultsLoading && (
-                <div className="absolute flex flex-col items-center justify-center h-[60vh] z-[-10]">
-                    <h1 className="text-lg">No styles found. Try a new search.</h1>
-                </div>
-            )}
+                </form>
+                {isLoading && (
+                    <div className="absolute flex flex-col items-center justify-center min-h-[86vh] w-full">
+                        <span className="text-[#ffffff90]">Loading...</span>
+                        <span className="loading loading-ring loading-xl" />
+                    </div>
+                )}
+                {gallery.length >= 1 && (
+                    <>
+                    <div className={`grid md:grid-cols-3 xl:grid-cols-5 pt-15 gap-5 place-items-center w-full
+                    transition-opacity duration-500 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                        {gallery.map((item) => (
+                            <GalleryCard key={item.id} item={item} />
+                        ))}
+                    </div>
+                    <div className="flex justify-center items-center gap-3 py-10">
+                        <button className={`btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+                        {pageNumbers.map((num, index) => (
+                            num === '...' ? (
+                                <span key={`ellipsis-${index}`}>...</span>
+                            ) : (
+                                <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-primary cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
+                            )
+                        ))}
+                        <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                        <p className="text-sm">Total Items: {totalItems}</p>
+                    </div>
+                    </>
+                )}
+                {!isLoading && gallery.length < 1 && !resultsLoading && (
+                    <div className="absolute flex flex-col items-center justify-center min-h-[86vh]">
+                        <h1 className="text-lg">No styles found. Try a new search.</h1>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

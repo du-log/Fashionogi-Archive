@@ -52,6 +52,8 @@ function SubmissionUpload() {
 
     const [isLoading, setLoading] = useState<boolean>(true);
 
+    const [inflateImg, setInflateImg] = useState<string | null>(null);
+
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [gender, setGender] = useState<string>('all');
@@ -396,6 +398,17 @@ function SubmissionUpload() {
                 </div>
             </div>
 
+            {inflateImg && (
+                <dialog className="modal modal-open">
+                    <div className="modal-box">
+                        <img src={`${inflateImg}`} className="aspect-[9/16] place-self-center" />
+                    </div>
+                    <form method="dialog" className="modal-backdrop">
+                        <button onClick={() => setInflateImg(null)}></button>
+                    </form>
+                </dialog>  
+            )}
+
             {images[activeCropIndex] && (
                 <dialog id='crop_modal' className="modal backdrop-blur-sm py-2">
                     <div className="modal-box max-w-full">
@@ -469,11 +482,12 @@ function SubmissionUpload() {
                                 {index === 1 && <span className="absolute top-1 left-1 text-xs bg-[#00000090] rounded p-1">2nd</span>}
                                 <div className="absolute inset-0 bg-[#00000070] opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 justify-center items-center">
                                     {index !== 0 && (
-                                        <button onClick={() => handleDisplayOrder(index, 0)} className="btn btn-xs text-[10px] w-3/4">Make 1st</button>
+                                        <button onClick={() => handleDisplayOrder(index, 0)} className="btn btn-xs text-10 w-3/4">Make 1st</button>
                                     )}
                                     {index !== 1 && images.length > 1 && (
-                                        <button onClick={() => handleDisplayOrder(index, 1)} className="btn btn-xs text-[10px] w-3/4">Make 2nd</button>
+                                        <button onClick={() => handleDisplayOrder(index, 1)} className="btn btn-xs text-10 w-3/4">Make 2nd</button>
                                     )}
+                                    <button onClick={() => setInflateImg(image.previewUrl)} className="btn btn-xs text-10 w-3/4">Preview</button>
                                 </div>
                             </div>
                         ))}

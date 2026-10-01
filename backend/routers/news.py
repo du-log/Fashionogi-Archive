@@ -65,12 +65,13 @@ def get_all_articles(db: Session = Depends(get_db)):
             'id': article.id,
             'title': article.title,
             'description': article.description,
-            'type': article.type
+            'type': article.type,
+            'created_at': article.created_at
         })
     
     return results
 
-@router.get('')
+@router.get('/latest')
 def get_latest_five_articles(db: Session = Depends(get_db)):
     stmt = (
         select(models.News)
@@ -88,6 +89,7 @@ def get_latest_five_articles(db: Session = Depends(get_db)):
         results.append({
             'id': article.id,
             'title': article.title,
+            'description': article.description,
             'type': article.type,
             'created_at': article.created_at,
         })

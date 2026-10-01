@@ -146,7 +146,7 @@ function SubmissionPage() {
                     {inflateImg && (
                         <dialog className="modal modal-open">
                             <div className="modal-box">
-                                <img src={`${BASE_URL}${inflateImg}`} className="aspect-[9/16]" />
+                                <img src={`${BASE_URL}${inflateImg}`} className="aspect-[9/16] place-self-center" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>

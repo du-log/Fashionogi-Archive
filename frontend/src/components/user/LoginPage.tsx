@@ -34,8 +34,8 @@ function LoginPage() {
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh]">
-            <div className="flex flex-col items-center py-5 px-10 outline-1 rounded-xl bg-[#00800090]">
-                <h1 className="text-4xl text-[#ffffff] italic">Fashionogi</h1>
+            <div className="flex flex-col items-center py-5 px-10 outline-1 rounded-xl bg-[#00660070]">
+                <h1 className="text-4xl text-[#ffffff] italic">Fashionogi Archive</h1>
                 <h5 className="text-lg text-[#ffd700] italic">Discover your Erinn Style</h5>
             </div>
             <div className="relative flex flex-col items-center px-20 py-10 rounded-lg outline outline-[#ffffff90] bg-[#00660070] gap-5">

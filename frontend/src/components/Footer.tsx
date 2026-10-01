@@ -12,8 +12,7 @@ function Footer() {
                     <Link to='/terms'><p className="hover:text-[#7CC96B]">Terms and Conditions</p></Link>
                 </div>
                 <div className="flex flex-col gap-1 items-start text-sm pl-2">
-                    <a className="hover:text-[#7CC96B]" href="https://www.nexon.com/mabinogi" target="_blank">Mabinogi Official Site</a>
-                    <a className="hover:text-[#7CC96B]" href="https://wiki.mabinogiworld.com" target="_blank">Mabinogi World Wiki</a>
+                    <a className="hover:text-[#7CC96B]" href="https://github.com/du-log/Fashionogi-Archive" target="_blank">GitHub</a>
                 </div>
             </div>
         </div>
