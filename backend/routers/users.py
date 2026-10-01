@@ -21,14 +21,14 @@ import models, auth
 
 router = APIRouter(prefix = '/api/users', tags = ['Users'])
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
+#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+#UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
 
-AVATARS_DIR = os.path.join(UPLOAD_DIR, 'avatars')
+#AVATARS_DIR = os.path.join(UPLOAD_DIR, 'avatars')
 
-os.makedirs(AVATARS_DIR, exist_ok = True)
+#os.makedirs(AVATARS_DIR, exist_ok = True)
 
-router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
+#router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
 
 class UserProfileUpdate(BaseModel):
     bio: Optional[str] = None
