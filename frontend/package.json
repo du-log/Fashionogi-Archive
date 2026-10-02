@@ -1,7 +1,7 @@
 {
   "name": "fashionogilookbook",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
+    "@vercel/analytics": "^2.0.1",
     "axios": "^1.19.0",
     "lucide-react": "^1.14.0",
     "react": "^19.2.5",

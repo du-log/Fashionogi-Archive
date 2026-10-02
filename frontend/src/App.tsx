@@ -22,6 +22,7 @@ import About from './components/static/About';
 import Rules from './components/static/Rules';
 import NewsPage from './components/news/NewsPage';
 import ArticlePage from './components/news/ArticlePage';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
+      <Analytics />
     </AuthProvider>
   )
 }
