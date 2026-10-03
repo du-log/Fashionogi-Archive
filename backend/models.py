@@ -45,6 +45,9 @@ class User(Base):
 
     is_admin: Mapped[bool] = mapped_column(Boolean, default = False, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
+    is_verified: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
+
+    verification_token: Mapped[str] = mapped_column(String, nullable = True)
 
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
     last_login = mapped_column(DateTime(timezone = True), nullable = True)
@@ -170,7 +173,8 @@ class Submission(Base):
     gender: Mapped[str] = mapped_column(String(6), index = True, nullable = False)
     race: Mapped[str] = mapped_column(String(5), index = True, nullable = False)
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
-    # "pending", "approved", "flagged", "rejected", "unlisted"
+    is_active: Mapped[bool] = mapped_column(Boolean, default = True, server_default = 'true', nullable = False)
+    # "pending", "approved", "flagged", "rejected", "unlisted", "deleted"
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
 
     favorited_by = relationship(

@@ -32,19 +32,18 @@ function UserCollapse() {
     }, []);
 
     useEffect(() => {
-        setTimeout(() => setLoading(false), 500);
+        setTimeout(() => setLoading(false), 200);
     })
-
 
     return (
         <div className={`transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-            {!isAuth && (
+            {!isAuth && !user && (
                 <div className="flex gap-3">
                     <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Log In</button>
                     <button className="cursor-pointer bg-[#bb00bb90] hover:bg-[#800080] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/register')}>Register</button>
                 </div>
             )}
-            {isAuth && (
+            {isAuth && user && (
                 <div className="relative pr-[1rem]" ref={menuRef}>
                     <div className="flex items-center justify-end gap-3 bg-[#3E4540] outline outline-[#ffffff50] rounded-lg p-2">
                         <h2 className="text-lg hover:cursor-default">{user?.username}</h2>
