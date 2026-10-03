@@ -101,9 +101,11 @@ function SignUpPage() {
         }
         if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
             setPwErr('Password does not fulfill requirements.')
+            return;
         }
         if (verify !== password) {
             setPwErr('Passwords do not match.')
+            return;
         }
 
         if (!username || !email || !password || verify !== password) return;

@@ -95,8 +95,7 @@ function AccountSettings() {
                             </div>
                             <div className="flex flex-col gap-2 py-2 w-full">
                                 <h1 className="text-xl">Password</h1>
-                                <button className={`btn btn-success btn-soft w-fit
-                                ${user?.username === username || !isAvailable ? 'btn-disabled' : ''} ${username !== user?.username && isAvailable ? '' : 'btn-disabled'}`}
+                                <button className={`btn btn-warning btn-soft w-fit`}
                                 onClick={() => setPwFlag(true)}>
                                     Password Change Form
                                 </button>
@@ -143,7 +142,7 @@ function AccountSettings() {
                 )}
                 {pwFlag && (
                     <dialog className="modal modal-open">
-                        <div className="modal-box">
+                        <div className="modal-box w-fit h-fit p-10">
                             <PwChangeForm />
                             <div className="modal-action justify-center">
                                 <button className="btn btn-error" onClick={() => setPwFlag(false)}>Cancel</button>
