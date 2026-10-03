@@ -123,7 +123,7 @@ export default function PwChangeForm() {
                         <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showVerify ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowVerify((show) => !show)}>{showVerify ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                     </div>
                     <span>{verifyErr}</span>
-                    <button className="btn btn-warning" onClick={() => pwVerifyHandler}>Verify</button>
+                    <button className="btn btn-warning" onClick={pwVerifyHandler}>Verify</button>
                 </div>
             )}
             {verified && (
@@ -162,7 +162,7 @@ export default function PwChangeForm() {
                             </div>
                         </div>
                         <span className="text-[#ff0000]">{pwErr}</span>
-                        <button className="btn btn-success" onClick={() => pwChangeHandler}>Change Password</button>
+                        <button className="btn btn-success" onClick={pwChangeHandler}>Change Password</button>
                     </div>
                 </div>
             )}
