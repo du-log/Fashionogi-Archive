@@ -21,11 +21,14 @@ dist-ssr
 /.vite/*
 *.venv
 *.webp
-**/__pycache__/
+backend/__pycache__/
 **.pyc
 some.txt
 
 package-lock.json
+
+alembic/__pycache__/
+alembic/versions/__pycache__/
 
 # Editor directories and files
 .vscode/*
