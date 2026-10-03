@@ -21,8 +21,10 @@ dist-ssr
 /.vite/*
 *.venv
 *.webp
-backend/__pycache__/
-**.pyc
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 some.txt
 
 package-lock.json
