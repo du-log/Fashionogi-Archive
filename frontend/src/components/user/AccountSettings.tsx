@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { USERS_URL } from "../../utilities/MiscUtility";
+import PwChangeForm from "./PwChangeForm";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
@@ -18,7 +19,7 @@ function AccountSettings() {
 
     const [nameFlag, setNameFlag] = useState<boolean>(false);
     //const [emailFlag, setEmailFlag] = useState<boolean>(false);
-    //const [pwFlag, setPwFlag] = useState<boolean>(false);
+    const [pwFlag, setPwFlag] = useState<boolean>(false);
 
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
@@ -92,6 +93,14 @@ function AccountSettings() {
                                     Change Username
                                 </button>
                             </div>
+                            <div className="flex flex-col gap-2 py-2 w-full">
+                                <h1 className="text-xl">Password</h1>
+                                <button className={`btn btn-success btn-soft w-fit
+                                ${user?.username === username || !isAvailable ? 'btn-disabled' : ''} ${username !== user?.username && isAvailable ? '' : 'btn-disabled'}`}
+                                onClick={() => setPwFlag(true)}>
+                                    Password Change Form
+                                </button>
+                            </div>
                         </div>
                     )}
                     {currentTab === 'notif' && (
@@ -128,6 +137,16 @@ function AccountSettings() {
                             <div className="modal-action justify-center pb-5">
                                 <button className="btn btn-success" onClick={() => handleNameChange(username)}>Change</button>
                                 <button className="btn btn-error" onClick={() => setNameFlag(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </dialog>
+                )}
+                {pwFlag && (
+                    <dialog className="modal modal-open">
+                        <div className="modal-box">
+                            <PwChangeForm />
+                            <div className="modal-action justify-center">
+                                <button className="btn btn-error" onClick={() => setPwFlag(false)}>Cancel</button>
                             </div>
                         </div>
                     </dialog>

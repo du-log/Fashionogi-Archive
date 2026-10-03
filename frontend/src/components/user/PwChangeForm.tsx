@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { USERS_URL } from "../../utilities/MiscUtility";
 
 export default function PwChangeForm() {
     const [verifyPw, setVerifyPw] = useState<string>('');
@@ -7,7 +8,9 @@ export default function PwChangeForm() {
 
     const pwVerifyHandler = async () => {
         setVerifyErr('');
-        const res = await fetch('');
+        const res = await fetch(`${USERS_URL}/password/verify/${verifyPw}`, {
+            credentials: 'include'
+        });
         if (res.ok) {
             setVerified(true);
         } else {
@@ -23,6 +26,11 @@ export default function PwChangeForm() {
                     <input type="password" value={verifyPw} onChange={(e) => setVerifyPw(e.target.value)} />
                     <span>{verifyErr}</span>
                     <button className="btn btn-warning" onClick={() => pwVerifyHandler}>Verify</button>
+                </div>
+            )}
+            {verified && (
+                <div>
+                    <p>If this is displaying, then the test was successful.</p>
                 </div>
             )}
         </div>

@@ -246,3 +246,14 @@ def get_my_favorites(current_user: models.User = Depends(auth.get_current_user),
         })
 
     return results
+
+@router.get('/password/verify/{password}')
+def verify_password(password: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 403, detail = 'Unauthorized.')
+
+    if not auth.verify_pw(password, user.password):
+        raise HTTPException(status_code = 400, detail = 'Passwords do not match.')
+
+    return {'success': True,'message': 'Password successfully verified.'}
