@@ -17,8 +17,8 @@ function AccountSettings() {
     const [availMsg, setAvailMsg] = useState<string>('');
 
     const [nameFlag, setNameFlag] = useState<boolean>(false);
-    const [emailFlag, setEmailFlag] = useState<boolean>(false);
-    const [pwFlag, setPwFlag] = useState<boolean>(false);
+    //const [emailFlag, setEmailFlag] = useState<boolean>(false);
+    //const [pwFlag, setPwFlag] = useState<boolean>(false);
 
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
