@@ -258,7 +258,7 @@ def verify_password(password: str, current_user: models.User = Depends(auth.get_
 
     return {'success': True,'message': 'Password successfully verified.'}
 
-@router.patch('/password/update/{password}}')
+@router.patch('/password/update/{password}')
 def update_password(password: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
     if not user:
