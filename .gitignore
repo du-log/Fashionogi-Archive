@@ -20,17 +20,20 @@ dist-ssr
 */.vite/*
 /.vite/*
 *.venv
+venv/
+.venv/
 *.webp
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 some.txt
-
-package-lock.json
-
-alembic/__pycache__/
-alembic/versions/__pycache__/
+.vercel/
+.pytest_cache/
+.coverage
+.eslintcache
+Thumbs.db
+Desktop.ini
 
 # Editor directories and files
 .vscode/*
