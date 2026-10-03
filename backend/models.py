@@ -79,6 +79,10 @@ class UserProfile(Base):
 
     user: Mapped["User"] = relationship("User", back_populates = "profile")
 
+    @property
+    def joined(self):
+        return self.user.created_at
+
 # Global Equipment Dict Model
 class BaseEquipment(Base):
     __tablename__ = "base_equipment"
@@ -174,7 +178,7 @@ class Submission(Base):
     race: Mapped[str] = mapped_column(String(5), index = True, nullable = False)
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
     # "pending", "approved", "flagged", "rejected", "unlisted", "deleted"
-    
+
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, server_default = 'true', nullable = False)
     delete_flag: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
 

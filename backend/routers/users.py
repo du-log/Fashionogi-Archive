@@ -7,6 +7,7 @@ import json
 
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 
 from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
 from fastapi.security import OAuth2PasswordRequestForm
@@ -46,6 +47,7 @@ class UserProfileUpdate(BaseModel):
 
 class UserProfileResponse(UserProfileUpdate):
     id: int
+    joined: datetime
 
     class Config:
         from_attributes: True
@@ -67,7 +69,6 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
     if not user.profile:
         return {
             'id': user.id,
-            'joined': user.created_at,
             'bio': None,
             'server': None,
             'guild': None,

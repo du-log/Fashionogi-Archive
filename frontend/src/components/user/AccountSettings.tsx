@@ -16,6 +16,10 @@ function AccountSettings() {
     const [isAvailable, setAvailable] = useState<boolean>(false);
     const [availMsg, setAvailMsg] = useState<string>('');
 
+    const [nameFlag, setNameFlag] = useState<boolean>(false);
+    const [emailFlag, setEmailFlag] = useState<boolean>(false);
+    const [pwFlag, setPwFlag] = useState<boolean>(false);
+
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
         if (username.length > 15) {
@@ -45,9 +49,8 @@ function AccountSettings() {
             credentials: 'include'
         })
         if (res.ok) {
-            alert('Sucessfully changed username. \nReturning back to login due to change in user credentials.');
+            alert('Sucessfully changed username. \nReturning back to login.');
             logout();
-            window.location.reload();
         }
     }
 
@@ -85,7 +88,7 @@ function AccountSettings() {
                                 <p className={`text-sm ${isAvailable && availMsg.length > 0 ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{availMsg}</p>
                                 <button className={`btn btn-success btn-soft w-fit
                                 ${user?.username === username || !isAvailable ? 'btn-disabled' : ''} ${username !== user?.username && isAvailable ? '' : 'btn-disabled'}`}
-                                onClick={() => handleNameChange(username)}>
+                                onClick={() => setNameFlag(true)}>
                                     Change Username
                                 </button>
                             </div>
@@ -108,6 +111,27 @@ function AccountSettings() {
                         </div>
                     )}
                 </div>
+                {nameFlag && (
+                    <dialog className="modal modal-open">
+                        <div className="modal-box w-100 h-fit bg-[#3E454090] outline">
+                            <div className="flex flex-col gap-2 p-5">
+                                <h1 className="text-3xl text-center">Name Change Request</h1>
+                                <p className="text-center py-5">{user?.username} {'->'} {username}</p>
+                                <p className="text-wrap">Changing your username will affect these things:</p>
+                                <ul className="list-disc pl-5">
+                                    <li><p>The URL to access your profile.</p></li>
+                                    <li><p>The username featured on your submissions.</p></li>
+                                    {user?.is_admin && (<li><p>Any admin-related actions that display your username.</p></li>)}
+                                </ul>
+                                <p>Are you sure? After confirming, you will need to sign in again.</p>
+                            </div>
+                            <div className="modal-action justify-center pb-5">
+                                <button className="btn btn-success" onClick={() => handleNameChange(username)}>Change</button>
+                                <button className="btn btn-error" onClick={() => setNameFlag(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </dialog>
+                )}
             </div>
         </>
     )
