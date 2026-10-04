@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import UserCollapse from "./UserCollapse";
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Navigation() {
     const auth = useContext(AuthContext);

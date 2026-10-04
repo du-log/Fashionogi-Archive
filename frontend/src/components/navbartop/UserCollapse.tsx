@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function UserCollapse() {
     const menuRef = useRef<HTMLDivElement | null>(null);

@@ -57,7 +57,7 @@ def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
 @router.get('/search')
 def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     userStmt = (
-        select(models.User.username)
+        select(models.User)
         .where(models.User.is_active == True)
         .order_by(models.User.username.asc())
     )
@@ -65,7 +65,7 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
         userStmt = userStmt.where(models.User.username.ilike(f"%{q}%"))
 
     subStmt = (
-        select(models.Submission.title)
+        select(models.Submission)
         .where(
             models.Submission.status == 'approved',
             models.Submission.is_active == True
@@ -82,12 +82,19 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
     titles = []
 
     for user in users:
-        names.append({'username': user.username})
+        names.append({
+            'id': user.id,
+            'username': user.username
+        })
 
     for sub in submissions:
-        titles.append({'title': sub.title})
+        titles.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': sub.author
+        })
 
     return {
-        'usernames': names,
-        'titles': titles
+        'users': names,
+        'submissions': titles
     }
