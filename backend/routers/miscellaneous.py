@@ -37,7 +37,7 @@ def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
 
     results = db.execute(stmt).scalars().all()
 
-    return[{'id': item.id, 'name': item.name} for item in results]
+    return [{'id': item.id, 'name': item.name} for item in results]
 
 @router.get('/tags')
 def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
@@ -53,3 +53,41 @@ def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     results = db.execute(stmt).scalars().all()
 
     return [{'id': item.id, 'name': item.name} for item in results]
+
+@router.get('/search')
+def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    userStmt = (
+        select(models.User.username)
+        .where(models.User.is_active == True)
+        .order_by(models.User.username.asc())
+    )
+    if q:
+        userStmt = userStmt.where(models.User.username.ilike(f"%{q}%"))
+
+    subStmt = (
+        select(models.Submission.title)
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
+        )
+        .order_by(models.Submission.title.asc())
+    )
+    if q:
+        subStmt = subStmt.where(models.Submission.title.ilike(f"%{q}%"))
+
+    users = db.execute(userStmt).scalars().all()
+    submissions = db.execute(subStmt).scalars().all()
+
+    names = []
+    titles = []
+
+    for user in users:
+        names.append({'username': user.username})
+
+    for sub in submissions:
+        titles.append({'title': sub.title})
+
+    return {
+        'usernames': names,
+        'titles': titles
+    }
