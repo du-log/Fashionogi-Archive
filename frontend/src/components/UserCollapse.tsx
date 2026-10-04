@@ -12,10 +12,9 @@ function UserCollapse() {
     const isAuth = auth?.isAuth ?? false;
     const logout = auth?.logout ?? (async () => {});
     const user = auth?.user ?? null;
-    const [isLoading, setLoading] = useState<boolean>(true);
+    const isLoading = auth?.isLoading ?? false;
 
     const logOutHandle = () => {
-        setLoading(true);
         logout();
     }
 
@@ -31,20 +30,18 @@ function UserCollapse() {
         return () => document.removeEventListener('mousedown', outsideClickHandle);
     }, []);
 
-    useEffect(() => {
-        setTimeout(() => setLoading(false), 200);
-    })
+    if(isLoading) return(<></>);
 
     return (
-        <div className={`transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        <div>
             {!isAuth && !user && (
-                <div className="flex gap-3">
+                <div className={`flex gap-3`}>
                     <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Log In</button>
                     <button className="cursor-pointer bg-[#bb00bb90] hover:bg-[#800080] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/register')}>Register</button>
                 </div>
             )}
             {isAuth && user && (
-                <div className="relative pr-[1rem]" ref={menuRef}>
+                <div className={`relative pr-5`} ref={menuRef}>
                     <div className="flex items-center justify-end gap-3 bg-[#3E4540] outline outline-[#ffffff50] rounded-lg p-2">
                         <h2 className="text-lg hover:cursor-default">{user?.username}</h2>
                         <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-md cursor-pointer w-10 h-10 outline-2 hover:outline-[#B59E6D]`} onClick={() => setOpen(!isOpen)}>
