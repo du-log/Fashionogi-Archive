@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import SearchBarComboBox from "./SearchBarComboBox";
 
 function UserCollapse() {
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +34,7 @@ function UserCollapse() {
     if(isLoading) return(<></>);
 
     return (
-        <div>
+        <div className="relative">
             {!isAuth && !user && (
                 <div className={`flex gap-3`}>
                     <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 text-[#ffffff] hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Log In</button>
@@ -60,7 +61,10 @@ function UserCollapse() {
                         </ul>
                     )}
                 </div>
-            )}  
+            )}
+            <div className="absolute right-0 mt-4 z-[-10] px-5 py-2 bg-[#006600] rounded-b-xl">
+                <SearchBarComboBox />
+            </div>
         </div>
     )
 }

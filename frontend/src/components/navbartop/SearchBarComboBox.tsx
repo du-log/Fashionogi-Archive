@@ -36,16 +36,14 @@ export default function SearchBarComboBox() {
                     const data = await res.json();
                     setUserResults(data.users);
                     setSubResults(data.submissions);
-                    const urlParam = new URLSearchParams(location.search);
-                    const queryFromUrl = urlParam.get("query")
-                    if(query.length > 2 && query !== queryFromUrl && (userResults.length > 0 || subResults.length > 0)) {
+                    if(userResults.length > 0 || subResults.length > 0) {
                         setOpen(true);
-                    } else {
-                        setOpen(false);
                     }
                 } catch (err) {
                     console.error("Search failed", err);
                 }
+            } else {
+                setOpen(false);
             }
         }, 200);
         return () => clearTimeout(timerDebounce);
@@ -53,11 +51,11 @@ export default function SearchBarComboBox() {
 
     return (
         <div className="relative w-40">
-            <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Tag" 
+            <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." 
             className="w-full p-1 outline rounded bg-[#ffffff50] text-[#fff]" />
 
             {isOpen && (
-                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto">
+                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto bg-[#666]">
                     {userResults.length > 0 && (
                         <>
                             <p>Users</p>
@@ -69,7 +67,7 @@ export default function SearchBarComboBox() {
                                     navigate(`/profile/${item.username}`)
                                     setQuery('');
                                 }}
-                                className="cursor-pointer bg-[#666] hover:bg-[#777] p-2">
+                                className="cursor-pointer hover:bg-[#777] p-2">
                                     {item.username}
                                 </li>
                             ))}
@@ -77,7 +75,7 @@ export default function SearchBarComboBox() {
                     )}
                     {subResults.length > 0 && (
                         <>
-                            <p>Submissions</p>
+                            <p className="px-2 py-1">Submissions</p>
                             {subResults.map((item) => (
                                 <li key={item.id} 
                                 onClick={() => {
@@ -86,8 +84,8 @@ export default function SearchBarComboBox() {
                                     navigate(`/fashion/id/${item.id}`)
                                     setQuery('');
                                 }}
-                                className="cursor-pointer bg-[#666] hover:bg-[#777] p-2">
-                                    {item.title}
+                                className="cursor-pointer hover:bg-[#777] p-2">
+                                    {item.title} by {item.author}
                                 </li>
                             ))}
                         </>

@@ -71,6 +71,7 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
             models.Submission.is_active == True
         )
         .order_by(models.Submission.title.asc())
+        .options(joinedload(models.Submission.author))
     )
     if q:
         subStmt = subStmt.where(models.Submission.title.ilike(f"%{q}%"))
@@ -91,7 +92,7 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
         titles.append({
             'id': sub.id,
             'title': sub.title,
-            'author': sub.author
+            'author': sub.author.username
         })
 
     return {
