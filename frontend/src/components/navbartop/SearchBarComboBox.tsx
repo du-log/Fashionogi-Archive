@@ -36,14 +36,18 @@ export default function SearchBarComboBox() {
                     const data = await res.json();
                     setUserResults(data.users);
                     setSubResults(data.submissions);
-                    if(userResults.length > 0 || subResults.length > 0) {
-                        setOpen(true);
-                    }
                 } catch (err) {
                     console.error("Search failed", err);
                 }
+                if(userResults.length > 0 || subResults.length > 0) {
+                    setOpen(true);
+                } else {
+                    setOpen(false);
+                }
             } else {
                 setOpen(false);
+                setUserResults([]);
+                setSubResults([]);
             }
         }, 200);
         return () => clearTimeout(timerDebounce);
@@ -58,11 +62,10 @@ export default function SearchBarComboBox() {
                 <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto bg-[#666]">
                     {userResults.length > 0 && (
                         <>
-                            <p>Users</p>
+                            <p className="px-2 py-1 bg-[#003000]">Users</p>
                             {userResults.map((item) => (
                                 <li key={item.id} 
                                 onClick={() => {
-                                    skipSearch.current = true;
                                     setOpen(false);
                                     navigate(`/profile/${item.username}`)
                                     setQuery('');
@@ -75,17 +78,17 @@ export default function SearchBarComboBox() {
                     )}
                     {subResults.length > 0 && (
                         <>
-                            <p className="px-2 py-1">Submissions</p>
+                            <p className="px-2 py-1 bg-[#003000]">Submissions</p>
                             {subResults.map((item) => (
                                 <li key={item.id} 
                                 onClick={() => {
-                                    skipSearch.current = true;
                                     setOpen(false);
                                     navigate(`/fashion/id/${item.id}`)
                                     setQuery('');
                                 }}
-                                className="cursor-pointer hover:bg-[#777] p-2">
-                                    {item.title} by {item.author}
+                                className="flex flex-col cursor-pointer hover:bg-[#777] p-2">
+                                    <p>{item.title}</p>
+                                    <p className="text-sm">by {item.author}</p>
                                 </li>
                             ))}
                         </>

@@ -62,9 +62,6 @@ function UserCollapse() {
                     )}
                 </div>
             )}
-            <div className="absolute right-0 mt-4 z-[-10] px-5 py-2 bg-[#006600] rounded-b-xl">
-                <SearchBarComboBox />
-            </div>
         </div>
     )
 }
