@@ -20,6 +20,7 @@ export default function SearchBarComboBox() {
     const skipSearch = useRef<boolean>(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
     const [query, setQuery] = useState<string>('');
 
@@ -53,8 +54,21 @@ export default function SearchBarComboBox() {
         return () => clearTimeout(timerDebounce);
     }, [query, userResults, subResults, location.search])
 
+    useEffect(() => {
+        const outsideClickHandle = (event: MouseEvent) => {
+            if (!menuRef.current) return;
+            const target = event.target;
+            if (target instanceof Node && !menuRef.current.contains(target)) {
+                skipSearch.current = true;
+                setOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', outsideClickHandle);
+        return () => document.removeEventListener('mousedown', outsideClickHandle);
+    }, []);
+
     return (
-        <div className="relative w-40">
+        <div className="relative w-40" ref={menuRef}>
             <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." 
             className="w-full p-1 outline rounded bg-[#ffffff50] text-[#fff]" />
 

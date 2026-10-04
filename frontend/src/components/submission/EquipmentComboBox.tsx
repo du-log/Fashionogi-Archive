@@ -17,6 +17,7 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
     const [results, setResults] = useState([]);
     const [isOpen, setOpen] = useState<boolean>(false);
     const skipSearch = useRef<boolean>(false);
+    const menuRef = useRef<HTMLUListElement | null>(null);
 
     useEffect(() => {
         if (skipSearch.current) {
@@ -48,13 +49,26 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
         return () => clearTimeout(timerDebounce);
     }, [value, slot])
 
+    useEffect(() => {
+        const outsideClickHandle = (event: MouseEvent) => {
+            if (!menuRef.current) return;
+            const target = event.target;
+            if (target instanceof Node && !menuRef.current.contains(target)) {
+                skipSearch.current = true;
+                setOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', outsideClickHandle);
+        return () => document.removeEventListener('mousedown', outsideClickHandle);
+    }, []);
+
     return (
         <div className="relative w-full">
             <input type="text" value={value} onChange={(e) => onSelect(slot, 'name', e.target.value)} placeholder="Item name..." 
             className="w-full p-1 outline rounded bg-[#ffffff50] text-[#ffffff]" />
 
             {isOpen && results.length > 0 && (
-                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto">
+                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
                     {results.map((item: Equipment) => (
                         <li key={item.id} 
                         onClick={() => {
