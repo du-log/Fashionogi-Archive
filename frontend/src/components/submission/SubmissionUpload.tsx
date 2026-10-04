@@ -8,6 +8,10 @@ import EquipmentAccordion from "./EquipmentAccordion";
 import { AuthContext } from "../../contexts/AuthContext";
 import TagsComboBox from "./TagsComboBox";
 import { SUBS_URL } from "../../utilities/MiscUtility";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import remarkRehype from "remark-rehype";
 
 interface UploadImageItem {
     id: number,
@@ -51,6 +55,8 @@ function SubmissionUpload() {
     const userLoading = auth?.isLoading ?? true;
 
     const [isLoading, setLoading] = useState<boolean>(true);
+    const [inReview, setInReview] = useState<boolean>(false);
+    const [rulesAgree, setRulesAgree] = useState<boolean>(false);
 
     const [inflateImg, setInflateImg] = useState<string | null>(null);
 
@@ -102,11 +108,14 @@ function SubmissionUpload() {
         accessory2: defaultItem('accessory')
     })
 
+    const [previewEquip, setPreviewEquip] = useState<EquipmentItem[]>([]);
+
     const equipmentChangeHandler = (slot: SlotKey, part: keyof EquipmentItem | string, value: string | boolean) => {
         setEquipment(prev => ({
             ...prev,
             [slot]: { ...prev[slot], [part]: value}
         }))
+        setPreviewEquip(equipmentSanitize(equipment));
     }
 
     const equipmentSanitize = (rawEquipment: Record<SlotKey, EquipmentItem>) => {
@@ -322,6 +331,8 @@ function SubmissionUpload() {
             accessory1: defaultItem('accessory'),
             accessory2: defaultItem('accessory')
         });
+
+        setPreviewEquip([]);
     }
 
     const equipmentSections: { title: string, key: SlotKey }[] = [
@@ -382,9 +393,9 @@ function SubmissionUpload() {
             </div>
             <div className="flex flex-col gap-2 w-full">
                 <h1 className="text-xl">Tags</h1>
-                <p className="text-sm text-[#990000]">At least one tag required.</p>
+                <p className="text-sm text-[#990000]">At least one tag required, max 5 tags.</p>
                 <TagsComboBox tags={tags} onSelect={tagHandlerV2} />
-                <p className="text-sm text-[#ffffff90]">Search filters based on text entered. Hit space to show all tags.</p>
+                <p className="text-sm text-[#ffffff90]">Search filters based on text entered and relative string matching. Hit space to show all tags.</p>
                 <div className="flex flex-wrap gap-2">
                     {tags.map((tag, index) => (
                         <span key={index} className="flex items-center gap-2 bg-[#008000] text-white text-sm px-3 py-1 rounded-full">
@@ -495,6 +506,8 @@ function SubmissionUpload() {
                 </div>
                 <div className="relative flex flex-col gap-2">
                     <h2 className="text-xl">Equipment Data</h2>
+                    <h5 className="text-sm text-[#ffffff90]">At least one piece of equipment must be included.</h5>
+                    <h5 className="text-sm text-[#ffffff90]">Only include equipment relevant to the style.</h5>
                     <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-[#ffffff50] rounded-lg" style={{scrollbarWidth: "thin"}}>
                         {equipmentSections.map((section) => (
                             <EquipmentAccordion 
@@ -524,9 +537,96 @@ function SubmissionUpload() {
                 </div>
             </div>
             <div className="flex justify-center gap-3">
-                <button onClick={handleUpload} className={`btn btn-soft btn-success p-3 ${images.length === 0 ? "btn-disabled" : ""}`}>Submit</button>
-                <button onClick={() => {resetParams(); document.documentElement.scrollTop = 0}} className="btn btn-soft btn-error p-3">Reset</button>
+                <button onClick={() => setInReview(true)} className={`btn btn-warning p-3 ${images.length === 0 || tags.length === 0 || previewEquip.length === 0 ? "btn-disabled" : ""}`}>Review Style</button>
+                <button onClick={() => {resetParams(); document.documentElement.scrollTop = 0}} className="btn btn-error p-3">Reset All</button>
             </div>
+            {inReview && (
+                <dialog className="modal modal-open">
+                    <div className="modal-box flex flex-col justify-center max-w-4xl min-h-[60vh] gap-5 px-10 py-20">
+                        <h1 className="text-center text-4xl">Style Review</h1>
+                        <p className="py-5 text-lg">Title: {title}</p>
+                        <div className="flex flex-col">
+                            <p>Description:</p>
+                            <div className=""><Markdown remarkPlugins={[remarkGfm, remarkBreaks,remarkRehype]}>{description}</Markdown></div>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <h2 className="text-md">Tags: </h2> 
+                            {tags.map((tag) => (
+                                <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col gap-3 w-[75%] py-2">
+                            <h2 className="text-lg font-bold">Equipment</h2>
+                            <div className="flex flex-wrap gap-3">
+                                {Object.values(equipment).map((item) => (
+                                    item.name && (
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-[#ffffff30] bg-[#91009120]">
+                                            <h5 className="text-xs text-[#ffffff30]">{item.slot}</h5>
+                                            <h4 className="text-md">{item.name}</h4>
+                                            {!item.dyeable && (
+                                                <h5 className="text-sm text-[#fff] outline outline-[#ffffff30] outline-offset-1 rounded w-fit">Not Dyeable</h5>
+                                            )}
+                                            {item.dyeable && (
+                                                <>
+                                                    <div className="flex gap-2 text-sm">
+                                                        {item.partA && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>A: {item.partA.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partB && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>B: {item.partB.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partC && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>C: {item.partC.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
+                                                                </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2 text-sm">
+                                                        {item.partD && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>D: {item.partD.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partE && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>E: {item.partE.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partF && (
+                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                                <p>F: {item.partF.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+                        </div>
+                        <p className="text-wrap font-bold">Please preview all images and ensure that they are the best possible quality.</p>
+                        <div className="flex items-center gap-5">
+                            <label>I confirm that this style submission adheres to the guidelines under <a href="/guidelines" target="_blank" className="hover:text-[#a5f500]">Rules and Guidelines</a>.</label>
+                            <input type="checkbox" checked={rulesAgree} onChange={(e) => setRulesAgree(e.target.checked)} />
+                        </div>
+                        <div className="modal-action justify-center">
+                            <button className={`btn btn-success ${!rulesAgree ? 'btn-disabled' : ''}`} onClick={handleUpload}>Submit Style</button>
+                            <button className="btn btn-warning" onClick={() => setInReview(false)}>Edit Style</button>
+                        </div>
+                    </div>
+                </dialog>
+            )}
         </div>
     )
 }

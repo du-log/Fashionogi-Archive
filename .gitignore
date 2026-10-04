@@ -27,7 +27,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-some.txt
+some.*
 .vercel/
 .pytest_cache/
 .coverage
