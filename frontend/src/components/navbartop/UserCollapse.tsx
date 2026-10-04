@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import SearchBarComboBox from "./SearchBarComboBox";
 
 function UserCollapse() {
     const menuRef = useRef<HTMLDivElement | null>(null);
