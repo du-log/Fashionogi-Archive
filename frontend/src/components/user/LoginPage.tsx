@@ -5,8 +5,8 @@ import { useContext, useState } from "react";
 
 function LoginPage() {
     const auth = useContext(AuthContext);
-    if (!auth) throw new Error('AuthContext not provided');
-    const {login} = auth;
+    const login = auth?.login ?? (() => {});
+    const checkSession = auth?.checkSession ?? (() => {});
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loginMsg, setLoginMsg] = useState<string>('');
@@ -23,7 +23,7 @@ function LoginPage() {
             if (res) {
                 setSuccess(true)
                 setLoginMsg('Success! Redirecting...');
-                setTimeout(() => {navigate('/'); location.reload()}, 1000);
+                setTimeout(() => {checkSession(); navigate('/')}, 1000);
             } else {
                 setLoginMsg('Invalid email or password.');
             }

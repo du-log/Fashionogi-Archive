@@ -15,6 +15,23 @@ export default function AuthProvider({children}: {children: ReactNode}) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
 
+    const checkSession = async () => {
+        setLoading(true);
+        try {
+            const res = await api.get('/api/users/me');
+            if (res) {
+                setUser(res.data);
+                setAuth(true);
+            }
+        } catch (err) {
+            console.error('No session', err);
+            setUser(null);
+            setAuth(false);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const login = async (email: string, password: string) => {
         const formData = new URLSearchParams();
         formData.append('username', email);
@@ -35,6 +52,7 @@ export default function AuthProvider({children}: {children: ReactNode}) {
 
     const logout = async () => {
         try {
+            setLoading(true);
             await api.post('/api/auth/logout');
         } catch (err) {
             console.error('Request to logout failed', err);
@@ -84,7 +102,7 @@ export default function AuthProvider({children}: {children: ReactNode}) {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout, register, isLoading }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register, isLoading, checkSession }}>
             {children}
         </AuthContext.Provider>
     )
