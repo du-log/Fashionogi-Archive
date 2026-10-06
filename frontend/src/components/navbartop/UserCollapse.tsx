@@ -42,14 +42,14 @@ function UserCollapse() {
             )}
             {isAuth && user && (
                 <div className={`relative pr-5`} ref={menuRef}>
-                    <div className="flex items-center justify-end gap-3 bg-[#3E4540] outline outline-[#ffffff50] rounded-lg p-2">
-                        <h2 className="text-lg hover:cursor-default">{user?.username}</h2>
-                        <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-md cursor-pointer w-10 h-10 outline-2 hover:outline-[#B59E6D]`} onClick={() => setOpen(!isOpen)}>
+                    <div className="flex items-center justify-between gap-3 bg-[#3E4540] outline outline-[#ffffff50] rounded-lg p-2 w-50">
+                        <h2 className="text-lg hover:cursor-default truncate max-w-40">{user?.username}</h2>
+                        <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-md cursor-pointer w-12 h-12 outline-2 hover:outline-[#B59E6D]`} onClick={() => setOpen(!isOpen)}>
                             <User size={50} />
                         </div>
                     </div>
                     {isOpen && (
-                        <ul id="Collapse" className="absolute flex flex-col items-start bg-[#3E4540] mt-4 sm:text-md xl:text-lg outline-1 outline-[#DAA700] right-0 w-40">
+                        <ul id="Collapse" className="absolute flex flex-col items-start bg-[#3E4540] mt-4 sm:text-md xl:text-lg outline-1 outline-[#DAA700] top-14 left-0 w-50">
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>View Profile</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>
