@@ -26,14 +26,14 @@ function Navigation() {
                     <h5 className="italic text-sm text-[#ffd700]">Discover your Erinn Style</h5>
                 </div>
                 <div className="right flex flex-1 justify-start items-center h-22">
-                    <div className="flex place-items-center z-10 bg-[#3E4540] outline outline-[#ffffff50] rounded-lg p-2 w-fit min-w-50 h-fit min-h-16">
+                    <div className={`flex place-items-center z-10 bg-[#3E4540] rounded-lg p-2 w-fit min-w-50 h-fit min-h-16 ${showSearch ? '' : 'border-b-1'}`}>
                         <UserCollapse />
                     </div>
-                    <div className="fixed mt-19 ml-4.5 place-items-center w-40 cursor-pointer rounded-b-lg bg-[#3E4540] hover:outline hover:outline-[#ffffff50]" onClick={() => showSearch ? setShowSearch(false) : setShowSearch(true)}>
+                    <div className={`fixed ${showSearch ? 'mt-45 z-[-10]' : 'mt-20'} ml-5 place-items-center w-40 cursor-pointer rounded-b-lg bg-[#3E4540] hover:outline hover:outline-[#ffffff50]`} onClick={() => showSearch ? setShowSearch(false) : setShowSearch(true)}>
                         <p className="flex justify-between">{showSearch ? <ChevronUp height={20} /> : <ChevronDown height={20} />}</p>
                     </div>
                     {showSearch && (
-                        <div className="fixed mt-34 z-[-10] px-5 py-2 bg-[#006600] rounded-b-xl">
+                        <div className="fixed mt-25 border-b-1 px-5 pt-5 pb-2 bg-[#3E4540] rounded-b-xl">
                             <SearchBarComboBox />
                         </div>
                     )}
