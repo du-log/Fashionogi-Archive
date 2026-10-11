@@ -166,7 +166,7 @@ function SubmissionUpload() {
                     const file = e.target.files[index];
                     const imageDataUrl = URL.createObjectURL(file);
                     const defaultPixels = await calculateDefaultCrop(imageDataUrl, 9/16) as cropDimen;
-                    const autoCroppedFile = await getCroppedImg( {imageSrc: imageDataUrl, pixelCrop: defaultPixels} ) as Blob;
+                    const autoCroppedFile = await getCroppedImg( {imageSrc: imageDataUrl, pixelCrop: defaultPixels, targetSize: {width: 540, height: 960}} ) as Blob;
                     const previewUrl = URL.createObjectURL(autoCroppedFile);
                     const image: UploadImageItem = {
                         id: index,
@@ -199,7 +199,7 @@ function SubmissionUpload() {
 
             const currentImg = images[activeCropIndex];
             const pixelCrop = croppedAreaPixels as cropDimen;
-            const croppedFile = await getCroppedImg( {imageSrc: currentImg.rawUrl, pixelCrop: pixelCrop} ) as Blob;
+            const croppedFile = await getCroppedImg( {imageSrc: currentImg.rawUrl, pixelCrop: pixelCrop, targetSize: {width: 540, height: 960}} ) as Blob;
             const newPrevUrl = URL.createObjectURL(croppedFile);
 
             setImages(prev => {
@@ -225,7 +225,7 @@ function SubmissionUpload() {
         const currentImg = images[activeCropIndex];
         if (croppedAreaPixels) {
             const pixelCrop = croppedAreaPixels as cropDimen;
-            const croppedFile = await getCroppedImg({imageSrc: currentImg.rawUrl, pixelCrop: pixelCrop }) as Blob;
+            const croppedFile = await getCroppedImg( {imageSrc: currentImg.rawUrl, pixelCrop: pixelCrop, targetSize: {width: 540, height: 960}} ) as Blob;
             const newPrevUrl = URL.createObjectURL(croppedFile);
 
             setImages(prev => {
@@ -537,7 +537,7 @@ function SubmissionUpload() {
                 </div>
             </div>
             <div className="flex justify-center gap-3">
-                <button onClick={() => setInReview(true)} className={`btn btn-warning p-3 ${images.length === 0 || tags.length === 0 || previewEquip.length === 0 ? "btn-disabled" : ""}`}>Review Style</button>
+                <button onClick={() => setInReview(true)} className={`btn btn-warning p-3 ${images.length === 0 || tags.length === 0 || previewEquip.length === 0 || title.length === 0 || description.length === 0 ? "btn-disabled" : ""}`}>Review Style</button>
                 <button onClick={() => {resetParams(); document.documentElement.scrollTop = 0}} className="btn btn-error p-3">Reset All</button>
             </div>
             {inReview && (
@@ -555,7 +555,7 @@ function SubmissionUpload() {
                                 <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
                             ))}
                         </div>
-                        <div className="flex flex-col gap-3 w-[75%] py-2">
+                        <div className="flex flex-col gap-3 w-[80%] py-2">
                             <h2 className="text-lg font-bold">Equipment</h2>
                             <div className="flex flex-wrap gap-3">
                                 {Object.values(equipment).map((item) => (
@@ -615,7 +615,7 @@ function SubmissionUpload() {
                                 ))}
                             </div>
                         </div>
-                        <p className="text-wrap font-bold">Please preview all images and ensure that they are the best possible quality.</p>
+                        <p className="text-wrap font-bold">Please preview all images and ensure that they are the best possible quality. You will also not be able to change them after submitting, so please finalize them.</p>
                         <div className="flex items-center gap-5">
                             <label>I confirm that this style submission adheres to the guidelines under <a href="/guidelines" target="_blank" className="hover:text-[#a5f500]">Rules and Guidelines</a>.</label>
                             <input type="checkbox" checked={rulesAgree} onChange={(e) => setRulesAgree(e.target.checked)} />

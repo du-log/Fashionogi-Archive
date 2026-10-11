@@ -5,7 +5,7 @@ type cropDimen = {
     height: number
 }
 
-export default async function getCroppedImg( {imageSrc, pixelCrop} : {imageSrc: string, pixelCrop: cropDimen} ) {
+export default async function getCroppedImg( {imageSrc, pixelCrop, targetSize} : {imageSrc: string, pixelCrop: cropDimen, targetSize?:{width: number, height: number}} ) {
     const image = new Image();
     image.src = imageSrc;
 
@@ -20,13 +20,13 @@ export default async function getCroppedImg( {imageSrc, pixelCrop} : {imageSrc: 
         throw new Error('Could not resolve canvas 2D context');
     }
 
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+    canvas.width = targetSize ? targetSize.width : pixelCrop.width;
+    canvas.height = targetSize ? targetSize.height : pixelCrop.height;
 
     ctx.drawImage(
         image,
         pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height,
-        0, 0, pixelCrop.width, pixelCrop.height
+        0, 0, canvas.width, canvas.height
     );
 
     return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ export default async function getCroppedImg( {imageSrc, pixelCrop} : {imageSrc: 
             }
             const file = new File([blob], 'cropped_img.webp', {type: 'image/webp'});
             resolve(file);
-        }, 'image/webp', 1);
+        }, 'image/webp', 0.85);
     });
 }
 
