@@ -38,7 +38,7 @@ export interface EquipmentItem {
 
 export type SlotKey = 'headgear' | 'body' | 'gloves' | 'shoes' | 'back' | 'tail' | 'face' | 'accessory1' | 'accessory2';
 
-type cropDimen = {
+export type cropDimen = {
     x: number,
     y: number,
     width: number,

@@ -28,15 +28,6 @@ import auth
 
 router = APIRouter(prefix = '/api/submissions', tags = ['Submissions'])
 
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
-
-#SUBMISSIONS_DIR = os.path.join(UPLOAD_DIR, 'submissions')
-
-#os.makedirs(SUBMISSIONS_DIR, exist_ok = True)
-
-#router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
-
 R2_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME')
 R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
 s3_client = boto3.client(
@@ -143,10 +134,6 @@ async def upload_submission(
             ExtraArgs={'ContentType': 'image/webp'}
         )
 
-        #file_path = os.path.join(SUBMISSIONS_DIR, f'{image_uuid.hex}.webp')
-        #with open(file_path, 'wb') as buffer:
-        #    shutil.copyfileobj(file.file, buffer)
-
         new_image = models.SubmissionImage(
             image_id = image_uuid,
             submission_id = new_submission.id,
@@ -160,18 +147,16 @@ async def upload_submission(
         db.rollback()
         raise HTTPException(status_code = 500, detail = f'Database commit failed: {str(e)}')
 
-    print(f'Title: {title}')
-    print(f'Gender: {gender}')
-    print(f'Tags: {parsed_tags}')
-    print(f'Equipment count: {len(parsed_equipment)}')
-
     return {'message': 'Upload successful', 'success': True, 'submission_id': new_submission.id}
 
 @router.get('/latest')
 def get_latest_ten(db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission)
-        .where(models.Submission.status == 'approved')
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
+        )
         .options(
             joinedload(models.Submission.author),
             selectinload(models.Submission.images)
@@ -204,7 +189,10 @@ def get_top_five(db: Session = Depends(get_db)):
         .outerjoin(models.user_favorites, models.Submission.id == models.user_favorites.c.submission_id)
         .group_by(models.Submission.id)
         .order_by(desc(func.count(models.user_favorites.c.user_id)))
-        .where(models.Submission.status == 'approved')
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
+        )
         .options(
             selectinload(models.Submission.author),
             selectinload(models.Submission.images)
@@ -233,8 +221,11 @@ def get_top_five(db: Session = Depends(get_db)):
 def get_submissions_amount(db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission.id)
-        .where(models.Submission.status == 'approved')
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
         )
+    )
 
     submissions = db.execute(stmt).scalars().unique().all()
 
@@ -254,7 +245,10 @@ def get_submission_gallery(
 ):
     stmt = (
         select(models.Submission)
-        .where(models.Submission.status == 'approved')
+        .where(
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
+        )
         .options(
             selectinload(models.Submission.author),
             selectinload(models.Submission.images),
@@ -322,7 +316,11 @@ def get_submission_gallery(
 def get_submission(submission_id: int, db: Session = Depends(get_db), current_user: models.User | None = Depends(auth.get_optional_current_user)):
     stmt = (
         select(models.Submission)
-        .where(models.Submission.id == submission_id)
+        .where(
+            models.Submission.id == submission_id,
+            models.Submission.status == 'approved',
+            models.Submission.is_active == True
+        )
         .options(
             joinedload(models.Submission.author),
             selectinload(models.Submission.images),

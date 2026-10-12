@@ -3,6 +3,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { USERS_URL } from "../../utilities/MiscUtility";
 import PwChangeForm from "./PwChangeForm";
+import AvatarSettings from "./AvatarSettings";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
@@ -69,16 +70,19 @@ function AccountSettings() {
                     <span className="loading loading-spinner loading-xl"></span>
                 </div>
             )}
-            <div className={`flex gap-10 w-full min-h-[86vh] sm:px-[5%] xl:px-[20%] pt-10 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className={`flex gap-10 w-full h-[73.5vh] sm:px-[5%] xl:px-[20%] pt-10 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                 <div className="flex flex-1 flex-col gap-3 outline rounded-xl text-lg p-5 h-fit bg-[#3E454090]">
                     <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('personal')}>User Settings</p>
                     <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('notif')}>Notifications</p>
                     <p className="p-2 outline rounded-lg cursor-pointer hover:bg-[#2A2F2C]" onClick={() => setTab('other')}>Other</p>
                 </div>
-                <div className="flex flex-3 flex-col w-full px-10 py-5 outline rounded-xl overflow-y-auto bg-[#3E454090]">
+                <div className="flex flex-3 flex-col w-full max-h-[50vh] px-10 py-5 outline rounded-xl overflow-y-auto bg-[#3E454090]">
                     {currentTab === 'personal' && (
                         <div className="flex flex-col p-2">
                             <h1 className="text-2xl border-b border-[#ffffff50] pb-2">User Settings</h1>
+                            <div>
+                                <AvatarSettings currentAvatarId={user?.avatar_id} />
+                            </div>
                             <div className="flex flex-col gap-2 py-2 w-full">
                                 <h1 className="text-xl">Username</h1>
                                 <div className="flex gap-5 items-center">

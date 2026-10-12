@@ -75,8 +75,8 @@ function UserDashboard() {
     }, [user, userLoading, navigate])
     
     return (
-        <div className={`flex flex-col w-full min-h-[86vh] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <div className="fixed flex flex-col gap-2 w-full bg-[#004000] py-5">
+        <div className={`flex flex-col w-full h-[73.5vh] transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="fixed flex flex-col gap-2 w-full bg-[#004000]">
                 <h1 className="text-2xl text-center">Your Dashboard</h1>
                 <div className="flex justify-center gap-5 px-3 bg-[#3a3a3a] outline outline-[#ffffff90] text-lg">
                     <p className={`cursor-pointer p-3 ${tab === 'submissions' ? 'bg-[#a5a5a590]' : 'hover:bg-[#555]'}`} onClick={() => setTab('submissions')}>My Styles</p>

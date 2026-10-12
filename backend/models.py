@@ -83,6 +83,10 @@ class UserProfile(Base):
     def joined(self):
         return self.user.created_at
 
+    @property
+    def avatar_id(self):
+        return self.user.avatar_id
+
 # Global Equipment Dict Model
 class BaseEquipment(Base):
     __tablename__ = "base_equipment"

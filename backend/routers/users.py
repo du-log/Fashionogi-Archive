@@ -4,10 +4,12 @@ import os
 import shutil
 import uuid
 import json
+import boto3
 
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
+from uuid import UUID
 
 from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
 from fastapi.security import OAuth2PasswordRequestForm
@@ -22,16 +24,16 @@ import models, auth
 
 router = APIRouter(prefix = '/api/users', tags = ['Users'])
 
+R2_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME')
 R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
-
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#UPLOAD_DIR = os.path.join(BASE_DIR, 'uploads')
-
-#AVATARS_DIR = os.path.join(UPLOAD_DIR, 'avatars')
-
-#os.makedirs(AVATARS_DIR, exist_ok = True)
-
-#router.mount('/uploads', StaticFiles(directory = UPLOAD_DIR), name = 'uploads')
+s3_client = boto3.client(
+    's3',
+    endpoint_url = os.environ.get('R2_ENDPOINT_URL'),
+    aws_access_key_id = os.environ.get('R2_ACCESS_KEY'),
+    aws_secret_access_key = os.environ.get('R2_SECRET_ACCESS'),
+    config = Config(signature_version = 's3v4'),
+    region_name = 'auto'
+)
 
 class UserProfileUpdate(BaseModel):
     bio: Optional[str] = None
@@ -48,6 +50,7 @@ class UserProfileUpdate(BaseModel):
 class UserProfileResponse(UserProfileUpdate):
     id: int
     joined: datetime
+    avatar_id: Optional[UUID] = None
 
     class Config:
         from_attributes: True
@@ -58,7 +61,45 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin }
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': current_user.avatar_id }
+
+@router.post('/me/avatar')
+def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.username == current_user.username)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    if file.content_type != 'image/webp':
+        raise HTTPException(status_code = 400, detail = 'Invalid image format.')
+    
+    old_avatar = user.avatar_id
+    if old_avatar:
+        try:
+            s3_client.delete_object(
+                Bucket = R2_BUCKET_NAME,
+                Key = f'avatars/{old_avatar.hex}.webp'
+            )
+        except Exception:
+            pass
+    
+    new_uuid = uuid.uuid4()
+    r2_object_key = f'avatars/{new_uuid.hex}.webp'
+
+    s3_client.upload_fileobj(
+        file.file,
+        R2_BUCKET_NAME,
+        r2_object_key,
+        ExtraArgs = {'ContentType': 'image/webp'}
+    )
+
+    user.avatar_id = new_uuid
+    db.commit()
+
+    return {
+        'success': True,
+        'message': 'Successfully updated user avatar.',
+        'avatar_id': str(new_uuid)
+    }
 
 @router.get('/profiles/{username}', response_model = UserProfileResponse)
 def get_public_profile(username: str, db: Session = Depends(get_db)):

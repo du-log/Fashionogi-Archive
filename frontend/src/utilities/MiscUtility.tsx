@@ -11,3 +11,4 @@ export const SUBS_URL = import.meta.env.VITE_API_SUBS_URL;
 export const MISC_URL = import.meta.env.VITE_API_MISC_URL;
 export const NEWS_URL = import.meta.env.VITE_API_NEWS_URL;
 export const ADMIN_URL = import.meta.env.VITE_API_ADMIN_URL;
+export const R2_PUBLIC_URL = import.meta.env.VITE_R2_PUBLIC_URL;
