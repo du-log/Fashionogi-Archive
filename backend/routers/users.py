@@ -52,7 +52,7 @@ class UserProfileUpdate(BaseModel):
 class UserProfileResponse(UserProfileUpdate):
     id: int
     joined: datetime
-    avatar_id: Optional[UUID] = None
+    avatar_id: Optional[str] = None
 
     class Config:
         from_attributes: True
@@ -124,7 +124,7 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
             'youtube_link': None
         }
 
-    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatars/{user.avatar_id.hex}.webp' or None}
+    return user.profile
 
 @router.get('/profiles/{username}/nameplate', response_model = UserProfileResponse)
 def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
@@ -147,7 +147,7 @@ def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
             'youtube_link': None
         }
 
-    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatars/{user.avatar_id.hex}.webp' or None}
+    return user.profile
 
 @router.get('/profiles/{username}/styles')
 def get_user_styles(username: str, db: Session = Depends(get_db)):

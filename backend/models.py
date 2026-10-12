@@ -85,7 +85,7 @@ class UserProfile(Base):
 
     @property
     def avatar_id(self):
-        return self.user.avatar_id
+        return self.user.avatar_id.hex if self.user.avatar_id else None
 
 # Global Equipment Dict Model
 class BaseEquipment(Base):

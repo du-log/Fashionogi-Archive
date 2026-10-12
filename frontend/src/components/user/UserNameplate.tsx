@@ -2,20 +2,18 @@ import { UserIcon } from "lucide-react"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { userProfile } from "./UserProfile";
-import { USERS_URL } from "../../utilities/MiscUtility";
+import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 
 function UserNameplate( {username} : {username: string} ) {
     const navigate = useNavigate();
     const [userData, setUserData] = useState<userProfile>();
-    const [userAvatar, setUserAvatar] = useState<string>('');
 
     useEffect(() => {
         const fetchDetail = async () => {
-            const res = await fetch(`${USERS_URL}/profiles/${username}/nameplate`);
+            const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
-                setUserData(data.profile);
-                setUserAvatar(data.avatar);
+                setUserData(data);
             }
         }
         fetchDetail();
@@ -28,7 +26,7 @@ function UserNameplate( {username} : {username: string} ) {
                 <p>{userData?.server ? userData.server : ''}</p>
             </div>
             <div className="p-1 outline outline-[#fa531690] rounded-xl items-center justify-center">
-                {userAvatar ? <img src={userAvatar} /> : <UserIcon size={80} />}
+                {userData?.avatar_id ? <img src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
         </div>
     )

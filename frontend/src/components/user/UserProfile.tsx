@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserIcon } from "lucide-react";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
-import { USERS_URL } from "../../utilities/MiscUtility";
+import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -12,6 +12,7 @@ import remarkBreaks from "remark-breaks";
 export type userProfile = {
     id?: number,
     joined?: string,
+    avatar_id?: string,
     bio?: string,
     server?: string,
     guild?: string,
@@ -49,8 +50,6 @@ function UserProfile() {
     const [twitter, setTwitter] = useState<string | null | undefined>('');
     const [twitch, setTwitch] = useState<string | null | undefined>('');
     const [youtube, setYoutube] = useState<string | null | undefined>('');
-
-    const [userAvatar, setAvatar] = useState<string | null>('');
 
     const formattedDate: string = userData ? new Date(userData.joined ?? new Date().toString()).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -112,8 +111,7 @@ function UserProfile() {
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
-                setUserData(data.profile);
-                setAvatar(data.avatar);
+                setUserData(data);
             }
             const imgRes = await fetch(`${USERS_URL}/profiles/${username}/styles`);
             if (imgRes.ok) {
@@ -135,7 +133,7 @@ function UserProfile() {
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-[#758277] rounded-xl px-5 py-10 bg-[#3E4540]">
                         <div className="flex gap-10 w-full">
                             <div className="outline outline-[#758277] rounded-xl p-5 w-fit h-fit">
-                                {userAvatar ? <img src={userAvatar} /> : <UserIcon size={80} />}
+                                {userData.avatar_id ? <img src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
                             </div>
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 justify-between items-center w-full">
