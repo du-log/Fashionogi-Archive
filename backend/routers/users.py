@@ -63,7 +63,8 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' or None }
+    
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' if current_user.avatar_id else None }
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -139,8 +140,8 @@ def get_profile_data(username: str, db: Session = Depends(get_db), current_user:
         is_following = current_user in target_user.followers
     
     return {
-        'following': following_count,
-        'followers': followers_count,
+        'following_count': following_count,
+        'followers_count': followers_count,
         'is_following': is_following
     }
 
