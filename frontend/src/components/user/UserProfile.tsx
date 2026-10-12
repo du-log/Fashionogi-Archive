@@ -50,6 +50,8 @@ function UserProfile() {
     const [twitch, setTwitch] = useState<string | null | undefined>('');
     const [youtube, setYoutube] = useState<string | null | undefined>('');
 
+    const [userAvatar, setAvatar] = useState<string | null>('');
+
     const formattedDate: string = userData ? new Date(userData.joined ?? new Date().toString()).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -110,7 +112,8 @@ function UserProfile() {
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
-                setUserData(data);
+                setUserData(data.profile);
+                setAvatar(data.avatar);
             }
             const imgRes = await fetch(`${USERS_URL}/profiles/${username}/styles`);
             if (imgRes.ok) {
@@ -132,7 +135,7 @@ function UserProfile() {
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-[#758277] rounded-xl px-5 py-10 bg-[#3E4540]">
                         <div className="flex gap-10 w-full">
                             <div className="outline outline-[#758277] rounded-xl p-5 w-fit h-fit">
-                                <UserIcon size={80} />
+                                {userAvatar ? <img src={userAvatar} /> : <UserIcon size={80} />}
                             </div>
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 justify-between items-center w-full">

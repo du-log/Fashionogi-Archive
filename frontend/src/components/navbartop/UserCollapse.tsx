@@ -45,7 +45,7 @@ function UserCollapse() {
                     <div className={"flex items-center justify-between gap-3 bg-[#3E4540] w-45"}>
                         <h2 className="text-lg hover:cursor-default truncate max-w-40">{user?.username}</h2>
                         <div className={`flex flex-col bg-[#ffffff90] justify-center items-center rounded-md cursor-pointer w-12 h-12 outline-2 hover:outline-[#B59E6D]`} onClick={() => setOpen(!isOpen)}>
-                            {user?.avatar_id ? <img src={`${user.avatar_id}`} /> : <User size={50} />}
+                            {user?.avatar_id ? <img src={user.avatar_id} /> : <User size={50} />}
                         </div>
                     </div>
                     {isOpen && (

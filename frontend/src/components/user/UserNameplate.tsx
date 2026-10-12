@@ -28,7 +28,7 @@ function UserNameplate( {username} : {username: string} ) {
                 <p>{userData?.server ? userData.server : ''}</p>
             </div>
             <div className="p-1 outline outline-[#fa531690] rounded-xl items-center justify-center">
-                ${userAvatar ? <img src={`${userAvatar}`} /> : <UserIcon size={80} />}
+                {userAvatar ? <img src={userAvatar} /> : <UserIcon size={80} />}
             </div>
         </div>
     )

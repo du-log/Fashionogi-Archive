@@ -63,7 +63,7 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatar/{current_user.avatar_id.hex}.webp' }
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' or None }
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -124,7 +124,7 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
             'youtube_link': None
         }
 
-    return user.profile
+    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatars/{user.avatar_id.hex}.webp' or None}
 
 @router.get('/profiles/{username}/nameplate', response_model = UserProfileResponse)
 def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
@@ -147,7 +147,7 @@ def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
             'youtube_link': None
         }
 
-    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatar/{user.avatar_id.hex}.webp'}
+    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatars/{user.avatar_id.hex}.webp' or None}
 
 @router.get('/profiles/{username}/styles')
 def get_user_styles(username: str, db: Session = Depends(get_db)):
