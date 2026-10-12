@@ -390,7 +390,7 @@ def toggle_favorite(submission_id: int, db: Session = Depends(get_db), current_u
     if not sub:
         raise HTTPException(status_code = 404, detail = 'Submission not found')
 
-    user = db.query(models.User).filter(models.User.id == current_user.id).first();
+    user = db.query(models.User).filter(models.User.id == current_user.id).first()
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized, perhaps there is an error in the code')
 

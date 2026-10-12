@@ -23,6 +23,15 @@ user_favorites = Table(
     Column("created_at", DateTime(timezone = True), server_default = func.now())
 )
 
+# Followers Join Table
+user_followers = Table(
+    "user_followers",
+    Base.metadata,
+    Column("follower_id", Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True),
+    Column("followed_id", Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True),
+    Column("created_at", DateTime(timezone = True), server_default = func.now())
+)
+
 # Collections Join Table
 collection_items = Table(
     "collection_items",
@@ -58,6 +67,9 @@ class User(Base):
     favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
 
     profile: Mapped[Optional["UserProfile"]] = relationship("UserProfile", back_populates = "user", uselist = False, cascade = "all, delete-orphan")
+
+    following = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.follower_id, secondaryjoin = id == user_followers.c.followed_id, back_populates = "followers")
+    followers = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.followed_id, secondaryjoin = id == user_followers.c.follower_id, back_populates = "following")
 
 # User Profile Model
 class UserProfile(Base):

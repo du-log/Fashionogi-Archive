@@ -336,3 +336,34 @@ def update_password(password: str, current_user: models.User = Depends(auth.get_
     db.commit()
 
     return {'success': True, 'message': f'User {user.username}, ID {user.id} successfully changed password.'}
+
+@router.post('/{user_id}/follow')
+def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    if user_id == current_user.id:
+        raise HTTPException(status_code = 400, detail = 'You cannot follow yourself.')
+
+    stmt = (
+        select(models.User)
+        .where(models.User.id == user_id)
+    )
+    target_user = db.execute(stmt).scalars().first()
+    if not target_user:
+        raise HTTPException(status_code = 404, detail = 'User not found')
+
+    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized, perhaps there is an error in the code')
+
+    is_followed = user in target_user.followers
+    if is_followed:
+        target_user.followers.remove(user)
+        followed = False
+    else:
+        target_user.followers.append(user)
+        followed = True
+    
+    db.commit()
+
+    return {
+        'followed': followed
+    }
