@@ -63,7 +63,7 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': str(current_user.avatar_id) }
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatar/{current_user.avatar_id.hex}.webp' }
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -125,6 +125,29 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
         }
 
     return user.profile
+
+@router.get('/profiles/{username}/nameplate', response_model = UserProfileResponse)
+def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
+    user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()
+    if not user:
+        raise HTTPException(status_code = 404, detail = 'User not found')
+
+    if not user.profile:
+        return {
+            'id': user.id,
+            'bio': None,
+            'server': None,
+            'guild': None,
+            'in_game_name': None,
+            'main_race': None,
+            'main_gender': None,
+            'discord_username': None,
+            'twitter_link': None,
+            'twitch_link': None,
+            'youtube_link': None
+        }
+
+    return {'profile': user.profile, 'avatar': f'{R2_PUBLIC_URL}/avatar/{user.avatar_id.hex}.webp'}
 
 @router.get('/profiles/{username}/styles')
 def get_user_styles(username: str, db: Session = Depends(get_db)):

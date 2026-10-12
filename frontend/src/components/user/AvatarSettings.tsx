@@ -1,12 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import Cropper from "react-easy-crop";
 import { User, UploadCloud, X, Check, Loader2 } from "lucide-react";
 import getCroppedImg from "../../utilities/CropUtility";
 import type { cropDimen } from "../submission/SubmissionUpload";
-import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
+import { USERS_URL } from "../../utilities/MiscUtility";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: string} ) {
+    const auth = useContext(AuthContext);
+    const checkSession = auth?.checkSession ?? (() => {});
+
     const [rawImage, setRawImage] = useState<string | null>(null);
     const [croppedFile, setCroppedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -16,7 +20,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<cropDimen | null>(null);
 
-    const displayAvatar = previewUrl || (currentAvatarId ? `${R2_PUBLIC_URL}/avatars/${currentAvatarId}.webp` : null);
+    const displayAvatar = previewUrl || (currentAvatarId ? currentAvatarId : null);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles && acceptedFiles.length > 0) {
@@ -77,6 +81,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
 
             if (res.ok) {
                 setCroppedFile(null);
+                checkSession();
             }
         } catch (error) {
             console.error("Upload error", error);

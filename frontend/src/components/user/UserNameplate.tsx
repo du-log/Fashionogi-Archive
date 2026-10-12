@@ -7,13 +7,15 @@ import { USERS_URL } from "../../utilities/MiscUtility";
 function UserNameplate( {username} : {username: string} ) {
     const navigate = useNavigate();
     const [userData, setUserData] = useState<userProfile>();
+    const [userAvatar, setUserAvatar] = useState<string>('');
 
     useEffect(() => {
         const fetchDetail = async () => {
-            const res = await fetch(`${USERS_URL}/profiles/${username}`);
+            const res = await fetch(`${USERS_URL}/profiles/${username}/nameplate`);
             if (res.ok) {
                 const data = await res.json();
-                setUserData(data);
+                setUserData(data.profile);
+                setUserAvatar(data.avatar);
             }
         }
         fetchDetail();
@@ -26,7 +28,7 @@ function UserNameplate( {username} : {username: string} ) {
                 <p>{userData?.server ? userData.server : ''}</p>
             </div>
             <div className="p-1 outline outline-[#fa531690] rounded-xl items-center justify-center">
-                <UserIcon size={80} />
+                ${userAvatar ? <img src={`${userAvatar}`} /> : <UserIcon size={80} />}
             </div>
         </div>
     )
