@@ -98,8 +98,12 @@ def register(response: Response, username = Form(...), email = Form(...), passwo
     try:
         pw_hash = auth.get_pw_hash(password)
         new_user = models.User(username = username, email = email, hashed_password = pw_hash)
+        new_profile = models.UserProfile()
+        new_user.profile = new_profile
+
         db.add(new_user)
         db.commit()
+        db.refresh(new_user)
 
         return {
             'success': True,
