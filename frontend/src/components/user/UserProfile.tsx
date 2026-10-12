@@ -139,6 +139,7 @@ function UserProfile() {
     const toggleFollow = async () => {
         try {
             const res = await fetch(`${USERS_URL}/${userData?.id}/follow`, {
+                method: 'POST',
                 credentials: 'include'
             });
             if (res.ok) {
