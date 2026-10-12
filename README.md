@@ -1,5 +1,4 @@
 # The Fashionogi Archive
-**Site Version: 1.0**
 
 **Disclaimer: As this website is still in the initial deployment phase, there may be bugs and design flaws.**
 
@@ -16,8 +15,9 @@ My hope is that the Archive will successfully serve a niche in the Mabinogi comm
 * Style uploading and favoriting, with images saved in WebP format.
 * Gallery for displaying all approved styles, with ability to filter based on style gender, race, username, style title, and tag.
 * User profiles and private dashboard to view personally uploaded styles and favorites.
-* User settings page, though currently minimal with only the ability to change your username.
+* Ability to change your username, avatar, and password (no email yet).
 * Basic news system for sharing any site news and updates.
+* Search bar for searching users and outfit names, hidden by default.
 
 ## Roadmap
 Below is the current feature roadmap for the future, in no particular order.
@@ -25,7 +25,7 @@ Below is the current feature roadmap for the future, in no particular order.
 * Follower System.
 * Time-Window Trending Feeds.
 * Extended Profile UI, if requested.
-* User Avatars and custom Profile Banners.
+* Custom Profile Banners.
 * Site Themes.
 * Custom titles and colored community names.
 * Grouping outfits into shareable public collections.
