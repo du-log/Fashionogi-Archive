@@ -86,7 +86,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
     };
 
     return (
-        <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start bg-[#3E4540] p-6 rounded-lg outline outline-1 outline-[#ffffff50]">
+        <div className="flex flex-col sm:flex-row gap-6 items-center p-6">
             {/* Left Side: Avatar Display */}
             <div className="flex-shrink-0">
                 <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-[#ffffff90] flex items-center justify-center outline outline-2 outline-[#B59E6D]">
@@ -107,7 +107,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
                     <div 
                         {...getRootProps()} 
                         className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors
-                            ${isDragActive ? "border-[#DAA700] bg-[#DAA700] bg-opacity-10" : "border-[#ffffff50] hover:border-white hover:bg-white hover:bg-opacity-5"}`}
+                            ${isDragActive ? "border-[#DAA700] bg-[#DAA700] bg-opacity-10" : "border-[#FFFFFF50] hover:border-[#FFF] hover:bg-[#FFFFFF50] hover:bg-opacity-5"}`}
                     >
                         <input {...getInputProps()} />
                         <UploadCloud size={32} className="text-white mb-2" />

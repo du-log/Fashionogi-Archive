@@ -11,6 +11,8 @@ from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
 
+from botocore.config import Config
+
 from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
