@@ -1,5 +1,19 @@
 # Changelog
 
+## 10/11/2026
+Small feature update and UI changes.
+
+- Implemented avatars for users.
+- Modified the navigation bar UI, in particular the user collapse on the right side.
+- Added the ability to show/hide the search bar, hidden by default.
+- Updated the styling to be more global to the UI and better incorporate the search bar when shown.
+
+## 10/4/2026
+Minor updates.
+
+- Implemented a search bar that queries relative to string matching.
+- Updated the login to align more to SPA routing rather than force a refresh.
+
 ## 10/3/2026
 Improvements and more fixes.
 
