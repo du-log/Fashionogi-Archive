@@ -25,8 +25,8 @@ function UserNameplate( {username} : {username: string} ) {
                 <h1 className="cursor-pointer text-lg hover:text-[#00ab80]" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
                 <p>{userData?.server ? userData.server : ''}</p>
             </div>
-            <div className="p-1 outline outline-[#fa531690] rounded-xl items-center justify-center">
-                {userData?.avatar_id ? <img src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
+            <div className="outline outline-[#fa531690] rounded-xl items-center justify-center h-fit">
+                {userData?.avatar_id ? <img className="w-20 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
         </div>
     )

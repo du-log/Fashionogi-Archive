@@ -132,8 +132,8 @@ function UserProfile() {
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-[#758277] rounded-xl px-5 py-10 bg-[#3E4540]">
                         <div className="flex gap-10 w-full">
-                            <div className="outline outline-[#758277] rounded-xl p-5 w-fit h-fit">
-                                {userData.avatar_id ? <img src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
+                            <div className="outline outline-[#758277] rounded-xl h-fit">
+                                {userData.avatar_id ? <img className="w-36 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
                             </div>
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 justify-between items-center w-full">
