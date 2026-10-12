@@ -25,6 +25,12 @@ export type userProfile = {
     youtube_link?: string
 }
 
+type followData = {
+    followers_count: number,
+    following_count: number,
+    is_following: boolean
+}
+
 function UserProfile() {
     const { username } = useParams();
     const auth = useContext(AuthContext);
@@ -50,6 +56,8 @@ function UserProfile() {
     const [twitter, setTwitter] = useState<string | null | undefined>('');
     const [twitch, setTwitch] = useState<string | null | undefined>('');
     const [youtube, setYoutube] = useState<string | null | undefined>('');
+
+    const [followData, setFollowData] = useState<followData>();
 
     const formattedDate: string = userData ? new Date(userData.joined ?? new Date().toString()).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -106,6 +114,41 @@ function UserProfile() {
         }
     }
 
+    const fetchProfile = async () => {
+            const res = await fetch(`${USERS_URL}/profiles/${username}`);
+            if (res.ok) {
+                const data = await res.json();
+                setUserData(data);
+            }
+            const imgRes = await fetch(`${USERS_URL}/profiles/${username}/styles`);
+            if (imgRes.ok) {
+                const galleryData = await imgRes.json();
+                setTopStyles(galleryData.top);
+                setLatestStyles(galleryData.latest);
+                setTotal(Number(galleryData.total));
+            }
+            const dataRes = await fetch(`${USERS_URL}/profiles/${username}/data`, {
+                credentials: 'include'
+            });
+            if (dataRes.ok) {
+                const addiData = await dataRes.json();
+                setFollowData(addiData);
+            }
+        }
+
+    const toggleFollow = async () => {
+        try {
+            const res = await fetch(`${USERS_URL}/${userData?.id}/follow`, {
+                credentials: 'include'
+            });
+            if (res.ok) {
+                fetchProfile();
+            }
+        } catch (err) {
+            console.error('Follow toggle failed', err);
+        }
+    }
+
     useEffect(() => {
         const fetchProfile = async () => {
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
@@ -119,6 +162,13 @@ function UserProfile() {
                 setTopStyles(galleryData.top);
                 setLatestStyles(galleryData.latest);
                 setTotal(Number(galleryData.total));
+            }
+            const dataRes = await fetch(`${USERS_URL}/profiles/${username}/data`, {
+                credentials: 'include'
+            });
+            if (dataRes.ok) {
+                const addiData = await dataRes.json();
+                setFollowData(addiData);
             }
             document.documentElement.scrollTop = 0;
             setTimeout(() => setLoading(false), 200);
@@ -138,9 +188,14 @@ function UserProfile() {
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 justify-between items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
-                                    {user && user.username === username && (
-                                        <button className="btn btn-soft btn-primary top-1 right-1" onClick={setModalData}>Edit Profile</button>
-                                    )}
+                                    <div className="flex flex-col gap-2">
+                                        {user && user.username === username && (
+                                            <button className="btn btn-soft btn-primary" onClick={setModalData}>Edit Profile</button>
+                                        )}
+                                        {user && user.username !== username && (
+                                            <button className={`btn btn-soft ${followData?.is_following ? 'btn-success' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Following' : 'Follow'}</button>
+                                        )}
+                                    </div>
                                 </div>
                                 <p className="text-2xl py-1 px-2 rounded-lg outline outline-[#758277] w-fit cursor-default">Member</p>
                             </div>
@@ -149,6 +204,10 @@ function UserProfile() {
                             <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
                                 <p>Styles Created:</p>
                                 <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
+                            </div>
+                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
+                                <p>Followers:</p>
+                                <p>{followData?.followers_count}</p>
                             </div>
                             <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
                                 <p>Joined:</p>

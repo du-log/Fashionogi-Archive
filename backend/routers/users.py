@@ -126,28 +126,23 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
 
     return user.profile
 
-@router.get('/profiles/{username}/nameplate', response_model = UserProfileResponse)
-def get_public_profile_nameplate(username: str, db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()
-    if not user:
+@router.get('/profiles/{username}/data')
+def get_profile_data(username: str, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_optional_current_user)):
+    target_user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()
+    if not target_user:
         raise HTTPException(status_code = 404, detail = 'User not found')
 
-    if not user.profile:
-        return {
-            'id': user.id,
-            'bio': None,
-            'server': None,
-            'guild': None,
-            'in_game_name': None,
-            'main_race': None,
-            'main_gender': None,
-            'discord_username': None,
-            'twitter_link': None,
-            'twitch_link': None,
-            'youtube_link': None
-        }
-
-    return user.profile
+    following_count = len(target_user.following)
+    followers_count = len(target_user.followers)
+    is_following = False
+    if current_user:
+        is_following = current_user in target_user.followers
+    
+    return {
+        'following': following_count,
+        'followers': followers_count,
+        'is_following': is_following
+    }
 
 @router.get('/profiles/{username}/styles')
 def get_user_styles(username: str, db: Session = Depends(get_db)):
