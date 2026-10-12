@@ -122,7 +122,9 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
             'discord_username': None,
             'twitter_link': None,
             'twitch_link': None,
-            'youtube_link': None
+            'youtube_link': None,
+            'joined': user.created_at,
+            'avatar_id': user.avatar_id.hex if user.avatar_id else None
         }
 
     return user.profile
