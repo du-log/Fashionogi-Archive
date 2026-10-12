@@ -61,7 +61,7 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': current_user.avatar_id }
+    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': str(current_user.avatar_id) }
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
