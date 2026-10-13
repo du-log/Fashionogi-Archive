@@ -87,6 +87,7 @@ function SubmissionPage() {
     }
 
     useEffect(() => {
+        document.documentElement.scrollTop = 0;
         const fetchSubmission = async () => {
             setLoading(true);
             setVisible(false);
@@ -103,9 +104,8 @@ function SubmissionPage() {
             } catch (err) {
                 console.error("Failed to fetch submission", err);
             } finally {
-                document.documentElement.scrollTop = 0;
                 setLoading(false);
-                setTimeout(() => setVisible(true), 50);
+                setTimeout(() => setVisible(true), 100);
             }
         }
         if (id) fetchSubmission();

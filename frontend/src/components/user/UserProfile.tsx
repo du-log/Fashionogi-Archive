@@ -139,6 +139,7 @@ function UserProfile() {
     }
 
     useEffect(() => {
+        document.documentElement.scrollTop = 0;
         const fetchProfile = async () => {
             setLoading(true);
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
@@ -160,15 +161,20 @@ function UserProfile() {
                 const addiData = await dataRes.json();
                 setFollowData(addiData);
             }
-            document.documentElement.scrollTop = 0;
-            setTimeout(() => setLoading(false), 50);
+            if(res.ok && imgRes.ok && dataRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (username) fetchProfile();
     }, [username])
 
     return (
         <div className="flex flex-col w-full min-h-[86vh] text-mabi-text">
-            {userData && (
+            {isLoading && (
+                <div className={`flex flex-col items-center justify-center min-h-[90vh] w-full transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                    <span>Loading...</span>
+                    <span className="loading loading-ring loading-xl" />
+                </div>
+            )}
+            {userData && !isLoading && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border rounded-xl px-5 py-10 bg-mabi-surface">
                         <div className="flex gap-10 w-full">

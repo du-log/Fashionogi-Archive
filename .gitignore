@@ -34,6 +34,10 @@ some.*
 .eslintcache
 Thumbs.db
 Desktop.ini
+seed_equipment.py
+seed_tags.py
+fetch_equip.py
+equipment_seed.json
 
 # Editor directories and files
 .vscode/*

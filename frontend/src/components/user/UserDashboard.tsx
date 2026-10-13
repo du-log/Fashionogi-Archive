@@ -42,6 +42,7 @@ function UserDashboard() {
 
     useEffect(() => {
         if (!user && !userLoading) navigate('/login');
+        document.documentElement.scrollTop = 0;
         const fetchQueue = async () => {
             try {
                 const res = await fetch(`${USERS_URL}/dashboard/queue`, {
@@ -70,7 +71,6 @@ function UserDashboard() {
         }
         fetchQueue();
         fetchFavorites();
-        document.documentElement.scrollTop = 0;
         setTimeout(() =>setLoading(false), 50);
     }, [user, userLoading, navigate])
     
