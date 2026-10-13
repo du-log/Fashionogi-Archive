@@ -21,3 +21,14 @@
     --color-mabi-orange: #F36608;     /* Sunset orange */
     --color-mabi-gold: #DAA700;
 }
+
+:root[data-theme="dark"] {
+    --color-mabi-base: #0f172a;       /* Deep night blue */
+    --color-mabi-surface: #1e293b;    /* Slate cards */
+    --color-mabi-surface-muted: #334155; /* Slate inner modules */
+
+    --color-mabi-text: #f8fafc;       /* Crisp silver/white text */
+    --color-mabi-text-muted: #94a3b8; /* Dimmed slate text */
+
+    --color-mabi-border: #475569;     /* Darker slate borders */
+}

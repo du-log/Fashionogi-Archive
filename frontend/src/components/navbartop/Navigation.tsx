@@ -3,9 +3,9 @@ import UserCollapse from "./UserCollapse";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import SearchBarComboBox from "./SearchBarComboBox";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Moon, Sun } from "lucide-react";
 
-function Navigation() {
+function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => void} ) {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
 
@@ -27,7 +27,7 @@ function Navigation() {
                         <h5 className="italic text-sm text-[#FFD700]">Discover your Erinn Style</h5>
                     </div>
                 </div>
-                <div className="right flex flex-1 justify-start items-center h-22">
+                <div className="right flex flex-1 gap-10 justify-start items-center h-22">
                     <div className={`flex place-items-center z-10 bg-mabi-surface-muted rounded-lg p-2 w-fit min-w-50 h-fit min-h-16 ${showSearch ? '' : 'border-b-1 border-mabi-border'}`}>
                         <UserCollapse />
                     </div>
@@ -39,6 +39,14 @@ function Navigation() {
                             <SearchBarComboBox />
                         </div>
                     )}
+                    <button aria-label="Toggle Theme" onClick={toggleTheme}
+                    className="p-2 rounded-lg bg-mabi-surface hover:bg-mabi-surface-muted transition-colors flex items-center justify-center outline-1 outline-mabi-border">
+                        {theme === "light" ? (
+                            <Moon size={20} className="text-mabi-text-muted hover:text-mabi-text" />
+                        ) : (
+                            <Sun size={20} className="text-mabi-text-muted hover:text-mabi-text" />
+                        )}
+                    </button>
                 </div>
         </div>
     )
