@@ -42,7 +42,7 @@ function PreviewCard({images, styleName, username} : {images: UploadImageItem[],
     }, [isHovered, hasImages, images.length, currentIndex])
 
     return (
-        <div className="group relative w-fit h-fit max-w-[225px] outline-2 outline-[#758277] outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
+        <div className="group relative w-fit h-fit max-w-[225px] bg-mabi-surface outline-2 outline-mabi-border-heavy outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
             <img src={hasImages ? displayUrl : ''}
@@ -50,8 +50,8 @@ function PreviewCard({images, styleName, username} : {images: UploadImageItem[],
             ${hasImages ? "w-full h-full" : "w-[225px] h-[400px]"}
             ${isHovered ? "transition-opacity duration-200 ease-in-out" : ""}`} alt={"Preview"}></img>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00000099] to-transparent rounded-b-lg pb-2 px-4 pt-2 transition-[0.5s] group-hover:bg-[#00000090]">
-                <h3 className="font-bold text-md text-transparent truncate transition-[0.5s] group-hover:text-[#faa920]">{hasImages ? styleName : "Select image(s) first"}</h3>
-                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#fefefe] truncate">{hasImages ? username : "Actual dimensions may vary"}</h5>
+                <h3 className="font-bold text-md text-transparent truncate transition-[0.5s] group-hover:text-[#FAA920]">{hasImages ? styleName : "Select image(s) first"}</h3>
+                <h5 className="text-sm text-transparent transition-[0.5s] group-hover:text-[#FEFEFE] truncate">{hasImages ? username : "Actual dimensions may vary"}</h5>
             </div>
         </div>
     )

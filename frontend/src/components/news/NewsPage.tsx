@@ -97,37 +97,37 @@ function NewsPage() {
     }, [])
 
     return (
-        <div className={`flex flex-col gap-5 min-h-[86vh] px-5 xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <div className="relative flex items-center border-b pb-2">
+        <div className={`flex flex-col gap-5 min-h-[86vh] px-5 xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="relative flex items-center border-b border-mabi-border-heavy pb-2">
                 <h1 className="text-4xl">Site News and Announcements</h1>
                 {user && user.is_admin && (
-                    <p className="absolute right-1 px-2 py-1 rounded outline text-[#E4E7E5] hover:text-[#B59E6D] cursor-pointer" onClick={() => setModalOpen(true)}>Create New Post</p>
+                    <p className="absolute right-1 px-2 py-1 rounded outline hover:text-mabi-green cursor-pointer" onClick={() => setModalOpen(true)}>Create New Post</p>
                 )}
             </div>
             <div className="flex flex-col w-full p-5">
                 <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 w-full p-1 place-items-center">
                     {articles.map((item) => (
-                        <div key={item.id} className="transition-transform duration-[0.2s] hover:scale-101"><NewsCard news={item} /></div>
+                        <div key={item.id} className="transition-transform duration-[0.2s] bg-mabi-surface hover:scale-101"><NewsCard news={item} /></div>
                     ))}
                 </div>
             </div>
             {modalOpen && (
                 <dialog className="modal modal-open">
-                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-[#2A2F2C]">
+                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-mabi-surface-muted">
                         <div className="flex flex-col gap-5 p-5">
                             <h1 className="text-4xl text-center">Write New Article</h1>
                             <div className="flex flex-col gap-2">
                                 <h1 className="text-2xl">Title</h1>
-                                <input className="w-full px-2 py-1 outline" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title... (Required)" />
+                                <input className="w-full px-2 py-1 outline-1 outline-mabi-border-heavy bg-mabi-surface" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title... (Required)" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <h1 className="text-2xl">Description</h1>
-                                <input className="w-full px-2 py-1 outline" type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description... (Required)" />
+                                <input className="w-full px-2 py-1 outline-1 outline-mabi-border-heavy bg-mabi-surface" type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description... (Required)" />
                             </div>
                             <div>
                                 <h1 className="text-2xl">Article Type</h1>
                                 <select id="gender" value={type} onChange={(e) => setType(e.target.value)} 
-                                className="text-[#000] bg-[#ffffff90] p-1">
+                                className="bg-mabi-surface p-1">
                                     <option value="News">Site News</option>
                                     <option value="Maintenance">Maintenance</option>
                                     <option value="Update">Site Update</option>
@@ -136,7 +136,7 @@ function NewsPage() {
                             </div>
                             <div className="flex flex-col gap-2">
                                 <h1 className="text-2xl">Context</h1>
-                                <textarea className="w-full px-2 py-1 resize-none outline" rows={10} value={context} onChange={(e) => setContext(e.target.value)} placeholder="Context..." />
+                                <textarea className="w-full px-2 py-1 resize-none outline-1 outline-mabi-border-heavy bg-mabi-surface" rows={10} value={context} onChange={(e) => setContext(e.target.value)} placeholder="Context..." />
                             </div>
                         </div>
                     </div>

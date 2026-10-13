@@ -124,13 +124,13 @@ function Gallery() {
     }, [fetchGallery, searchParams]);
 
     return (
-        <div className={`flex flex-col items-center w-full min-h-[86vh] px-[10%] xl:px-[20%] py-10 transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <div className="flex flex-col items-center w-full min-h-[86vh] px-[10%] py-10 bg-[#3E4540] rounded-2xl">
-                <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-[#758277] bg-[#2A2F2C] z-[10]">
+        <div className={`flex flex-col items-center w-full min-h-[86vh] px-[10%] xl:px-[20%] py-10 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="flex flex-col items-center w-full min-h-[86vh] px-[10%] py-10 bg-mabi-surface rounded-2xl">
+                <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-mabi-border bg-mabi-surface-muted z-[10]">
                     <div className="flex gap-5 pt-3 pb-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                         <h1 className="font-bold">Search By:</h1>
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Title" />
-                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-[#ffffff50] w-30 text-[#fff] outline outline-[#fff] rounded" placeholder="Username" />
+                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border rounded" placeholder="Title" />
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border rounded" placeholder="Username" />
                         <TagsComboBox tag={tag} setTag={setTag} />
                     </div>
                     <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">
@@ -138,7 +138,7 @@ function Gallery() {
                         <div className="flex gap-2 items-center">
                             <label htmlFor="gender">Gender</label>
                             <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} 
-                            className="text-[#000] bg-[#ffffff90] p-1">
+                            className="bg-mabi-surface p-1">
                                 <option value="">All</option>
                                 <option value="female">Female</option>
                                 <option value="male">Male</option>
@@ -147,7 +147,7 @@ function Gallery() {
                         <div className="flex gap-2 items-center">
                             <label htmlFor="race">Race</label>
                             <select id="race" value={race} onChange={(e) => setRace(e.target.value)} 
-                            className="text-[#000] bg-[#ffffff90] p-1">
+                            className="bg-mabi-surface p-1">
                                 <option value="">All</option>
                                 <option value="elf">Elf</option>
                                 <option value="human">Human</option>
@@ -157,21 +157,21 @@ function Gallery() {
                         <div className="flex gap-2 items-center">
                             <label htmlFor="sort">Sort By</label>
                             <select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-                            className="text-[#000] bg-[#ffffff90] p-1">
+                            className="bg-mabi-surface p-1">
                                 <option value="newest">Newest</option>
                                 <option value="oldest">Oldest</option>
                                 <option value="favorites">Favorites</option>
                             </select>
                         </div>
                     </div>
-                    <div className="flex justify-center w-full pt-3 border-t-1 gap-3">
+                    <div className="flex justify-center w-full pt-3 border-t-1 border-mabi-border-heavy gap-3">
                         <button type="submit" className="btn btn-success btn-soft">Apply Filters</button>
                         <button type="button" onClick={resetFiltersHandler} className="btn btn-error btn-soft">Reset Filters</button>
                     </div>
                 </form>
                 {isLoading && (
                     <div className="absolute flex flex-col items-center justify-center min-h-[86vh] w-full">
-                        <span className="text-[#ffffff90]">Loading...</span>
+                        <span>Loading...</span>
                         <span className="loading loading-ring loading-xl" />
                     </div>
                 )}
@@ -189,7 +189,7 @@ function Gallery() {
                             num === '...' ? (
                                 <span key={`ellipsis-${index}`}>...</span>
                             ) : (
-                                <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-primary cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
+                                <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-success cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
                             )
                         ))}
                         <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}>Next</button>

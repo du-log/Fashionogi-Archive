@@ -112,13 +112,13 @@ export default function PwChangeForm() {
         }, [password, check])
 
     return (
-        <div className="flex flex-col gap-10 justify-center items-center p-10 bg-[#3E454090]">
+        <div className="flex flex-col gap-10 justify-center items-center p-10 text-mabi-text bg-mabi-surface-muted">
             <h1 className="text-3xl">Password Change Form</h1>
             {!verified && (
                 <div className="flex flex-col gap-5 p-10 outline rounded">
                     <p>Enter Current Password</p>
                     <div className="relative flex items-center">
-                        <input className={`bg-[#fff] text-[#000] px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type={showVerify ? 'text' : 'password'} value={verifyPw} onChange={(e) => setVerifyPw(e.target.value)} required
+                        <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-mabi-border' : ''}`} type={showVerify ? 'text' : 'password'} value={verifyPw} onChange={(e) => setVerifyPw(e.target.value)} required
                         maxLength={16} />
                         <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showVerify ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowVerify((show) => !show)}>{showVerify ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                     </div>
@@ -133,14 +133,14 @@ export default function PwChangeForm() {
                             <div className="flex flex-col gap-5 w-full">
                                 <label htmlFor="passwordL">New Password</label>
                                 <div className="relative flex items-center">
-                                    <input className={`bg-[#fff] text-[#000] px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
+                                    <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-outline-mabi-border' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
                                     title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, no spaces, and be between 8-16 characters" maxLength={16} />
                                     <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showPw ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowPw((show) => !show)}>{showPw ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                                 </div>
                             </div>
                             {password.length > 0 && (
                                 <>
-                                <div className="flex flex-col w-full place-self-end bg-[#2A2F2C90] outline outline-[#758277] p-2">
+                                <div className="flex flex-col w-full place-self-end bg-mabi-border outline outline-mabi-border-heavy p-2">
                                     <div className="w-full h-1.5 bg-[#00000090] rounded-full overflow-hidden">
                                         <div className={`h-full transition-all duration-300 ${strength.width} ${strength.color}`} />
                                     </div>
@@ -158,7 +158,7 @@ export default function PwChangeForm() {
                             )}
                             <div className="flex flex-col gap-5 w-full">
                                 <label htmlFor="verifyL">Confirm Password</label>
-                                <input className={`bg-[#fff] text-[#000] px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type='password' id="verifyL" value={check} onChange={(e) => setCheck(e.target.value)} required />
+                                <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type='password' id="verifyL" value={check} onChange={(e) => setCheck(e.target.value)} required />
                             </div>
                         </div>
                         <span className="text-[#ff0000]">{pwErr}</span>

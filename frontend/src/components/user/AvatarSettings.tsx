@@ -91,7 +91,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
     };
 
     return (
-        <div className="flex flex-col sm:flex-row gap-6 items-center p-6">
+        <div className="flex flex-col sm:flex-row gap-6 items-center text-mabi-text">
             {/* Left Side: Avatar Display */}
             <div className="flex-shrink-0">
                 <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-[#ffffff90] flex items-center justify-center outline outline-2 outline-[#B59E6D]">
@@ -105,18 +105,16 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
 
             {/* Right Side: Interactive Area */}
             <div className="flex-grow w-full">
-                <h3 className="text-xl font-bold text-white mb-2">Profile Avatar</h3>
-                
                 {/* State 1: Dropzone */}
                 {!rawImage && !croppedFile && (
                     <div 
                         {...getRootProps()} 
                         className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors
-                            ${isDragActive ? "border-[#DAA700] bg-[#DAA700] bg-opacity-10" : "border-[#FFFFFF50] hover:border-[#FFF] hover:bg-[#FFFFFF50] hover:bg-opacity-5"}`}
+                            ${isDragActive ? "border-[#DAA700] bg-[#DAA700] bg-opacity-10" : "border-mabi-border hover:border-mabi-border-heavy hover:bg-[#FFFFFF50] hover:bg-opacity-5"}`}
                     >
                         <input {...getInputProps()} />
-                        <UploadCloud size={32} className="text-white mb-2" />
-                        <p className="text-white text-sm">
+                        <UploadCloud size={32} className="mb-2" />
+                        <p className="text-sm">
                             {isDragActive ? "Drop image here..." : "Drag & drop an image, or click to select"}
                         </p>
                     </div>
@@ -130,7 +128,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
                                 image={rawImage}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={1} // Perfect square
+                                aspect={1}
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}

@@ -114,19 +114,7 @@ function UserProfile() {
         }
     }
 
-    const fetchProfile = async () => {
-            const res = await fetch(`${USERS_URL}/profiles/${username}`);
-            if (res.ok) {
-                const data = await res.json();
-                setUserData(data);
-            }
-            const imgRes = await fetch(`${USERS_URL}/profiles/${username}/styles`);
-            if (imgRes.ok) {
-                const galleryData = await imgRes.json();
-                setTopStyles(galleryData.top);
-                setLatestStyles(galleryData.latest);
-                setTotal(Number(galleryData.total));
-            }
+    const fetchData = async () => {
             const dataRes = await fetch(`${USERS_URL}/profiles/${username}/data`, {
                 credentials: 'include'
             });
@@ -143,7 +131,7 @@ function UserProfile() {
                 credentials: 'include'
             });
             if (res.ok) {
-                fetchProfile();
+                fetchData();
             }
         } catch (err) {
             console.error('Follow toggle failed', err);
@@ -178,67 +166,82 @@ function UserProfile() {
     }, [username])
 
     return (
-        <div className="flex flex-col w-full min-h-[86vh] text-[#E4E7E5]">
+        <div className="flex flex-col w-full min-h-[86vh] text-mabi-text">
             {userData && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-[#758277] rounded-xl px-5 py-10 bg-[#3E4540]">
+                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border rounded-xl px-5 py-10 bg-mabi-surface">
                         <div className="flex gap-10 w-full">
-                            <div className="outline outline-[#758277] rounded-xl h-fit">
+                            <div className="outline outline-mabi-border-heavy rounded-xl h-fit">
                                 {userData.avatar_id ? <img className="w-36 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
                             </div>
                             <div className="flex flex-col w-full gap-10">
-                                <div className="flex gap-5 justify-between items-center w-full">
+                                <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
-                                    <div className="flex flex-col gap-2">
-                                        {user && user.username === username && (
-                                            <button className="btn btn-soft btn-primary" onClick={setModalData}>Edit Profile</button>
-                                        )}
-                                        {user && user.username !== username && (
-                                            <button className={`btn btn-soft ${followData?.is_following ? 'btn-success' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Following' : 'Follow'}</button>
-                                        )}
-                                    </div>
+                                    <p className="text-2xl py-1 px-2 rounded-lg outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+                                    {user && user.username === username && (
+                                        <button className="btn btn-soft btn-primary" onClick={setModalData}>Edit Profile</button>
+                                    )}
+                                    {user && user.username !== username && (
+                                        <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
+                                    )}
                                 </div>
-                                <p className="text-2xl py-1 px-2 rounded-lg outline outline-[#758277] w-fit cursor-default">Member</p>
                             </div>
                         </div>
-                        <div className="flex gap-5">
-                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
+                        <div className="grid grid-cols-5 gap-5">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
                                 <p>Styles Created:</p>
                                 <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                                <p>Style Favorites:</p>
+                                <p>0</p>
+                            </div>
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
                                 <p>Followers:</p>
                                 <p>{followData?.followers_count}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-[#758277] rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                                <p>Following:</p>
+                                <p>{followData?.following_count}</p>
+                            </div>
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
                                 <p>Joined:</p>
                                 <p>{formattedDate}</p>
                             </div>
                         </div>
-                        <div className="gap-2 pt-10 border-t">
-                            <div className="text-md text-wrap outline outline-[#ffffff90] rounded-lg p-2 max-h-40 overflow-y-auto"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{userData.bio ? userData.bio : 'No bio.'}</Markdown></div>
+                        <div className="grid grid-cols-3 w-full gap-5 pt-10 border-t border-mabi-border">
+                            <div className="flex flex-col gap-1 col-span-2 w-full">
+                                <h1>Bio</h1>
+                                <div className="text-md text-wrap outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg p-2 max-h-40 overflow-y-auto"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{userData.bio ? userData.bio : 'No bio.'}</Markdown></div>
+                            </div>
+                            <div className="flex flex-col col-span-1 gap-1">
+                                <h1>User Info</h1>
+                                <div className="flex flex-col gap-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg p-4 max-h-40 overflow-y-auto">
+                                    <div className="flex gap-2">
+                                        <h1 className="text">Server/Region:</h1>
+                                        <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <h1 className="text">IGN:</h1>
+                                        <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <h1 className="text">Discord:</h1>
+                                        <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-15 w-full xl:w-[80%] py-10">
                         <div className="flex flex-col gap-5 p-1">
-                            <h1 className="text-xl xl:text-2xl pb-2 border-b">User Info</h1>
-                            <div className="flex flex-col gap-4 outline outline-[#758277] rounded p-4 bg-[#3E4540]">
-                                <div className="flex gap-2">
-                                    <h1 className="text">Server/Region:</h1>
-                                    <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <h1 className="text">IGN:</h1>
-                                    <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <h1 className="text">Discord:</h1>
-                                    <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
-                                </div>
+                            <h1 className="text-xl xl:text-2xl pb-2 border-b border-mabi-border">Collections</h1>
+                            <div className="flex flex-col gap-4 outline outline-mabi-border-heavy rounded p-4 bg-mabi-surface-muted">
+                                Not yet implemented.
                             </div>
                         </div>
                         <div className="flex flex-col gap-5 p-1">
-                            <h1 className="text-xl xl:text-2xl pb-2 border-b">Most Popular Styles</h1>
+                            <h1 className="text-xl xl:text-2xl pb-2 border-b border-mabi-border">Most Popular Styles</h1>
                             <div className="grid grid-cols-3 gap-5 place-items-center py-5">
                                 {topStyles.map((style) => (
                                     <GalleryCard key={style.id} item={style} />
@@ -247,7 +250,7 @@ function UserProfile() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%]">
-                        <h1 className="text-xl xl:text-2xl border-b pb-2">Latest Styles</h1>
+                        <h1 className="text-xl xl:text-2xl border-b border-mabi-border pb-2">Latest Styles</h1>
                         <div className="w-full grid grid-cols-5 gap-5 place-items-center py-5">
                             {latestStyles.map((style) => (
                                 <GalleryCard key={style.id} item={style} />

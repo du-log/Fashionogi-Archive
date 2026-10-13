@@ -19,15 +19,15 @@ function EquipmentAccordion({title, slotKey, data, onChange} : EquipmentAccordio
             <div className="flex items-center gap-3 w-full">
                 <label htmlFor="hex" className="text-sm">{partLabel}</label>
                 <input id="hex" type="text" maxLength={7} placeholder="Ex: #FFFFFF" value={value} onChange={(e) => onChange(slotKey, partKey, e.target.value)} disabled={!data.dyeable}
-                className="w-full p-1 bg-[#ffffff30] rounded-sm text-sm text-[#ffffff] uppercase disabled:opacity-50" />
-                <div className="w-4 h-4 rounded-full outline outline-[#ffffff] flex-shrink-0 transition-colors"
+                className="w-full p-1 bg-mabi-border rounded-sm text-sm text-mabi-text uppercase disabled:opacity-50" />
+                <div className="w-4 h-4 rounded-full outline outline-mabi-border-heavy flex-shrink-0 transition-colors"
                 style={{backgroundColor: value.length === 7 ? value : 'transparent'}} />
             </div>
         )
     }
 
     return (
-        <div className="relative w-full border rounded-lg bg-[#00300030]">
+        <div className="relative w-full border rounded-lg bg-mabi-surface-muted text-mabi-text">
             <button onClick={() => setOpen(!isOpen)} className={`p-2 w-full flex justify-between items-center font-bold text-lg text-left cursor-pointer bg-[#00500030] rounded-t-lg ${isOpen ? "" : "rounded-b-lg"}`}>
                 {title}
                 <span>{isOpen ? "▲" : "▼"}</span>
@@ -43,7 +43,7 @@ function EquipmentAccordion({title, slotKey, data, onChange} : EquipmentAccordio
                     </div>
                     {data.dyeable && (
                         <div className="flex flex-col gap-3">
-                            <h5 className="text-xs text-[#51515190]">Fill only relevant parts:</h5>
+                            <h5 className="text-xs text-mabi-text-muted">Fill only relevant parts:</h5>
                             <div className="flex gap-3">
                                 {dyeInputRender("Part A", "partA")}
                                 {dyeInputRender("Part B", "partB")}

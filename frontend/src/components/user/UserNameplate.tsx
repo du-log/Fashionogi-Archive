@@ -20,12 +20,12 @@ function UserNameplate( {username} : {username: string} ) {
     }, [username])
 
     return (
-        <div className="flex justify-between gap-4 min-w-50 p-4 outline-2 outline-[#fa531690] rounded-xl bg-[#2A2F2C]">
+        <div className="flex justify-between gap-4 min-w-50 p-4 outline-2 outline-mabi-gold rounded-xl bg-mabi-border-heavy">
             <div className="flex flex-col gap justify-start">
-                <h1 className="cursor-pointer text-lg hover:text-[#00ab80]" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
+                <h1 className="cursor-pointer text-lg hover:text-mabi-green" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
                 <p>{userData?.server ? userData.server : ''}</p>
             </div>
-            <div className="outline outline-[#fa531690] rounded-xl items-center justify-center h-fit">
+            <div className="outline-1 outline-mabi-border-heavy rounded-xl items-center justify-center h-fit">
                 {userData?.avatar_id ? <img className="w-20 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
         </div>

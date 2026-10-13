@@ -357,10 +357,10 @@ function SubmissionUpload() {
     }, [user, userLoading, navigate])
 
     return (
-        <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
-                <input className="p-3 border-1 w-full text-md rounded"
+                <input className="p-3 border-1 w-full text-md rounded bg-mabi-surface-muted"
                 type="text"
                 placeholder="Style Name... (Required)"
                 value={title}
@@ -368,15 +368,15 @@ function SubmissionUpload() {
                 maxLength={100}
                 required
                 />
-                <p className="absolute bottom-0 right-1 text-[#ffffff90] text-xs">{100 - title.length < 100 ? 100 - title.length : ""}</p>
+                <p className="absolute bottom-0 right-1 text-xs">{100 - title.length < 100 ? 100 - title.length : ""}</p>
             </div>
             <div className="relative flex w-full">
-                <textarea className="p-3 outline w-full text-md rounded resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
-                <p className="absolute bottom-0 right-1 text-[#ffffff90] text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
+                <textarea className="p-3 outline w-full bg-mabi-surface-muted text-md rounded resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
+                <p className="absolute bottom-0 right-1 text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
             </div>
             <div className="flex w-fit gap-3 items-center text-md">
                 <label htmlFor="gender" className="text-xl">Gender:</label>
-                <select id="gender" className="bg-[#ffffff] text-[#000000] px-1" value={gender} onChange={(e) => setGender(e.target.value)}>
+                <select id="gender" className="bg-mabi-surface-muted px-1" value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value="all">All</option>
                     <option value="female">Female</option>
                     <option value="male">Male</option>
@@ -384,7 +384,7 @@ function SubmissionUpload() {
             </div>
             <div className="flex w-fit gap-3 items-center text-md">
                 <label htmlFor="race" className="text-xl">Race:</label>
-                <select id="race" className="bg-[#ffffff] text-[#000000] px-1" value={race} onChange={(e) => setRace(e.target.value)}>
+                <select id="race" className="bg-mabi-surface-muted px-1" value={race} onChange={(e) => setRace(e.target.value)}>
                     <option value="all">All</option>
                     <option value="human">Human</option>
                     <option value="elf">Elf</option>
@@ -393,12 +393,12 @@ function SubmissionUpload() {
             </div>
             <div className="flex flex-col gap-2 w-full">
                 <h1 className="text-xl">Tags</h1>
-                <p className="text-sm text-[#990000]">At least one tag required, max 5 tags.</p>
+                <p className="text-sm text-mabi-text-muted">At least one tag required, max 5 tags.</p>
                 <TagsComboBox tags={tags} onSelect={tagHandlerV2} />
-                <p className="text-sm text-[#ffffff90]">Search filters based on text entered and relative string matching. Hit space to show all tags.</p>
+                <p className="text-sm text-mabi-text-muted">Search filters based on text entered and relative string matching. Hit space to show all tags.</p>
                 <div className="flex flex-wrap gap-2">
                     {tags.map((tag, index) => (
-                        <span key={index} className="flex items-center gap-2 bg-[#008000] text-white text-sm px-3 py-1 rounded-full">
+                        <span key={index} className="flex items-center gap-2 bg-mabi-green text-sm px-3 py-1 rounded-full">
                             {tag}
                             <button onClick={() => removeTag(index)} type="button"
                             className="cursor-pointer text-white hover:text-[#ff0000] font-bold mb-1 text-lg outline-none">
@@ -411,7 +411,7 @@ function SubmissionUpload() {
 
             {inflateImg && (
                 <dialog className="modal modal-open">
-                    <div className="modal-box">
+                    <div className="modal-box bg-mabi-surface">
                         <img src={`${inflateImg}`} className="aspect-[9/16] place-self-center" />
                     </div>
                     <form method="dialog" className="modal-backdrop">
@@ -459,8 +459,8 @@ function SubmissionUpload() {
             <div className="relative grid grid-cols-1 xl:grid-cols-2 gap-2">
                 <div className="image-card-section flex flex-col gap-2">
                     <h2 className="text-xl">Images</h2>
-                    <input type="file" accept="image/*" multiple max={5} onChange={onFileChange} ref={fileInputRef} className="bg-[#666666] cursor-pointer p-3 rounded-lg w-fit" />
-                    <h5 className="text-sm text-[#ffffff90]">Please select at most 5 images.</h5>
+                    <input type="file" accept="image/*" multiple max={5} onChange={onFileChange} ref={fileInputRef} className="bg-mabi-surface-muted cursor-pointer p-3 rounded-lg w-fit" />
+                    <h5 className="text-sm text-mabi-text-muted">Please select at most 5 images.</h5>
                     <div className="CropAndModal flex flex-col gap-3">
                         {images[activeCropIndex] && (
                             <div className="flex flex-col gap-3">
@@ -506,9 +506,9 @@ function SubmissionUpload() {
                 </div>
                 <div className="relative flex flex-col gap-2">
                     <h2 className="text-xl">Equipment Data</h2>
-                    <h5 className="text-sm text-[#ffffff90]">At least one piece of equipment must be included.</h5>
-                    <h5 className="text-sm text-[#ffffff90]">Only include equipment relevant to the style.</h5>
-                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-[#ffffff50] rounded-lg" style={{scrollbarWidth: "thin"}}>
+                    <h5 className="text-sm text-mabi-text-muted">At least one piece of equipment must be included.</h5>
+                    <h5 className="text-sm text-mabi-text-muted">Only include equipment relevant to the style.</h5>
+                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-mabi-border-heavy rounded-lg" style={{scrollbarWidth: "thin"}}>
                         {equipmentSections.map((section) => (
                             <EquipmentAccordion 
                             key={section.key}
@@ -518,7 +518,7 @@ function SubmissionUpload() {
                             onChange={equipmentChangeHandler}/>
                         ))}
                     </div>
-                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-[#ffffff90] rounded-lg">
+                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg">
                         <h2 className="text-xl">RGB to Hex Converter</h2>
                         <div className="flex gap-2">
                             <input type="number" className="bg-[#fff] text-[#000] px-1" value={r} min={0} max={255} onChange={(e) => setR(Number(e.target.value))} />
@@ -542,7 +542,7 @@ function SubmissionUpload() {
             </div>
             {inReview && (
                 <dialog className="modal modal-open">
-                    <div className="modal-box flex flex-col justify-center max-w-4xl min-h-[60vh] gap-5 px-10 py-20">
+                    <div className="modal-box flex flex-col justify-center max-w-4xl min-h-[60vh] gap-5 px-10 py-20 bg-mabi-surface-muted">
                         <h1 className="text-center text-4xl">Style Review</h1>
                         <p className="py-5 text-lg">Title: {title}</p>
                         <div className="flex flex-col">
@@ -552,7 +552,7 @@ function SubmissionUpload() {
                         <div className="flex gap-2 items-center">
                             <h2 className="text-md">Tags: </h2> 
                             {tags.map((tag) => (
-                                <p key={tag} className="text-md py-1 px-2 rounded bg-[#009090] w-fit h-fit">{tag}</p>
+                                <p key={tag} className="text-md py-1 px-2 rounded bg-mabi-green w-fit h-fit">{tag}</p>
                             ))}
                         </div>
                         <div className="flex flex-col gap-3 w-[80%] py-2">
@@ -560,29 +560,29 @@ function SubmissionUpload() {
                             <div className="flex flex-wrap gap-3">
                                 {Object.values(equipment).map((item) => (
                                     item.name && (
-                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-[#ffffff30] bg-[#91009120]">
-                                            <h5 className="text-xs text-[#ffffff30]">{item.slot}</h5>
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
+                                            <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
                                             <h4 className="text-md">{item.name}</h4>
                                             {!item.dyeable && (
-                                                <h5 className="text-sm text-[#fff] outline outline-[#ffffff30] outline-offset-1 rounded w-fit">Not Dyeable</h5>
+                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 rounded w-fit">Not Dyeable</h5>
                                             )}
                                             {item.dyeable && (
                                                 <>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partA && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>A: {item.partA.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
                                                             </div>
                                                         )}
                                                         {item.partB && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>B: {item.partB.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
                                                             </div>
                                                         )}
                                                         {item.partC && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>C: {item.partC.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
                                                                 </div>
@@ -590,19 +590,19 @@ function SubmissionUpload() {
                                                     </div>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partD && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>D: {item.partD.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
                                                             </div>
                                                         )}
                                                         {item.partE && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>E: {item.partE.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
                                                             </div>
                                                         )}
                                                         {item.partF && (
-                                                            <div className="flex gap-3 outline outline-[#ffffff30] outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
                                                                 <p>F: {item.partF.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
                                                             </div>

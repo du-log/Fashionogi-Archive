@@ -10,10 +10,10 @@ function NewsPanel ( {article} : {article: Article} ) {
     }) : "";
 
     return (
-        <div className="group grid grid-cols-3 w-full place-items-center justify-start outline px-2 py-5 bg-[#003000] cursor-pointer" onClick={() => navigate(`/news/article/${article.id}`)}>
-            <p className="text-[#E4E7E5] group-hover:text-[#B59E6D]">{article.title}</p>
-            <p className="text-[#E4E7E5] group-hover:text-[#B59E6D]">{article.type}</p>
-            <p className="text-[#E4E7E5] group-hover:text-[#B59E6D]">{formattedDate}</p>
+        <div className="group grid grid-cols-3 w-full place-items-center justify-start outline px-2 py-5 text-mabi-text bg-mabi-surface-muted cursor-pointer" onClick={() => navigate(`/news/article/${article.id}`)}>
+            <p className="group-hover:text-mabi-gold">{article.title}</p>
+            <p className="group-hover:text-mabi-gold">{article.type}</p>
+            <p className="group-hover:text-mabi-gold">{formattedDate}</p>
         </div>
     )
 }

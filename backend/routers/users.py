@@ -110,23 +110,6 @@ def get_public_profile(username: str, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code = 404, detail = 'User not found')
 
-    if not user.profile:
-        return {
-            'id': user.id,
-            'bio': None,
-            'server': None,
-            'guild': None,
-            'in_game_name': None,
-            'main_race': None,
-            'main_gender': None,
-            'discord_username': None,
-            'twitter_link': None,
-            'twitch_link': None,
-            'youtube_link': None,
-            'joined': user.created_at,
-            'avatar_id': user.avatar_id.hex if user.avatar_id else None
-        }
-
     return user.profile
 
 @router.get('/profiles/{username}/data')

@@ -68,15 +68,15 @@ export default function SearchBarComboBox() {
     }, []);
 
     return (
-        <div className="relative w-40" ref={menuRef}>
+        <div className="relative w-40 text-mabi-text" ref={menuRef}>
             <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." 
-            className="w-full p-1 outline rounded bg-[#ffffff50] text-[#fff]" />
+            className="w-full p-1 outline-1 outline-mabi-border-heavy rounded bg-mabi-surface-muted" />
 
             {isOpen && (
-                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto bg-[#666]">
+                <ul className="absolute z-10 w-full outline-1 outline-mabi-border mt-1 max-h-60 overflow-y-auto bg-mabi-surface">
                     {userResults.length > 0 && (
                         <>
-                            <p className="px-2 py-1 bg-[#003000]">Users</p>
+                            <p className="px-2 py-1 bg-mabi-surface-muted">Users</p>
                             {userResults.map((item) => (
                                 <li key={item.id} 
                                 onClick={() => {
@@ -84,7 +84,7 @@ export default function SearchBarComboBox() {
                                     navigate(`/profile/${item.username}`)
                                     setQuery('');
                                 }}
-                                className="cursor-pointer hover:bg-[#777] p-2">
+                                className="cursor-pointer hover:bg-mabi-green p-2">
                                     {item.username}
                                 </li>
                             ))}
@@ -92,7 +92,7 @@ export default function SearchBarComboBox() {
                     )}
                     {subResults.length > 0 && (
                         <>
-                            <p className="px-2 py-1 bg-[#003000]">Submissions</p>
+                            <p className="px-2 py-1 bg-mabi-surface-muted">Submissions</p>
                             {subResults.map((item) => (
                                 <li key={item.id} 
                                 onClick={() => {
@@ -100,7 +100,7 @@ export default function SearchBarComboBox() {
                                     navigate(`/fashion/id/${item.id}`)
                                     setQuery('');
                                 }}
-                                className="flex flex-col cursor-pointer hover:bg-[#777] p-2">
+                                className="flex flex-col cursor-pointer hover:bg-mabi-green p-2">
                                     <p>{item.title}</p>
                                     <p className="text-sm">by {item.author}</p>
                                 </li>

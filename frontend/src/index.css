@@ -1,3 +1,23 @@
 @import "tailwindcss";
 @plugin "daisyui/index.js";
 @plugin "@tailwindcss/typography";
+
+@theme {
+    /* Layout & Cards - Soft Tea/Sage Greens */
+    --color-mabi-base: #E3EFE1;       /* A muted, soft sage green for the main background */
+    --color-mabi-surface: #EFF6ED;    /* Very pale, airy green for the profile/gallery cards */
+    --color-mabi-surface-muted: #D4E2D2; /* Deeper muted sage for inner modules */
+
+    /* Text - Deep Forest Greens for contrast */
+    --color-mabi-text: #1F2E22;       /* Very dark forest green (almost black) for readability */
+    --color-mabi-text-muted: #5C7360; /* Muted forest/sage for secondary info */
+
+    /* Borders */
+    --color-mabi-border: #C1D1BF;     /* Soft green-grey boundary */
+    --color-mabi-border-heavy: #A3A3A3; /* The silver-grey from the Celtic knot */
+
+    /* Accents from Icons */
+    --color-mabi-green: #8CDA6D;      /* Vibrant leaf green */
+    --color-mabi-orange: #F36608;     /* Sunset orange */
+    --color-mabi-gold: #DAA700;
+}

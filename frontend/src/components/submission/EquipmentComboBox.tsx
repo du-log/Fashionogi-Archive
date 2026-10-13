@@ -63,9 +63,9 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
     }, []);
 
     return (
-        <div className="relative w-full">
+        <div className="relative w-full text-mabi-text">
             <input type="text" value={value} onChange={(e) => onSelect(slot, 'name', e.target.value)} placeholder="Item name..." 
-            className="w-full p-1 outline rounded bg-[#ffffff50] text-[#ffffff]" />
+            className="w-full p-1 outline rounded bg-mabi-surface" />
 
             {isOpen && results.length > 0 && (
                 <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
@@ -76,7 +76,7 @@ function EquipmentComboBox ( {slot, value, onSelect} : ComboBoxProps ) {
                             onSelect(slot, 'name', item.name);
                             setOpen(false);
                         }}
-                        className="cursor-pointer bg-[#666] hover:bg-[#777] p-2">
+                        className="cursor-pointer bg-mabi-surface hover:bg-mabi-green p-2">
                             {item.name}
                         </li>
                     ))}

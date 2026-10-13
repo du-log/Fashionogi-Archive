@@ -3,13 +3,3 @@
     scrollbar-width: thin;
     overflow-y: scroll;
 }
-
-#Collapse li {
-    p {
-        color: #E4E7E5;
-    }
-    p:hover {
-        color: #B59E6D;
-        background-color: #2A2F2C;
-    }
-}

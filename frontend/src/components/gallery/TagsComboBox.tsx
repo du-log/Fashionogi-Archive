@@ -62,12 +62,12 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
     }, [setTag]);
 
     return (
-        <div className="relative w-40">
+        <div className="relative w-40 text-mabi-text">
             <input type="text" value={tag} onChange={(e) => setTag(e.target.value)} placeholder="Tag" 
-            className="w-full p-1 outline rounded bg-[#ffffff50] text-[#fff]" />
+            className="w-full p-1 outline-1 outline-mabi-border rounded bg-mabi-surface" />
 
             {isOpen && results.length > 0 && (
-                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
+                <ul className="absolute z-10 w-full outline-1 outline-mabi-border mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
                     {results.map((item: Tag) => (
                         <li key={item.id} 
                         onClick={() => {
@@ -75,7 +75,7 @@ function TagsComboBox ( {tag, setTag} :  ComboBoxProps) {
                             setTag(item.name);
                             setOpen(false);
                         }}
-                        className="cursor-pointer bg-[#666] hover:bg-[#777] p-2">
+                        className="cursor-pointer bg-mabi-surface hover:bg-mabi-green p-2">
                             {item.name}
                         </li>
                     ))}
