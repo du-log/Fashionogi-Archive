@@ -140,6 +140,7 @@ function UserProfile() {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            setLoading(true);
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
@@ -160,7 +161,7 @@ function UserProfile() {
                 setFollowData(addiData);
             }
             document.documentElement.scrollTop = 0;
-            setTimeout(() => setLoading(false), 200);
+            setTimeout(() => setLoading(false), 50);
         }
         if (username) fetchProfile();
     }, [username])

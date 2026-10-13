@@ -88,6 +88,8 @@ function SubmissionPage() {
 
     useEffect(() => {
         const fetchSubmission = async () => {
+            setLoading(true);
+            setVisible(false);
             try {
                 const res = await fetch(`${SUBS_URL}/id/${id}`, {
                     credentials: 'include'
@@ -103,7 +105,7 @@ function SubmissionPage() {
             } finally {
                 document.documentElement.scrollTop = 0;
                 setLoading(false);
-                setTimeout(() => setVisible(true), 200);
+                setTimeout(() => setVisible(true), 50);
             }
         }
         if (id) fetchSubmission();

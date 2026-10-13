@@ -2,7 +2,7 @@
 
 **Last Updated: October 2026**
 
-Welcome to the Fashionogi Archive. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website.
+Welcome to Fashionogi Archive. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website.
 
 ## Information We Collect
 
@@ -21,5 +21,5 @@ We do not sell, trade, or rent your personal information to third parties. Your 
 ## Data Security
 We implement standard security measures to the best our ability, including secure cookie handling and encrypted password storage, to protect your account. However, no internet transmission is completely secure, and we cannot guarantee absolute security.
 
-## Contact Us
-If you have questions about this Privacy Policy, please contact us at brandondulog@gmail.com.
+## Contact
+If you have questions about this Privacy Policy, please contact at brandondulog@gmail.com.

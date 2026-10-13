@@ -90,7 +90,7 @@ function NewsPage() {
                 setArticles(data);
                 setTimeout(() => {
                     setLoading(false);
-                }, 100);
+                }, 50);
             }
         }
         fetchArticles();

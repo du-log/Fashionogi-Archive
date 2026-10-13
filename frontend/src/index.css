@@ -3,32 +3,39 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-    /* Layout & Cards - Soft Tea/Sage Greens */
-    --color-mabi-base: #E3EFE1;       /* A muted, soft sage green for the main background */
-    --color-mabi-surface: #EFF6ED;    /* Very pale, airy green for the profile/gallery cards */
-    --color-mabi-surface-muted: #D4E2D2; /* Deeper muted sage for inner modules */
+    /* Layout & Cards */
+    --color-mabi-base: #E3EFE1;
+    --color-mabi-surface: #EFF6ED;
+    --color-mabi-surface-muted: #D4E2D2;
 
-    /* Text - Deep Forest Greens for contrast */
-    --color-mabi-text: #1F2E22;       /* Very dark forest green (almost black) for readability */
-    --color-mabi-text-muted: #5C7360; /* Muted forest/sage for secondary info */
+    /* Text */
+    --color-mabi-text: #1F2E22;
+    --color-mabi-text-muted: #5C7360;
 
     /* Borders */
-    --color-mabi-border: #C1D1BF;     /* Soft green-grey boundary */
-    --color-mabi-border-heavy: #A3A3A3; /* The silver-grey from the Celtic knot */
+    --color-mabi-border: #C1D1BF;
+    --color-mabi-border-heavy: #A3A3A3;
 
-    /* Accents from Icons */
-    --color-mabi-green: #8CDA6D;      /* Vibrant leaf green */
-    --color-mabi-orange: #F36608;     /* Sunset orange */
+    /* Accents */
+    --color-mabi-green: #8CDA6D;
+    --color-mabi-orange: #F36608;
     --color-mabi-gold: #DAA700;
 }
 
 :root[data-theme="dark"] {
-    --color-mabi-base: #0f172a;       /* Deep night blue */
-    --color-mabi-surface: #1e293b;    /* Slate cards */
-    --color-mabi-surface-muted: #334155; /* Slate inner modules */
+    /* Layout & Cards */
+    --color-mabi-base: #0f172a;
+    --color-mabi-surface: #1e293b;
+    --color-mabi-surface-muted: #334155;
 
-    --color-mabi-text: #f8fafc;       /* Crisp silver/white text */
-    --color-mabi-text-muted: #94a3b8; /* Dimmed slate text */
+    /* Text */
+    --color-mabi-text: #f8fafc;
+    --color-mabi-text-muted: #94a3b8;
 
-    --color-mabi-border: #475569;     /* Darker slate borders */
+    /* Borders */
+    --color-mabi-border: #475569;
+    --color-mabi-border-heavy: #636363;
+    
+    /* Accents */
+    --color-mabi-green: #00306F;
 }

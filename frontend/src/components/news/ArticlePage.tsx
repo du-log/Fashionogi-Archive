@@ -27,7 +27,7 @@ function ArticlePage() {
             if (res.ok) {
                 const data = await res.json();
                 setPageData(data);
-                setTimeout(() => setLoading(false), 200);
+                setTimeout(() => setLoading(false), 50);
             }
         }
         fetchArticle();

@@ -118,7 +118,7 @@ function Gallery() {
 
             fetchGallery(queryString);
             setPageLoading(false);
-        }, 100);
+        }, 50);
 
         return () => window.clearTimeout(timeoutId);
     }, [fetchGallery, searchParams]);

@@ -41,7 +41,7 @@ function Home() {
             setLatestArticles(data4);
 
             if (res.ok && res2.ok && res3.ok && res4.ok) {
-                setTimeout(() => setLoading(false), 300);
+                setTimeout(() => setLoading(false), 50);
             }
         }
         document.documentElement.scrollTop = 0;
