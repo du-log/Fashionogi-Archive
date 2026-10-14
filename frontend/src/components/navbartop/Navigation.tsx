@@ -31,7 +31,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                     <div className={`flex place-items-center z-10 bg-mabi-surface-muted rounded-lg p-2 w-fit min-w-50 h-fit min-h-16 ${showSearch ? '' : 'border-b-1 border-mabi-border'}`}>
                         <UserCollapse />
                     </div>
-                    <div className={`fixed ${showSearch ? 'mt-45 z-[-10]' : 'mt-20'} ml-5 place-items-center w-40 cursor-pointer rounded-b-lg bg-mabi-surface-muted hover:outline hover:outline-mabi-border`} onClick={() => showSearch ? setShowSearch(false) : setShowSearch(true)}>
+                    <div className={`fixed ${showSearch ? 'mt-45 z-[-10]' : 'mt-20'} ml-5 place-items-center w-40 cursor-pointer rounded-b-lg bg-mabi-surface-muted outline-1 outline-mabi-border-heavy hover:outline-mabi-gold`} onClick={() => showSearch ? setShowSearch(false) : setShowSearch(true)}>
                         <p className="flex justify-between">{showSearch ? <ChevronUp height={20} /> : <ChevronDown height={20} />}</p>
                     </div>
                     {showSearch && (

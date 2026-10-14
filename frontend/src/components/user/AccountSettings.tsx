@@ -11,6 +11,7 @@ function AccountSettings() {
     const userLoading = auth?.isLoading ?? true;
     const logout = auth?.logout ?? (async () => {});
     const [isLoading, setLoading] = useState<boolean>(true);
+    const [isChecking, setChecking] = useState<boolean>(false);
     
     const navigate = useNavigate();
     const [currentTab, setTab] = useState<string>('personal');
@@ -19,8 +20,6 @@ function AccountSettings() {
     const [availMsg, setAvailMsg] = useState<string>('');
 
     const [nameFlag, setNameFlag] = useState<boolean>(false);
-    //const [emailFlag, setEmailFlag] = useState<boolean>(false);
-    const [pwFlag, setPwFlag] = useState<boolean>(false);
 
     const [bio, setBio] = useState<string | null | undefined>('');
     const [server, setServer] = useState<string | null | undefined>('');
@@ -35,6 +34,7 @@ function AccountSettings() {
 
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
+        setChecking(true);
         if (username.length > 15) {
             setAvailMsg('Username is over 15 characters.');
             return;
@@ -50,6 +50,7 @@ function AccountSettings() {
         setAvailMsg(data.message);
 
         if(data.success === true) setNameFlag(true);
+        setChecking(false);
     }
 
     const handleNameReset = async () => {
@@ -156,7 +157,7 @@ function AccountSettings() {
                                 <h1 className="text-xl">Change Username</h1>
                                 <div className="flex gap-5 items-center">
                                     <input type="text" className="bg-mabi-surface p-1" maxLength={15} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user?.username} />
-                                    <button className={`btn btn-warning w-fit ${username.length < 3 || username === user?.username ? 'btn-disabled' : ''}`} onClick={() => handleNameCheck(username)}>Check</button>
+                                    <button className={`btn btn-warning w-fit ${username.length < 3 || username === user?.username ? 'btn-disabled' : ''} ${isChecking && 'btn-disabled'}`} onClick={() => handleNameCheck(username)}>{isChecking ? 'Checking...' : 'Check'}</button>
                                 </div>
                                 <p className={`text-sm ${isAvailable && availMsg.length > 0 ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{availMsg}</p>
                                 {nameFlag && (
@@ -225,16 +226,6 @@ function AccountSettings() {
                         </div>
                     )}
                 </div>
-                {pwFlag && (
-                    <dialog className="modal modal-open">
-                        <div className="modal-box w-fit h-fit bg-mabi-surface p-10">
-                            <PwChangeForm />
-                            <div className="modal-action justify-center">
-                                <button className="btn btn-error" onClick={() => setPwFlag(false)}>Cancel</button>
-                            </div>
-                        </div>
-                    </dialog>
-                )}
             </div>
         </>
     )

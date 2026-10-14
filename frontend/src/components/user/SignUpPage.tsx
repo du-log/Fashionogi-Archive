@@ -257,7 +257,7 @@ function SignUpPage() {
                                 </div>
                                 {password.length > 0 && (
                                     <>
-                                    <div className="flex flex-col w-1/2 place-self-end bg-mabi-surface-muted outline outline-[#758277] p-2">
+                                    <div className="flex flex-col w-1/2 place-self-end bg-mabi-surface-muted outline-1 outline-mabi-border-heavy p-2">
                                         <div className="w-full h-1.5 bg-[#00000090] rounded-full overflow-hidden">
                                             <div className={`h-full transition-all duration-300 ${strength.width} ${strength.color}`} />
                                         </div>

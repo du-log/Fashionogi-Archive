@@ -97,6 +97,17 @@ export default function PwChangeForm() {
         }
     }
 
+    const resetForm = () => {
+        setCheck('');
+        setPassword('');
+        setPwErr('');
+        setShowPw(false);
+        setShowVerify(false);
+        setVerified(false);
+        setVerifyErr('');
+        setVerifyPw('');
+    }
+
     useEffect(() => {
             const timerDebounce = setTimeout(async () => {
                 if (password.length >= 8 && check.length > 0) {
@@ -127,20 +138,20 @@ export default function PwChangeForm() {
                 </div>
             )}
             {verified && (
-                <div className="flex flex-col gap-5 p-10 outline rounded">
+                <div className="flex flex-col gap-5 p-10 outline rounded w-fit">
                     <div className="flex flex-col gap-1">
                         <div className="flex flex-col gap-6">
-                            <div className="flex flex-col gap-5 w-full">
+                            <div className="flex flex-col gap-5 w-fit">
                                 <label htmlFor="passwordL">New Password</label>
-                                <div className="relative flex items-center">
-                                    <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-outline-mabi-border' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
+                                <div className="relative flex items-center w-fit">
+                                    <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#FF0000]' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
                                     title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, no spaces, and be between 8-16 characters" maxLength={16} />
-                                    <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showPw ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowPw((show) => !show)}>{showPw ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
+                                    <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showPw ? 'text-mabi-text/25' : ''}`} onClick={() => setShowPw((show) => !show)}>{showPw ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                                 </div>
                             </div>
                             {password.length > 0 && (
                                 <>
-                                <div className="flex flex-col w-full place-self-end bg-mabi-border outline outline-mabi-border-heavy p-2">
+                                <div className="flex flex-col w-fit place-self-start bg-mabi-surface-muted outline-1 outline-mabi-border-heavy p-2">
                                     <div className="w-full h-1.5 bg-[#00000090] rounded-full overflow-hidden">
                                         <div className={`h-full transition-all duration-300 ${strength.width} ${strength.color}`} />
                                     </div>
@@ -148,21 +159,24 @@ export default function PwChangeForm() {
                                     <div className="p-1 flex flex-col text-sm items-end">
                                         {requirements.map((req) => (
                                             <div className="flex gap-1 items-center">
-                                                <p className={`${req.met ? 'text-[#00f000]' : 'text-[#a00000]'}`}>{req.label}</p>
-                                                <p className={`${req.met ? 'text-[#00f000]' : 'text-[#a00000]'}`}>{req.met ? <CheckIcon /> : <XIcon />}</p>
+                                                <p className={`${req.met ? 'text-[#00B00090]' : 'text-[#A00000]'}`}>{req.label}</p>
+                                                <p className={`${req.met ? 'text-[#00B00090]' : 'text-[#A00000]'}`}>{req.met ? <CheckIcon /> : <XIcon />}</p>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                                 </>
                             )}
-                            <div className="flex flex-col gap-5 w-full">
+                            <div className="flex flex-col gap-5 w-fit">
                                 <label htmlFor="verifyL">Confirm Password</label>
                                 <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type='password' id="verifyL" value={check} onChange={(e) => setCheck(e.target.value)} required />
                             </div>
                         </div>
-                        <span className="text-[#ff0000]">{pwErr}</span>
-                        <button className="btn btn-success" onClick={pwChangeHandler}>Change Password</button>
+                        <div className="text-[#ff0000] flex flex-wrap w-60">{pwErr}</div>
+                        <div className="flex justify-center items-center gap-1">
+                            <button className="btn btn-success w-fit" onClick={pwChangeHandler}>Change Password</button>
+                            <button className="btn btn-error w-fit" onClick={resetForm}>Cancel</button>
+                        </div>
                     </div>
                 </div>
             )}
