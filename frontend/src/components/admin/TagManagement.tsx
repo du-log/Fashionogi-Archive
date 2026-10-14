@@ -35,6 +35,18 @@ function TagManagement() {
         }
     }
 
+    const newTagHandler = async (e: { preventDefault: () => void }) => {
+        e.preventDefault();
+
+        const res = await fetch (`${ADMIN_URL}/tags/add/${newTag}`, {
+            method: 'POST',
+            credentials: 'include'
+        });
+        if (res.ok) {
+            fetchTags();
+        }
+    }
+
     useEffect(() => {
         if (!user || !user.is_admin) return;
         const fetchTags = async () => {
@@ -51,7 +63,7 @@ function TagManagement() {
 
     return (
         <div className="flex flex-col w-full max-h-[70vh] p-2 outline-2 rounded gap-2">
-            <form className="flex outline p-2 items-center justify-center gap-10">
+            <form className="flex outline p-2 items-center justify-center gap-10" onSubmit={newTagHandler}>
                 <p>Total Tags: {tags.length}</p>
                 <input type="text" maxLength={20} value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Add a new tag if needed." className="outline text-lg p-2" />
                 <button type="submit" className="btn">Add Tag</button>

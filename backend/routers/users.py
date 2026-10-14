@@ -59,8 +59,7 @@ class UserProfileResponse(UserProfileUpdate):
 
 @router.get('/me')
 def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.username == current_user.username)).scalars().first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     user.last_active = func.now()
     
@@ -68,8 +67,7 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.username == current_user.username)).scalars().first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     
     if file.content_type != 'image/webp':
@@ -234,11 +232,10 @@ def update_username(username: str, current_user: models.User = Depends(auth.get_
     if user:
         raise HTTPException(status_code = 400, detail = 'Requested username already taken. Possible attempt to bypass through intrusive action.')
 
-    user_me = current_user
-    if not user_me:
+    if not current_user:
         raise HTTPException(status_code = 403, detail = 'Unauthorized action.')
 
-    user_me.username = username
+    current_user.username = username
     db.commit()
 
     return {'message': 'Username successfully changed.', 'new_username': current_user.username}
@@ -296,8 +293,7 @@ def get_my_favorites(current_user: models.User = Depends(auth.get_current_user),
 
 @router.get('/password/verify/{password}')
 def verify_password(password: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 403, detail = 'Unauthorized.')
     
     if not auth.verify_pw(password, user.hashed_password):
@@ -307,12 +303,11 @@ def verify_password(password: str, current_user: models.User = Depends(auth.get_
 
 @router.patch('/password/update/{password}')
 def update_password(password: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 403, detail = 'Unauthorized.')
     
     hashed = auth.get_pw_hash(password)
-    user.hashed_password = hashed
+    current_user.hashed_password = hashed
 
     db.commit()
 
@@ -331,16 +326,15 @@ def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: mod
     if not target_user:
         raise HTTPException(status_code = 404, detail = 'User not found')
 
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized, perhaps there is an error in the code')
 
     is_followed = user in target_user.followers
     if is_followed:
-        target_user.followers.remove(user)
+        target_user.followers.remove(current_user)
         followed = False
     else:
-        target_user.followers.append(user)
+        target_user.followers.append(current_user)
         followed = True
     
     db.commit()

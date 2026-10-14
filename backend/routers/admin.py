@@ -24,8 +24,7 @@ R2_PUBLIC_URL = os.environ.get('R2_PUBLIC_URL')
 
 @router.get('/tags')
 def admin_get_tags(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user or not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (
@@ -39,8 +38,7 @@ def admin_get_tags(current_user: models.User = Depends(auth.get_current_user), d
 
 @router.patch('/tags/{tag_id}/toggle')
 def admin_toggle_tag(tag_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user or not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (
@@ -56,10 +54,31 @@ def admin_toggle_tag(tag_id: int, current_user: models.User = Depends(auth.get_c
 
     return {'id': tag.id, 'is_active': tag.is_active}
 
+@router.post('/tags/add/{tag}')
+def admin_add_new_tag(tag: str, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    if not current_user or not current_user.is_admin:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized.')
+
+    stmt = (
+        select(models.BaseTags)
+        .where(models.BaseTags.name == tag)
+    )
+    exists = db.execute(stmt).scalars().unique().first()
+    if exists:
+        raise HTTPException(status_code = 400, detail = 'This tag already exists.')
+    
+    new_tag = models.BaseTags(
+        name = tag
+    )
+
+    db.add(new_tag)
+    db.commit()
+
+    return {'success': True, 'message': f'Tag {tag} has been added to the table.'}
+
 @router.get('/pending')
 def admin_get_pending(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user or not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (
@@ -109,8 +128,7 @@ def admin_get_pending(current_user: models.User = Depends(auth.get_current_user)
 
 @router.patch('/pending/{sub_id}/approve')
 def admin_approve_sub(sub_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user or not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (
@@ -131,8 +149,7 @@ def admin_approve_sub(sub_id: int, current_user: models.User = Depends(auth.get_
 
 @router.patch('/pending/{sub_id}/reject')
 def admin_reject_sub(sub_id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().first()
-    if not user or not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized.')
 
     stmt = (

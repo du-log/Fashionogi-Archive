@@ -28,10 +28,7 @@ router = APIRouter(prefix = '/api/news', tags = ['News', 'Announcements'])
 @router.post('')
 def post_article(title: str = Form(...), description: str = Form(...), type: str = Form(...), context: str = Form(...),
 current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    user = db.execute(select(models.User).where(models.User.id == current_user.id)).scalars().unique().first()
-    if not user:
-        raise HTTPException(status_code = 404, detail = 'User not found')
-    if not user.is_admin:
+    if not current_user or not current_user.is_admin:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     
     new_article = models.News(

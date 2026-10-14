@@ -93,8 +93,6 @@ def register(response: Response, username = Form(...), email = Form(...), passwo
             'type': 'AccNameHas'
         }
 
-    
-
     try:
         pw_hash = auth.get_pw_hash(password)
         new_user = models.User(username = username, email = email, hashed_password = pw_hash)

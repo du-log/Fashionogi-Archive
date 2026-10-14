@@ -63,13 +63,12 @@ async def upload_submission(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user)
 ):
-    user = db.query(models.User).filter(models.User.id == current_user.id).first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
 
     twenty_four_hr_ago = datetime.now(timezone.utc) - timedelta(hours = 24)
     recent_subs_count = db.query(models.Submission).filter(
-        models.Submission.user_id == user.id,
+        models.Submission.user_id == current_user.id,
         models.Submission.created_at >= twenty_four_hr_ago
     ).count()
     if recent_subs_count >= 7:
@@ -81,7 +80,7 @@ async def upload_submission(
     parsed_equipment: List[EquipmentPayload] = [EquipmentPayload(**item) for item in raw_equipment]
 
     new_submission = models.Submission(
-        user_id = user.id,
+        user_id = current_user.id,
         title = title,
         description = description,
         gender = gender,
@@ -390,16 +389,15 @@ def toggle_favorite(submission_id: int, db: Session = Depends(get_db), current_u
     if not sub:
         raise HTTPException(status_code = 404, detail = 'Submission not found')
 
-    user = db.query(models.User).filter(models.User.id == current_user.id).first()
-    if not user:
+    if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized, perhaps there is an error in the code')
 
-    is_favorited = user in sub.favorited_by
+    is_favorited = current_user in sub.favorited_by
     if is_favorited:
-        sub.favorited_by.remove(user)
+        sub.favorited_by.remove(current_user)
         favorited = False
     else:
-        sub.favorited_by.append(user)
+        sub.favorited_by.append(current_user)
         favorited = True
     
     db.commit()
