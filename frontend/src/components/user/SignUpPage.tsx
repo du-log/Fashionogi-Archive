@@ -213,31 +213,31 @@ function SignUpPage() {
     }, [password, verify])
 
     return (
-        <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-lg text-[#E4E7E5]">
+        <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-lg text-mabi-text bg-mabi-surface-muted">
             {!isRegistered && (
-                <div className="flex flex-col gap-5 items-center outline outline-[#fff] pt-10 pb-5 px-5 rounded-xl bg-[#00660070]">
-                    <h1 className="text-4xl">Sign Up</h1>
+                <div className="flex flex-col gap-5 items-center outline outline-mabi-border-heavy pt-10 pb-5 px-5 rounded-xl bg-mabi-surface">
+                    <h1 className="text-4xl text-mabi-text-muted">Sign Up</h1>
                     <p className="text-wrap text-center w-[75%]">Join us and share your styles with your fellow Fashionogi!</p>
                     <form className="flex flex-col w-full py-10 px-5 gap-5" method="post" onSubmit={(e) => registerHandler(e)}>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex gap-10 items-center justify-between w-full">
                                 <label htmlFor="usernameL">Username</label>
                                 <div className="flex items-center relative">
-                                    <input className={`bg-[#fff] text-[#000] px-1 ${nameErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="text" id="usernameL" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={15} required
+                                    <input className={`bg-mabi-surface-muted px-1 ${nameErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="text" id="usernameL" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={15} required
                                     title="Username must be between 3 and 15 characters long. This can be changed later." />
                                     {!isNameChecking && nameErr.length === 0 && username.length >= 3 && (
                                         <p className="absolute right-1 text-[#00a000]"><CheckIcon size={20} /></p>
                                     )}
                                 </div>
                             </div>
-                            <p className="text-sm text-[#ffffff90]">Must be between 3-15 characters, no spaces.</p>
+                            <p className="text-sm text-mabi-text-muted">Must be between 3-15 characters, no spaces.</p>
                             <span className="flex text-[#aa0000] text-wrap">{nameErr}</span>
                         </div>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex gap-10 items-center justify-between w-full">
                                 <label htmlFor="emailL">Email</label>
                                 <div className="flex items-center relative">
-                                    <input className={`bg-[#fff] text-[#000] px-1 ${emailErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                    <input className={`bg-mabi-surface-muted px-1 ${emailErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} required />
                                     {!isEmailChecking && emailErr.length === 0 && isValidEmail(email) && (
                                         <p className="absolute right-1 text-[#00a000]"><CheckIcon size={20} /></p>
                                     )}
@@ -250,14 +250,14 @@ function SignUpPage() {
                                 <div className="flex gap-10 items-center justify-between w-full">
                                     <label htmlFor="passwordL">Password</label>
                                     <div className="relative flex items-center">
-                                        <input className={`bg-[#fff] text-[#000] px-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
+                                        <input className={`bg-mabi-surface-muted px-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type={showPw ? 'text' : 'password'} pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8.16}$" id="passwordL" value={password} onChange={(e) => setPassword(e.target.value)} required
                                         title="Must contain at least one number, one uppercase letter, one lowercase letter, one special character, no spaces, and be between 8-16 characters" maxLength={16} />
-                                        <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showPw ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowPw((show) => !show)}>{showPw ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
+                                        <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showPw ? 'text-mabi-text/25' : ''}`} onClick={() => setShowPw((show) => !show)}>{showPw ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                                     </div>
                                 </div>
                                 {password.length > 0 && (
                                     <>
-                                    <div className="flex flex-col w-1/2 place-self-end bg-[#2A2F2C90] outline outline-[#758277] p-2">
+                                    <div className="flex flex-col w-1/2 place-self-end bg-mabi-surface-muted outline outline-[#758277] p-2">
                                         <div className="w-full h-1.5 bg-[#00000090] rounded-full overflow-hidden">
                                             <div className={`h-full transition-all duration-300 ${strength.width} ${strength.color}`} />
                                         </div>
@@ -265,8 +265,8 @@ function SignUpPage() {
                                         <div className="p-1 flex flex-col text-sm items-end">
                                             {requirements.map((req) => (
                                                 <div className="flex gap-1 items-center">
-                                                    <p className={`${req.met ? 'text-[#00f000]' : 'text-[#a00000]'}`}>{req.label}</p>
-                                                    <p className={`${req.met ? 'text-[#00f000]' : 'text-[#a00000]'}`}>{req.met ? <CheckIcon /> : <XIcon />}</p>
+                                                    <p className={`${req.met ? 'text-[#00B00090]' : 'text-[#A00000]'}`}>{req.label}</p>
+                                                    <p className={`${req.met ? 'text-[#00B00090]' : 'text-[#A00000]'}`}>{req.met ? <CheckIcon /> : <XIcon />}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -275,22 +275,22 @@ function SignUpPage() {
                                 )}
                                 <div className="flex gap-10 items-center justify-between w-full">
                                     <label htmlFor="verifyL">Confirm Password</label>
-                                    <input className={`bg-[#fff] text-[#000] px-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type='password' id="verifyL" value={verify} onChange={(e) => setVerify(e.target.value)} required />
+                                    <input className={`bg-mabi-surface-muted px-1 ${pwErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type='password' id="verifyL" value={verify} onChange={(e) => setVerify(e.target.value)} required />
                                 </div>
                             </div>
                             <span className="text-[#ff0000]">{pwErr}</span>
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I have read the <a href="/privacy" target="_blank" className="hover:text-[#a5f500]">Privacy Policy</a>.</label>
+                            <label>I have read the <a href="/privacy" target="_blank" className="hover:text-mabi-green">Privacy Policy</a>.</label>
                             <input type="checkbox" checked={privacyAgree} onChange={(e) => setPrivacyAgree(e.target.checked)} />
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I agree to the <a href="/terms" target="_blank" className="hover:text-[#a5f500]">Terms and Conditions</a>.</label>
+                            <label>I agree to the <a href="/terms" target="_blank" className="hover:text-mabi-green">Terms and Conditions</a>.</label>
                             <input type="checkbox" checked={termsAgree} onChange={(e) => setTermsAgree(e.target.checked)} />
                         </div>
                         <button type="submit" className={`btn btn-xl btn-success ${(!privacyAgree || !termsAgree) ? 'btn-disabled' : ''}`}>Register</button>
-                        <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-[#7CC96B] hover:text-[#a5f500]" onClick={() => navigate('/login')}>Return to Login</p>
-                        <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-[#7CC96B] hover:text-[#a5f500]" onClick={() => navigate('/')}>Return to Home</p>
+                        <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-mabi-text-muted hover:text-mabi-gold" onClick={() => navigate('/login')}>Return to Login</p>
+                        <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-mabi-text-muted hover:text-mabi-gold" onClick={() => navigate('/')}>Return to Home</p>
                     </form>
                 </div>
             )}
