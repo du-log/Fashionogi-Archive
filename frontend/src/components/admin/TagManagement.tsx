@@ -44,6 +44,7 @@ function TagManagement() {
         });
         if (res.ok) {
             fetchTags();
+            setNewTag('');
         }
     }
 
