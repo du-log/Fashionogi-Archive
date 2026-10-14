@@ -281,7 +281,6 @@ function UserProfile() {
                         <div className="flex flex-col gap-2">
                             <h1 className="text-3xl font-bold text-center">Edit Profile</h1>
                             <h1 className="text-xl">Bio</h1>
-                            <p className="text-sm">This uses Markdown conventions for formatting.</p>
                             <div className="relative w-full">
                                 <textarea className="outline w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
                                 <p className="absolute top-1 right-1">{bio && 200 - bio.length}</p>
