@@ -54,6 +54,7 @@ export default function PwChangeForm() {
     const pwVerifyHandler = async () => {
         setVerifyErr('');
         const res = await fetch(`${USERS_URL}/password/verify/${verifyPw}`, {
+            method: 'GET',
             credentials: 'include'
         });
         if (res.ok) {
@@ -112,15 +113,14 @@ export default function PwChangeForm() {
         }, [password, check])
 
     return (
-        <div className="flex flex-col gap-10 justify-center items-center p-10 text-mabi-text bg-mabi-surface-muted">
-            <h1 className="text-3xl">Password Change Form</h1>
+        <div className="flex flex-col gap-10 text-mabi-text bg-mabi-surface-muted">
             {!verified && (
-                <div className="flex flex-col gap-5 p-10 outline rounded">
+                <div className="flex flex-col gap-5 p-5 outline-1 outline-mabi-border-heavy rounded w-fit">
                     <p>Enter Current Password</p>
-                    <div className="relative flex items-center">
+                    <div className="relative flex items-center w-fit">
                         <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-mabi-border' : ''}`} type={showVerify ? 'text' : 'password'} value={verifyPw} onChange={(e) => setVerifyPw(e.target.value)} required
                         maxLength={16} />
-                        <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showVerify ? 'text-[#00000050]' : 'text-[#000]'}`} onClick={() => setShowVerify((show) => !show)}>{showVerify ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
+                        <p className={`absolute right-1 z-100 cursor-pointer text-sm ${showVerify ? 'text-mabi-text/25' : ''}`} onClick={() => setShowVerify((show) => !show)}>{showVerify ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}</p>
                     </div>
                     <span>{verifyErr}</span>
                     <button className="btn btn-warning" onClick={pwVerifyHandler}>Verify</button>

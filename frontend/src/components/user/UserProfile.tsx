@@ -40,22 +40,10 @@ function UserProfile() {
 
     const [userData, setUserData] = useState<userProfile | null | undefined>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const [topStyles, setTopStyles] = useState<GalleryItem[]>([]);
     const [latestStyles, setLatestStyles] = useState<GalleryItem[]>([]);
     const [total, setTotal] = useState<number>(0);
-
-    const [bio, setBio] = useState<string | null | undefined>('');
-    const [server, setServer] = useState<string | null | undefined>('');
-    const [guild, setGuild] = useState<string | null | undefined>('');
-    const [ign, setIgn] = useState<string | null | undefined>('');
-    const [race, setRace] = useState<string | null | undefined>('');
-    const [gender, setGender] = useState<string | null | undefined>('');
-    const [discord, setDiscord] = useState<string | null | undefined>('');
-    const [twitter, setTwitter] = useState<string | null | undefined>('');
-    const [twitch, setTwitch] = useState<string | null | undefined>('');
-    const [youtube, setYoutube] = useState<string | null | undefined>('');
 
     const [followData, setFollowData] = useState<followData>();
 
@@ -64,55 +52,6 @@ function UserProfile() {
         month: 'short',
         day: 'numeric'
     }) : "";
-
-    const setModalData = async () => {
-        setBio(userData?.bio);
-        setServer(userData?.server);
-        setGuild(userData?.guild);
-        setIgn(userData?.in_game_name);
-        setRace(userData?.main_race);
-        setGender(userData?.main_gender);
-        setDiscord(userData?.discord_username);
-        setTwitter(userData?.twitter_link);
-        setTwitch(userData?.twitch_link);
-        setYoutube(userData?.youtube_link);
-        setModalOpen(true);
-    }
-
-    const handleProfileUpdate = async () => {
-        const payload = {
-            bio: bio,
-            server: server,
-            guild: guild,
-            in_game_name: ign,
-            main_race: race,
-            main_gender: gender,
-            discord_username: discord,
-            twitter_link: twitter,
-            twitch_link: twitch,
-            youtube_link: youtube
-        }
-
-        try {
-            const res = await fetch(`${USERS_URL}/profiles/me/update`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(payload)
-            })
-            if (res.ok) {
-                const newData = await res.json();
-                setUserData(newData);
-                setModalOpen(false);
-            } else {
-                console.error('Profile update failed.');
-            }
-        } catch (err) {
-            console.error('Error: ', err);
-        }
-    }
 
     const fetchData = async () => {
             const dataRes = await fetch(`${USERS_URL}/profiles/${username}/data`, {
@@ -185,9 +124,6 @@ function UserProfile() {
                                 <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
                                     <p className="text-2xl py-1 px-2 rounded-lg outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
-                                    {user && user.username === username && (
-                                        <button className="btn btn-soft btn-primary" onClick={setModalData}>Edit Profile</button>
-                                    )}
                                     {user && user.username !== username && (
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
                                     )}
@@ -225,7 +161,7 @@ function UserProfile() {
                                 <h1>User Info</h1>
                                 <div className="flex flex-col gap-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg p-4 max-h-40 overflow-y-auto">
                                     <div className="flex gap-2">
-                                        <h1 className="text">Server/Region:</h1>
+                                        <h1 className="text">Region/Server:</h1>
                                         <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
                                     </div>
                                     <div className="flex gap-2">
@@ -233,7 +169,7 @@ function UserProfile() {
                                         <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <h1 className="text">Discord:</h1>
+                                        <h1 className="text">Discord Username:</h1>
                                         <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
                                     </div>
                                 </div>
@@ -274,36 +210,6 @@ function UserProfile() {
                     <h1 className="text-xl">User not found or profile is unavailable.</h1>
                     <Link to='/'><p className="outline p-2 rounded-xl">Return to Home</p></Link>
                 </div>
-            )}
-            {modalOpen && (
-                <dialog className="modal modal-open">
-                    <div className="modal-box w-5/6 h-5/6 max-w-5xl">
-                        <div className="flex flex-col gap-2">
-                            <h1 className="text-3xl font-bold text-center">Edit Profile</h1>
-                            <h1 className="text-xl">Bio</h1>
-                            <div className="relative w-full">
-                                <textarea className="outline w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
-                                <p className="absolute top-1 right-1">{bio && 200 - bio.length}</p>
-                            </div>
-                            <div className="flex flex-col">
-                                <h1>Server/Region</h1>
-                                <input className="outline p-1 w-50" value={server || ''} onChange={(e) => setServer(e.target.value)} />
-                            </div>
-                            <div className="flex flex-col">
-                                <h1>IGN</h1>
-                                <input className="outline p-1 w-50" value={ign || ''} onChange={(e) => setIgn(e.target.value)} />
-                            </div>
-                            <div className="flex flex-col">
-                                <h1>Discord</h1>
-                                <input className="outline p-1 w-50" value={discord || ''} onChange={(e) => setDiscord(e.target.value)} />
-                            </div>
-                        </div>
-                        <div className="modal-action justify-center">
-                            <button className="btn btn-success" onClick={handleProfileUpdate}>Update</button>
-                            <button className="btn btn-error" onClick={() => setModalOpen(false)}>Cancel</button>
-                        </div>
-                    </div>
-                </dialog>
             )}
         </div>
     )
