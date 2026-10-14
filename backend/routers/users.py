@@ -311,7 +311,7 @@ def update_password(password: str, current_user: models.User = Depends(auth.get_
 
     db.commit()
 
-    return {'success': True, 'message': f'User {user.username}, ID {user.id} successfully changed password.'}
+    return {'success': True, 'message': f'User {current_user.username}, ID {current_user.id} successfully changed password.'}
 
 @router.post('/{user_id}/follow')
 def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
@@ -329,7 +329,7 @@ def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: mod
     if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized, perhaps there is an error in the code')
 
-    is_followed = user in target_user.followers
+    is_followed = current_user in target_user.followers
     if is_followed:
         target_user.followers.remove(current_user)
         followed = False

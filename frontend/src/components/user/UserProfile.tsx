@@ -128,6 +128,7 @@ function UserProfile() {
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
                                     )}
                                 </div>
+                                {followData?.is_following && <p className="text-2xl py-1 px-2 rounded-lg outline outline-mabi-orange bg-mabi-surface-muted text-mabi-gold w-fit cursor-default">Following</p>}
                             </div>
                         </div>
                         <div className="grid grid-cols-5 gap-5">
