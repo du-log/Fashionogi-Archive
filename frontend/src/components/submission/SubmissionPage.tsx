@@ -156,11 +156,71 @@ function SubmissionPage() {
                         </dialog>  
                     )}
                     <div className="flex justify-between w-full py-2">
-                        <div className="flex flex-col gap-2 w-[75%] xl:w-[50%]">
-                            <h1 className="text-lg">Description</h1>
-                            {submission.description && (
-                                <div className="bg-mabi-surface-muted rounded-lg  xl:w-full sm:w-[75%] text-wrap p-1"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{submission.description}</Markdown></div>
-                            )}
+                        <div className="flex flex-col gap-2 w-[75%] xl:w-[60%]">
+                            <div className="flex flex-col gap-2 w-full">
+                                <h1 className="text-lg">Description</h1>
+                                {submission.description && (
+                                    <div className="bg-mabi-surface-muted rounded-lg  xl:w-full sm:w-[75%] text-wrap p-1"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{submission.description}</Markdown></div>
+                                )}
+                            </div>
+                            <div className="flex flex-col gap-3 w-full py-2">
+                                <h2 className="text-lg font-bold">Equipment</h2>
+                                <div className="flex flex-wrap gap-3">
+                                    {submission.equipment.map((item) => (
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
+                                            <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
+                                            <h4 className="text-md">{item.name}</h4>
+                                            {!item.dyeable && (
+                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 rounded w-fit">Not Dyeable</h5>
+                                            )}
+                                            {item.dyeable && (
+                                                <>
+                                                    <div className="flex gap-2 text-sm">
+                                                        {item.partA && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>A: {item.partA.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partB && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>B: {item.partB.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partC && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>C: {item.partC.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
+                                                                </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2 text-sm">
+                                                        {item.partD && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>D: {item.partD.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partE && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>E: {item.partE.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
+                                                            </div>
+                                                        )}
+                                                        {item.partF && (
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                                <p>F: {item.partF.toUpperCase()}</p>
+                                                                <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                         <div className="flex flex-col items-end gap-10">
                             <h2 className="text-sm p-2 rounded bg-mabi-surface-muted h-fit">Submitted: {formattedDate}</h2>
@@ -186,64 +246,6 @@ function SubmissionPage() {
                                 <h1 className="text-xl text-start">Outfit Creator</h1>
                             <UserNameplate username={submission.author} />
                             </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-3 w-[75%] py-2">
-                        <h2 className="text-lg font-bold">Equipment</h2>
-                        <div className="flex flex-wrap gap-3">
-                            {submission.equipment.map((item) => (
-                                <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
-                                    <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
-                                    <h4 className="text-md">{item.name}</h4>
-                                    {!item.dyeable && (
-                                        <h5 className="text-sm outline outline-mabi-border outline-offset-1 rounded w-fit">Not Dyeable</h5>
-                                    )}
-                                    {item.dyeable && (
-                                        <>
-                                            <div className="flex gap-2 text-sm">
-                                                {item.partA && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>A: {item.partA.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
-                                                    </div>
-                                                )}
-                                                {item.partB && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>B: {item.partB.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
-                                                    </div>
-                                                )}
-                                                {item.partC && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>C: {item.partC.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
-                                                        </div>
-                                                )}
-                                            </div>
-                                            <div className="flex gap-2 text-sm">
-                                                {item.partD && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>D: {item.partD.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
-                                                    </div>
-                                                )}
-                                                {item.partE && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>E: {item.partE.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
-                                                    </div>
-                                                )}
-                                                {item.partF && (
-                                                    <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
-                                                        <p>F: {item.partF.toUpperCase()}</p>
-                                                        <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
                         </div>
                     </div>
                 </div>
