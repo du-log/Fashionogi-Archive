@@ -51,7 +51,7 @@ function Home() {
     return (
         <div className={`flex flex-col gap-10 w-full min-h-[86vh] px-[10%] xl:px-[20%] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <div className="flex flex-col w-full gap-10">
-                <div className="flex flex-col gap-5 px-20 py-10 border-b border-mabi-border-heavy">
+                <div className="flex flex-col gap-5 py-10 border-b border-mabi-border-heavy">
                     <h1 className="text-7xl text-mabi-text-muted leading-tight">Discover your Erinn Style</h1>
                     <p className="text-lg max-w-md">The ultimate archive for Mabinogi fashion.</p>
                     <p className="text-lg max-w-md">Share your finest outfits and dye combinations, and inspire the community.</p>
