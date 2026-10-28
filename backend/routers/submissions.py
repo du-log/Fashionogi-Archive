@@ -379,6 +379,141 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
         'is_favorited': is_favorited
     }
 
+@router.get('/edit/{id}')
+def get_submission_to_edit(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.id == id)
+        .options(
+            selectinload(models.Submission.tags),
+            selectinload(models.Submission.equipment).joinedload(models.SubmissionEquipment.base_item)
+        )
+    )
+
+    sub = db.execute(stmt).scalars().unique().first()
+    if not sub:
+        raise HTTPException(status_code = 404, detail = 'Submission not found')
+
+    if not current_user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    if current_user.id != sub.user_id:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    equipment_data = []
+    for eq in sub.equipment:
+        equipment_data.append({
+            'slot': eq.base_item.slot,
+            'name': eq.base_item.name,
+            'dyeable': eq.dyeable,
+            'partA': eq.part_a,
+            'partB': eq.part_b,
+            'partC': eq.part_c,
+            'partD': eq.part_d,
+            'partE': eq.part_e,
+            'partF': eq.part_f,
+        })
+
+    return {
+        'title': sub.title,
+        'description': sub.description,
+        'gender': sub.gender,
+        'race': sub.race,
+        'tags': [tag.name for tag in sub.tags],
+        'equipment': equipment_data
+    }
+
+@router.patch('/update/{id}')
+def update_submission(
+    title: str = Form(...),
+    description: str = Form(...),
+    gender: str = Form(...),
+    race: str = Form(...),
+    tags: str = Form(...),
+    equipment: str = Form(...),
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.id == id)
+        .options(
+            selectinload(models.Submission.tags),
+            selectinload(models.Submission.equipment).joinedload(models.SubmissionEquipment.base_item)
+        )
+    )
+    sub = db.execute(stmt).scalars().unique().first()
+    if not sub:
+        raise HTTPException(status_code = 404, detail = 'Submission not found')
+
+    if not current_user or current_user.id != sub.user_id:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    try:
+        if sub.title != title:
+            sub.title = title
+        
+        if sub.description != description:
+            sub.description = description
+
+        if sub.gender != gender:
+            sub.gender = gender
+
+        if sub.race != race:
+            sub.race = race
+
+        parsed_tags = json.loads(tags)
+        raw_equipment = json.loads(equipment)
+        parsed_equipment: List[EquipmentPayload] = [EquipmentPayload(**item) for item in raw_equipment]
+
+        new_tags = []
+        for tag_name in parsed_tags:
+            tag_obj = db.execute(select(models.Tag).where(models.Tag.name == tag_name)).scalars().first()
+            if not tag_obj:
+                tag_obj = models.Tag(name = tag_name)
+                db.add(tag_obj)
+                db.flush()
+            new_tags.append(tag_obj)
+        sub.tags = new_tags
+
+        db.execute(delete(models.SubmissionEquipment).where(models.SubmissionEquipment.submission_id == id))
+        db.flush()
+
+        for eq in parsed_equipment:
+            base_item = db.execute(select(models.BaseEquipment).where(
+                models.BaseEquipment.name == eq.name,
+                models.BaseEquipment.slot == eq.slot
+            )).scalars().first()
+            if not base_item:
+                base_item = models.BaseEquipment(name = eq.name, slot = eq.slot)
+                db.add(base_item)
+                db.flush()
+            
+            sub_eq = models.SubmissionEquipment(
+                submission_id = sub.id,
+                base_equipment_id = base_item.id,
+                dyeable = eq['dyeable'],
+                part_a = eq.get('partA'),
+                part_b = eq.get('partB'),
+                part_c = eq.get('partC'),
+                part_d = eq.get('partD'),
+                part_e = eq.get('partE'),
+                part_f = eq.get('partF')
+            )
+            db.add(sub_eq)
+
+        if sub.status != 'pending':
+            sub.status = 'pending'
+
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code = 500, detail = f'Submission update failed: {str(e)}')
+    
+    return {'success': True, 'message': 'Updated submission'}
+
+
 @router.post('/id/{submission_id}/favorite')
 def toggle_favorite(submission_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
     stmt = (

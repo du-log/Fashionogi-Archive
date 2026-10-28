@@ -123,15 +123,20 @@ function SubmissionPage() {
                 <div className={`flex flex-col items-start w-full min-h-[86vh] gap-5 p-5 xl:px-[20%] mx-auto transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex justify-between w-full">
                         <button className="cursor-pointer outline outline-mabi-border py-1 px-2 rounded hover:text-mabi-green sm:text-sm xl:text-md" onClick={() => navigate('/gallery')}>{'<-'} Gallery</button>
-                        {submission.status === 'pending' && (
-                            <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
-                        )}
-                        {submission.status === 'flagged_for_deletion' && (
-                            <h4 className="p-2 rounded-lg bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
-                        )}
-                        {submission.status === 'rejected' && (
-                            <h4 className="p-2 rounded-lg bg-[#111111] text-[#ffffff]">Rejected</h4>
-                        )}
+                        <div className="flex flex-col gap-2 items-end">
+                            {submission.status === 'pending' && (
+                                <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
+                            )}
+                            {submission.status === 'flagged_for_deletion' && (
+                                <h4 className="p-2 rounded-lg bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
+                            )}
+                            {submission.status === 'rejected' && (
+                                <h4 className="p-2 rounded-lg bg-[#111111] text-[#ffffff]">Rejected</h4>
+                            )}
+                            {submission.author === user?.username && (
+                                <Link to={`/fashion/edit/${submission.id}`}><p className="outline-1 outline-mabi-border text-mabi-text px-2 py-1 hover:text-mabi-gold bg-mabi-surface-muted">Edit Style</p></Link>
+                            )}
+                        </div>
                     </div>
                     <h1 className="sm:text-3xl xl:text-4xl bold">{submission.title}</h1>
                     <div className="flex gap-2 items-center justify-end">

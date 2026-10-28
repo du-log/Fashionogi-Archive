@@ -23,6 +23,7 @@ import Rules from './components/static/Rules';
 import NewsPage from './components/news/NewsPage';
 import ArticlePage from './components/news/ArticlePage';
 import { Analytics } from '@vercel/analytics/react';
+import SubmissionEdit from './components/submission/SubmissionEdit';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path='/gallery' element={<Gallery />} />
             <Route path='/upload' element={<SubmissionUpload />} />
             <Route path='/fashion/id/:id' element={<SubmissionPage />} />
+            <Route path='/fashion/edit/:id' element={<SubmissionEdit />} />
             <Route path='/profile/:username' element={<UserProfile />} />
             <Route path='/account/dashboard' element={<UserDashboard />} />
             <Route path='/account/settings' element={<AccountSettings />} />
