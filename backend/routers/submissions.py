@@ -16,7 +16,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 
 from sqlalchemy.orm import Session, joinedload, selectinload
-from sqlalchemy import select, func, desc
+from sqlalchemy import select, func, desc, delete
 
 from jose import JWTError, jwt
 

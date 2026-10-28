@@ -141,13 +141,12 @@ export default function SubmissionEdit() {
             formData.append('equipment', JSON.stringify(cleanEquipment));
         
             const res = await fetch(`${SUBS_URL}/update/${id}`, {
-                method: 'patch',
+                method: 'PATCH',
                 body: formData,
                 credentials: 'include'
             });
             if(res.ok) {
                 alert('Update successful!');
-                setTitle('');
                 navigate(`/fashion/id/${id}`);
             } else {
                 alert('Update failed. Please try again later.');
@@ -170,7 +169,47 @@ export default function SubmissionEdit() {
                 setGender(data.gender);
                 setRace(data.race);
                 setTags(data.tags);
-                setEquipment(data.equipment);
+                
+                const loadedEquipment = {
+                    headgear: defaultItem('headgear'),
+                    body: defaultItem('body'),
+                    gloves: defaultItem('gloves'),
+                    shoes: defaultItem('shoes'),
+                    back: defaultItem('back'),
+                    tail: defaultItem('tail'),
+                    face: defaultItem('face'),
+                    accessory1: defaultItem('accessory'),
+                    accessory2: defaultItem('accessory')
+                };
+
+                let accCount = 1;
+                
+                data.equipment.forEach((eq: EquipmentItem) => {
+                    let targetKey = eq.slot as SlotKey;
+                    
+                    // Route generic accessory slots back to accessory1 and accessory2
+                    if (eq.slot === 'accessory') {
+                        targetKey = `accessory${accCount}` as SlotKey;
+                        accCount++;
+                    }
+                    
+                    // Overwrite the default empty item with the saved data
+                    if (loadedEquipment[targetKey]) {
+                        loadedEquipment[targetKey] = {
+                            ...eq,
+                            // Ensure null parts fallback to empty strings for the inputs
+                            partA: eq.partA || '',
+                            partB: eq.partB || '',
+                            partC: eq.partC || '',
+                            partD: eq.partD || '',
+                            partE: eq.partE || '',
+                            partF: eq.partF || ''
+                        };
+                    }
+                });
+
+                setEquipment(loadedEquipment);
+                setPreviewEquip(equipmentSanitize(loadedEquipment));
 
                 setTimeout(() => setLoading(false), 50);
             }
