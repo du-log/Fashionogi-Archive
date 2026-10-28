@@ -122,19 +122,19 @@ function SubmissionPage() {
             {submission && (
                 <div className={`flex flex-col items-start w-full min-h-[86vh] gap-5 p-5 xl:px-[20%] mx-auto transition-opacity duration-200 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex justify-between w-full">
-                        <button className="cursor-pointer outline outline-mabi-border py-1 px-2 rounded hover:text-mabi-green sm:text-sm xl:text-md" onClick={() => navigate('/gallery')}>{'<-'} Gallery</button>
+                        <button className="cursor-pointer outline outline-mabi-border py-1 px-2 rounded bg-mabi-surface-muted hover:text-mabi-green sm:text-sm xl:text-md h-fit" onClick={() => navigate('/gallery')}>{'<-'} Gallery</button>
                         <div className="flex flex-col gap-2 items-end">
                             {submission.status === 'pending' && (
-                                <h4 className="p-2 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</h4>
+                                <h4 className="p-2 bg-[#55aa00] text-[#ffffff]">Pending</h4>
                             )}
                             {submission.status === 'flagged_for_deletion' && (
-                                <h4 className="p-2 rounded-lg bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
+                                <h4 className="p-2 bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
                             )}
                             {submission.status === 'rejected' && (
-                                <h4 className="p-2 rounded-lg bg-[#111111] text-[#ffffff]">Rejected</h4>
+                                <h4 className="p-2 bg-[#111111] text-[#ffffff]">Rejected</h4>
                             )}
                             {submission.author === user?.username && (
-                                <Link to={`/fashion/edit/${submission.id}`}><p className="outline-1 outline-mabi-border text-mabi-text px-2 py-1 hover:text-mabi-gold bg-mabi-surface-muted">Edit Style</p></Link>
+                                <Link to={`/fashion/edit/${submission.id}`}><p className="outline-1 outline-mabi-border rounded text-mabi-text px-2 py-1 hover:text-mabi-gold bg-mabi-surface-muted">Edit Style</p></Link>
                             )}
                         </div>
                     </div>
@@ -165,36 +165,36 @@ function SubmissionPage() {
                             <div className="flex flex-col gap-2 w-full">
                                 <h1 className="text-lg">Description</h1>
                                 {submission.description && (
-                                    <div className="bg-mabi-surface-muted rounded-lg  xl:w-full sm:w-[75%] text-wrap p-1"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{submission.description}</Markdown></div>
+                                    <div className="bg-mabi-surface-muted xl:w-full sm:w-[75%] text-wrap p-2"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{submission.description}</Markdown></div>
                                 )}
                             </div>
                             <div className="flex flex-col gap-3 w-full py-2">
                                 <h2 className="text-lg font-bold">Equipment</h2>
                                 <div className="flex flex-wrap gap-3">
                                     {submission.equipment.map((item) => (
-                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 outline outline-mabi-border bg-mabi-green">
                                             <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
                                             <h4 className="text-md">{item.name}</h4>
                                             {!item.dyeable && (
-                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 rounded w-fit">Not Dyeable</h5>
+                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 w-fit">Not Dyeable</h5>
                                             )}
                                             {item.dyeable && (
                                                 <>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partA && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>A: {item.partA.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
                                                             </div>
                                                         )}
                                                         {item.partB && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>B: {item.partB.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
                                                             </div>
                                                         )}
                                                         {item.partC && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>C: {item.partC.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
                                                                 </div>
@@ -202,19 +202,19 @@ function SubmissionPage() {
                                                     </div>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partD && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>D: {item.partD.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
                                                             </div>
                                                         )}
                                                         {item.partE && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>E: {item.partE.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
                                                             </div>
                                                         )}
                                                         {item.partF && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>F: {item.partF.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
                                                             </div>
@@ -228,26 +228,26 @@ function SubmissionPage() {
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-10">
-                            <h2 className="text-sm p-2 rounded bg-mabi-surface-muted h-fit">Submitted: {formattedDate}</h2>
-                            <div className="flex flex-col items-end gap-2 outline-1 outline-[#B59E6D] bg-mabi-surface-muted rounded-md p-3">
+                            <h2 className="text-sm p-2 bg-mabi-surface-muted h-fit">Submitted: {formattedDate}</h2>
+                            <div className="flex flex-col items-end gap-2 outline-1 outline-[#B59E6D] bg-mabi-surface-muted p-3">
                                 <h1 className="text-lg text-start">Outfit Information</h1>
                                 <div className="flex gap-2 items-center">
                                     For:
-                                    <p className="rounded bg-mabi-green text-md py-1 px-2">{submission.gender}</p>
+                                    <p className="bg-mabi-green text-md py-1 px-2">{submission.gender}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     Fits:
-                                    <p className="rounded bg-mabi-orange text-md py-1 px-2">{submission.race}</p>
+                                    <p className="bg-mabi-orange text-md py-1 px-2">{submission.race}</p>
                                 </div>
                                 <div className="flex flex-col gap-2 items-end">
-                                    <h2 className="text-md py-1 px-2 rounded bg-mabi-gold w-fit h-fit">Favorites: {submission.favorites_count}</h2>
+                                    <h2 className="text-md py-1 px-2 bg-mabi-gold w-fit h-fit">Favorites: {submission.favorites_count}</h2>
                                     <button onClick={toggleFavorite}
                                     className={`btn ${user ? '' : 'btn-disabled'} ${user?.username === submission.author ? 'btn-disabled' : ''} ${submission.is_favorited ? 'btn-warning' : 'btn-success'}`}>
                                         {submission.is_favorited ? 'Unfavorite' : 'Favorite'}
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 p-4 outline outline-mabi-border-heavy rounded bg-mabi-surface-muted">
+                            <div className="flex flex-col gap-2 p-4 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <h1 className="text-xl text-start">Outfit Creator</h1>
                             <UserNameplate username={submission.author} />
                             </div>

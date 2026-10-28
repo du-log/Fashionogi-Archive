@@ -60,8 +60,8 @@ function TagsComboBox ( {tags, onSelect} :  ComboBoxProps) {
     return (
         <div className="relative w-full text-mabi-text">
             <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Search..." 
-            className="w-full p-1 outline rounded bg-mabi-surface-muted" />
-
+            className="w-full p-1 outline bg-mabi-surface-muted" />
+            
             {isOpen && results.length > 0 && (
                 <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
                     {results.map((item: Tag) => (

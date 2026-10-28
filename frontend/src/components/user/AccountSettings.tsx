@@ -140,12 +140,12 @@ function AccountSettings() {
                 </div>
             )}
             <div className={`flex gap-10 w-full h-[73.5vh] sm:px-[5%] xl:px-[20%] pt-10 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-                <div className="flex flex-1 flex-col gap-3 outline rounded-xl text-lg p-5 h-fit bg-mabi-surface">
+                <div className="flex flex-1 flex-col gap-3 outline text-lg p-5 h-fit bg-mabi-surface">
                     <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'personal' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('personal')}>Account Settings</p>
                     <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'notif' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('notif')}>Notifications</p>
                     <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'security' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('security')}>Security</p>
                 </div>
-                <div className="flex flex-3 flex-col w-full min-h-[50vh] px-10 py-5 outline rounded-xl overflow-y-auto bg-mabi-surface-muted">
+                <div className="flex flex-3 flex-col w-full min-h-[50vh] px-10 py-5 outline overflow-y-auto bg-mabi-surface-muted">
                     {currentTab === 'personal' && (
                         <div className="flex flex-col gap-5 p-2">
                             <h1 className="text-2xl border-b border-mabi-border-heavy pb-2">Account Settings</h1>
@@ -180,7 +180,7 @@ function AccountSettings() {
                             </div>
                             <div className="flex flex-col gap-2">
                                 <h1 className="text-xl">Edit Profile</h1>
-                                <div className="flex flex-col gap-2 p-5 outline-1 outline-mabi-border-heavy rounded-xl">
+                                <div className="flex flex-col gap-2 p-5 outline-1 outline-mabi-border-heavy">
                                     <h1 className="text-md text-mabi-text-muted">Bio</h1>
                                     <div className="relative w-full">
                                         <textarea className="bg-mabi-surface outline-1 outline-mabi-border w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />

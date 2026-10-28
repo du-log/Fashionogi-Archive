@@ -38,7 +38,7 @@ function LoginPage() {
                 <h1 className="text-4xl text-[#ffffff] italic">Fashionogi Archive</h1>
                 <h5 className="text-lg text-[#ffd700] italic">Discover your Erinn Style</h5>
             </div>
-            <div className="relative flex flex-col items-center px-20 py-10 rounded-lg outline outline-mabi-border bg-mabi-surface gap-5">
+            <div className="relative flex flex-col items-center px-20 py-10 outline outline-mabi-border bg-mabi-surface gap-5">
                 <h1 className="text-4xl text-mabi-text-muted font-bold py-10">Sign In</h1>
                 <form method="POST" onSubmit={(e) => handleLogin(e)} className="flex flex-col gap-5 text-md">
                     <div className="flex gap-2 items-center">

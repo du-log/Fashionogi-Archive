@@ -221,7 +221,7 @@ export default function SubmissionEdit() {
         <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Edit Style</h2>
             <div className="relative flex w-full">
-                <input className="p-3 border-1 w-full text-md rounded bg-mabi-surface-muted"
+                <input className="p-3 border-1 w-full text-md bg-mabi-surface-muted"
                 type="text"
                 placeholder="Style Name... (Required)"
                 value={title}
@@ -232,7 +232,7 @@ export default function SubmissionEdit() {
                 <p className="absolute bottom-0 right-1 text-xs">{100 - title.length < 100 ? 100 - title.length : ""}</p>
             </div>
             <div className="relative flex w-full">
-                <textarea className="p-3 outline w-full bg-mabi-surface-muted text-md rounded resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
+                <textarea className="p-3 outline w-full bg-mabi-surface-muted text-md resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
                 <p className="absolute bottom-0 right-1 text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
             </div>
             <div className="flex w-fit gap-3 items-center text-md">
@@ -274,7 +274,7 @@ export default function SubmissionEdit() {
                     <h2 className="text-xl">Equipment Data</h2>
                     <h5 className="text-sm text-mabi-text-muted">At least one piece of equipment must be included.</h5>
                     <h5 className="text-sm text-mabi-text-muted">Only include equipment relevant to the style.</h5>
-                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-mabi-border-heavy rounded-lg" style={{scrollbarWidth: "thin"}}>
+                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-mabi-border-heavy" style={{scrollbarWidth: "thin"}}>
                         {equipmentSections.map((section) => (
                             <EquipmentAccordion 
                             key={section.key}
@@ -284,7 +284,7 @@ export default function SubmissionEdit() {
                             onChange={equipmentChangeHandler}/>
                         ))}
                     </div>
-                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg">
+                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-mabi-border-heavy bg-mabi-surface-muted">
                         <h2 className="text-xl">RGB to Hex Converter</h2>
                         <div className="flex gap-2">
                             <input type="number" className="bg-[#fff] text-[#000] px-1" value={r} min={0} max={255} onChange={(e) => setR(Number(e.target.value))} />
@@ -326,29 +326,29 @@ export default function SubmissionEdit() {
                             <div className="flex flex-wrap gap-3">
                                 {Object.values(equipment).map((item) => (
                                     item.name && (
-                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 outline outline-mabi-border bg-mabi-green">
                                             <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
                                             <h4 className="text-md">{item.name}</h4>
                                             {!item.dyeable && (
-                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 rounded w-fit">Not Dyeable</h5>
+                                                <h5 className="text-sm outline outline-mabi-border outline-offset-1 w-fit">Not Dyeable</h5>
                                             )}
                                             {item.dyeable && (
                                                 <>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partA && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>A: {item.partA.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partA}} />
                                                             </div>
                                                         )}
                                                         {item.partB && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>B: {item.partB.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partB}} />
                                                             </div>
                                                         )}
                                                         {item.partC && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>C: {item.partC.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partC}} />
                                                                 </div>
@@ -356,19 +356,19 @@ export default function SubmissionEdit() {
                                                     </div>
                                                     <div className="flex gap-2 text-sm">
                                                         {item.partD && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>D: {item.partD.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partD}} />
                                                             </div>
                                                         )}
                                                         {item.partE && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>E: {item.partE.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partE}} />
                                                             </div>
                                                         )}
                                                         {item.partF && (
-                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 rounded items-center">
+                                                            <div className="flex gap-3 outline outline-mabi-border outline-offset-1 items-center">
                                                                 <p>F: {item.partF.toUpperCase()}</p>
                                                                 <div className="w-4 h-4 rounded-full" style={{backgroundColor: item.partF}} />
                                                             </div>

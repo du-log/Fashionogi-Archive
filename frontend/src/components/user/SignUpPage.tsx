@@ -215,7 +215,7 @@ function SignUpPage() {
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-lg text-mabi-text bg-mabi-surface-muted">
             {!isRegistered && (
-                <div className="flex flex-col gap-5 items-center outline outline-mabi-border-heavy pt-10 pb-5 px-5 rounded-xl bg-mabi-surface">
+                <div className="flex flex-col gap-5 items-center outline outline-mabi-border-heavy pt-10 pb-5 px-5 bg-mabi-surface">
                     <h1 className="text-4xl text-mabi-text-muted">Sign Up</h1>
                     <p className="text-wrap text-center w-[75%]">Join us and share your styles with your fellow Fashionogi!</p>
                     <form className="flex flex-col w-full py-10 px-5 gap-5" method="post" onSubmit={(e) => registerHandler(e)}>
@@ -295,10 +295,11 @@ function SignUpPage() {
                 </div>
             )}
             {isRegistered && (
-                <div className="flex flex-col items-center gap-5">
-                    <h1 className="text-3xl">Registration successful!</h1>
-                    <p>Please check your email to verify your account.</p>
-                    <Link to='/login'><p className="hover:text-[#00fa70]">Click to return to login.</p></Link>
+                <div className="flex flex-col items-center gap-5 px-20 py-10 outline-2 outline-mabi-border bg-mabi-surface">
+                    <h1 className="text-3xl">Registration Successful</h1>
+                    {/*<p>Please check your email to verify your account.</p>*/}
+                    <p>Thanks for joining the community!</p>
+                    <p>Click <Link className="hover:text-mabi-gold" to='/login'>here</Link> to return to login.</p>
                 </div>
             )}
         </div>

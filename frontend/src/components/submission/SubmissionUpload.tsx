@@ -360,7 +360,7 @@ function SubmissionUpload() {
         <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <h2 className="text-3xl">Submit a Style</h2>
             <div className="relative flex w-full">
-                <input className="p-3 border-1 w-full text-md rounded bg-mabi-surface-muted"
+                <input className="p-3 border-1 w-full text-md bg-mabi-surface-muted"
                 type="text"
                 placeholder="Style Name... (Required)"
                 value={title}
@@ -371,7 +371,7 @@ function SubmissionUpload() {
                 <p className="absolute bottom-0 right-1 text-xs">{100 - title.length < 100 ? 100 - title.length : ""}</p>
             </div>
             <div className="relative flex w-full">
-                <textarea className="p-3 outline w-full bg-mabi-surface-muted text-md rounded resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
+                <textarea className="p-3 outline w-full bg-mabi-surface-muted text-md resize-none" placeholder="Description... (Required)" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={200} required/>
                 <p className="absolute bottom-0 right-1 text-xs">{200 - description.length < 200 ? 200 - description.length : ""}</p>
             </div>
             <div className="flex w-fit gap-3 items-center text-md">
@@ -508,7 +508,7 @@ function SubmissionUpload() {
                     <h2 className="text-xl">Equipment Data</h2>
                     <h5 className="text-sm text-mabi-text-muted">At least one piece of equipment must be included.</h5>
                     <h5 className="text-sm text-mabi-text-muted">Only include equipment relevant to the style.</h5>
-                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-mabi-border-heavy rounded-lg" style={{scrollbarWidth: "thin"}}>
+                    <div className="flex flex-col max-h-[40vh] overflow-y-scroll gap-2 p-2 outline outline-mabi-border-heavy" style={{scrollbarWidth: "thin"}}>
                         {equipmentSections.map((section) => (
                             <EquipmentAccordion 
                             key={section.key}
@@ -518,7 +518,7 @@ function SubmissionUpload() {
                             onChange={equipmentChangeHandler}/>
                         ))}
                     </div>
-                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg">
+                    <div className="flex flex-col gap-2 p-2 w-fit outline outline-mabi-border-heavy bg-mabi-surface-muted">
                         <h2 className="text-xl">RGB to Hex Converter</h2>
                         <div className="flex gap-2">
                             <input type="number" className="bg-[#fff] text-[#000] px-1" value={r} min={0} max={255} onChange={(e) => setR(Number(e.target.value))} />

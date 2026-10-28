@@ -49,23 +49,24 @@ function Home() {
     }, [])
 
     return (
-        <div className={`flex flex-col gap-20 w-full min-h-[86vh] px-[10%] xl:px-[20%] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col gap-10 w-full min-h-[86vh] px-[10%] xl:px-[20%] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <div className="flex flex-col w-full gap-10">
                 <div className="flex flex-col gap-5 px-20 py-10 border-b border-mabi-border-heavy">
                     <h1 className="text-7xl text-mabi-text-muted leading-tight">Discover your Erinn Style</h1>
-                    <p className="text-lg max-w-md">The ultimate lookbook for Mabinogi fashion. Discover new dye combinations, share your finest outfits, and inspire the community.</p>
+                    <p className="text-lg max-w-md">The ultimate archive for Mabinogi fashion.</p>
+                    <p className="text-lg max-w-md">Share your finest outfits and dye combinations, and inspire the community.</p>
                 </div>
             </div>
             <div className="relative flex flex-col gap-5 w-full xl:px-[10%]">
                 <h1 className="text-xl text-mabi-text-muted font-bold">News and Announcements</h1>
-                <div className="grid max-rows-5 gap-3 w-full place-items-start p-3 outline-2 outline-[#758277] rounded-lg bg-mabi-surface">
+                <div className="grid max-rows-5 gap-3 w-full place-items-start p-3 outline-2 outline-[#758277] bg-mabi-surface">
                     {latestArticles?.map((item) => (
                         <NewsPanel key={item.id} article={item} />
                     ))}
                 </div>
                 <Link className="w-fit place-self-end" to='/news'><p className="cursor-pointer px-2 py-1 outline rounded-xl hover:text-mabi-gold bg-mabi-surface-muted">See All Articles</p></Link>
             </div>
-            <h1 className="text-center text-xl">There are currently {total} styles featured in the lookbook!</h1>
+            <h1 className="text-center text-xl">There are currently {total} styles featured in the archive!</h1>
             <div className="flex flex-col w-full xl:px-[10%]">
                 <h1 className="text-xl text-mabi-text-muted font-bold">Latest Styles</h1>
                 <div className="grid grid-cols-5 gap-5 w-full place-items-center py-10">
@@ -83,6 +84,7 @@ function Home() {
                 </div>
             </div>
             <div className="flex flex-col gap-5 w-full xl:px-[20%]">
+                {/*
                 <h1 className="font-bold text-2xl text-mabi-text-muted text-center">Explore the Styles</h1>
                 <div className="flex gap-3 justify-center">
                     <button onClick={() => navigate('/gallery?tag=casual')} className="btn h-fit py-2 px-4 rounded-lg bg-mabi-surface-muted hover:bg-mabi-border-heavy transition-colors border border-mabi-border text-xl text-mabi-text font-bold hover:text-mabi-surface">Casual</button>
@@ -91,6 +93,7 @@ function Home() {
                     <button onClick={() => navigate('/gallery?tag=techwear')} className="btn h-fit py-2 px-4 rounded-lg bg-mabi-surface-muted hover:bg-mabi-border-heavy transition-colors border border-mabi-border text-xl text-mabi-text font-bold hover:text-mabi-surface">Techwear</button>
                     <button onClick={() => navigate('/gallery?tag=cosplay')} className="btn h-fit py-2 px-4 rounded-lg bg-mabi-surface-muted hover:bg-mabi-border-heavy transition-colors border border-mabi-border text-xl text-mabi-text font-bold hover:text-mabi-surface">Cosplay</button>
                 </div>
+                */}
                 <div className="flex gap-3 justify-center">
                     <button onClick={() => navigate('/gallery')} className="h-fit py-2 px-4 btn btn-outline btn-xl hover:text-mabi-surface hover:bg-mabi-border">Browse the Gallery</button>
                     <button onClick={() => {if (user) {navigate('/upload')} else {navigate('/login')}}} className="h-fit py-2 px-4 btn btn-outline btn-xl hover:btn-success hover:text-[#aaff00]">Submit a Style</button>

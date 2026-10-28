@@ -36,13 +36,13 @@ function ArticlePage() {
     return (
         <div className={`flex flex-col min-h-[86vh] px-10 xl:px-[20%] py-20 gap-5 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             {pageData && (
-                <div className="flex flex-col gap-5 px-10 xl:px-[10%] py-10 bg-mabi-surface-muted rounded-xl min-h-[60vh]">
+                <div className="flex flex-col gap-5 px-10 xl:px-[10%] py-10 bg-mabi-surface-muted min-h-[60vh]">
                     <button className="cursor-pointer outline-1 py-1 px-2 rounded hover:text-mabi-green sm:text-sm xl:text-md w-fit" onClick={() => navigate('/news')}>{'<-'} News</button>
                     <h1 className="text-4xl">{pageData.title}</h1>
-                    <div className="flex justify-between items-center py-2 border-b">
+                    <div className="flex justify-between items-center py-2 border-b text-lg">
                         <div className="flex flex-col items-end">
                             <p>Author</p>
-                            <p className="cursor-pointer" onClick={() => navigate(`/profile/${pageData.author}`)}>{pageData.author}</p>
+                            <p className="cursor-pointer hover:text-mabi-gold" onClick={() => navigate(`/profile/${pageData.author}`)}>{pageData.author}</p>
                         </div>
                         <div className="flex flex-col items-end">
                             <p>Article Type</p>

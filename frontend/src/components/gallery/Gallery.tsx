@@ -125,12 +125,12 @@ function Gallery() {
 
     return (
         <div className={`flex flex-col items-center w-full min-h-[86vh] px-[10%] xl:px-[20%] py-10 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <div className="flex flex-col items-center w-full min-h-[86vh] px-[10%] py-10 bg-mabi-surface rounded-2xl">
-                <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 rounded-xl outline-3 outline-mabi-border bg-mabi-surface-muted z-[10]">
+            <div className="flex flex-col items-center w-full min-h-[86vh] px-[10%] py-10 bg-mabi-surface">
+                <form method="GET" onSubmit={applyFiltersHandler} className="flex flex-col w-fit px-5 py-3 outline-3 outline-mabi-border bg-mabi-surface-muted z-[10]">
                     <div className="flex gap-5 pt-3 pb-5 w-fit sm:text-md xl:text-lg items-center justify-center">
                         <h1 className="font-bold">Search By:</h1>
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border rounded" placeholder="Title" />
-                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border rounded" placeholder="Username" />
+                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border" placeholder="Title" />
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="p-1 bg-mabi-surface w-30 outline outline-mabi-border" placeholder="Username" />
                         <TagsComboBox tag={tag} setTag={setTag} />
                     </div>
                     <div className="flex gap-5 py-5 w-fit sm:text-md xl:text-lg items-center justify-center">

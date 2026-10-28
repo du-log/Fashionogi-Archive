@@ -126,7 +126,7 @@ export default function PwChangeForm() {
     return (
         <div className="flex flex-col gap-10 text-mabi-text bg-mabi-surface-muted">
             {!verified && (
-                <div className="flex flex-col gap-5 p-5 outline-1 outline-mabi-border-heavy rounded w-fit">
+                <div className="flex flex-col gap-5 p-5 outline-1 outline-mabi-border-heavy w-fit">
                     <p>Enter Current Password</p>
                     <div className="relative flex items-center w-fit">
                         <input className={`bg-mabi-surface px-2 py-1 ${pwErr.length > 0 ? 'outline-2 outline-mabi-border' : ''}`} type={showVerify ? 'text' : 'password'} value={verifyPw} onChange={(e) => setVerifyPw(e.target.value)} required
@@ -138,7 +138,7 @@ export default function PwChangeForm() {
                 </div>
             )}
             {verified && (
-                <div className="flex flex-col gap-5 p-10 outline rounded w-fit">
+                <div className="flex flex-col gap-5 p-10 outline w-fit">
                     <div className="flex flex-col gap-1">
                         <div className="flex flex-col gap-6">
                             <div className="flex flex-col gap-5 w-fit">

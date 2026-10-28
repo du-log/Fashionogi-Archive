@@ -115,7 +115,7 @@ function UserProfile() {
             )}
             {userData && !isLoading && (
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border rounded-xl px-5 py-10 bg-mabi-surface">
+                    <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border px-5 py-10 bg-mabi-surface">
                         <div className="flex gap-10 w-full">
                             <div className="outline outline-mabi-border-heavy rounded-xl h-fit">
                                 {userData.avatar_id ? <img className="w-36 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
@@ -123,32 +123,32 @@ function UserProfile() {
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
-                                    <p className="text-2xl py-1 px-2 rounded-lg outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+                                    <p className="text-2xl py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
                                     {user && user.username !== username && (
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
                                     )}
                                 </div>
-                                {followData?.is_following && <p className="text-2xl py-1 px-2 rounded-lg outline outline-mabi-orange bg-mabi-surface-muted text-mabi-gold w-fit cursor-default">Following</p>}
+                                {followData?.is_following && <p className="text-2xl py-1 px-2 outline outline-mabi-orange bg-mabi-surface-muted text-mabi-gold w-fit cursor-default">Following</p>}
                             </div>
                         </div>
                         <div className="grid grid-cols-5 gap-5">
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Styles Created:</p>
                                 <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Style Favorites:</p>
                                 <p>0</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Followers:</p>
                                 <p>{followData?.followers_count}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Following:</p>
                                 <p>{followData?.following_count}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded">
+                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Joined:</p>
                                 <p>{formattedDate}</p>
                             </div>
@@ -156,11 +156,11 @@ function UserProfile() {
                         <div className="grid grid-cols-3 w-full gap-5 pt-10 border-t border-mabi-border">
                             <div className="flex flex-col gap-1 col-span-2 w-full">
                                 <h1>Bio</h1>
-                                <div className="text-md text-wrap outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg p-2 max-h-40 overflow-y-auto"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{userData.bio ? userData.bio : 'No bio.'}</Markdown></div>
+                                <div className="text-md text-wrap outline outline-mabi-border-heavy bg-mabi-surface-muted p-2 max-h-40 overflow-y-auto"><Markdown remarkPlugins={[remarkGfm, remarkBreaks]}>{userData.bio ? userData.bio : 'No bio.'}</Markdown></div>
                             </div>
                             <div className="flex flex-col col-span-1 gap-1">
                                 <h1>User Info</h1>
-                                <div className="flex flex-col gap-2 outline outline-mabi-border-heavy bg-mabi-surface-muted rounded-lg p-4 max-h-40 overflow-y-auto">
+                                <div className="flex flex-col gap-2 outline outline-mabi-border-heavy bg-mabi-surface-muted p-4 max-h-40 overflow-y-auto">
                                     <div className="flex gap-2">
                                         <h1 className="text">Region/Server:</h1>
                                         <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>

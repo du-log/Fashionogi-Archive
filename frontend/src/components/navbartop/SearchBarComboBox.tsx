@@ -70,7 +70,7 @@ export default function SearchBarComboBox() {
     return (
         <div className="relative w-40 text-mabi-text" ref={menuRef}>
             <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." 
-            className="w-full p-1 outline-1 outline-mabi-border-heavy rounded bg-mabi-surface-muted" />
+            className="w-full p-1 outline-1 outline-mabi-border-heavy bg-mabi-surface-muted" />
 
             {isOpen && (
                 <ul className="absolute z-10 w-full outline-1 outline-mabi-border mt-1 max-h-60 overflow-y-auto bg-mabi-surface">
