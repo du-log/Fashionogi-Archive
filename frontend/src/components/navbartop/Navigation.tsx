@@ -36,7 +36,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                     </button>
                     <div className={`relative flex place-items-center z-10 bg-mabi-surface-muted rounded-lg p-2 w-fit min-w-50 h-fit min-h-16`}>
                         <UserCollapse />
-                        <div className="absolute top-19.5 flex w-fit justify-center px-4 py-2 bg-mabi-border">
+                        <div className="fixed top-22 z-[-100] flex w-fit justify-center px-4 py-2 bg-mabi-border">
                             <SearchBarComboBox />
                         </div>
                     </div>
