@@ -3,7 +3,7 @@ import UserCollapse from "./UserCollapse";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import SearchBarComboBox from "./SearchBarComboBox";
-import { ChevronDown, ChevronUp, Moon, Sun, Search, SearchX } from "lucide-react";
+import { Moon, Sun, Search, SearchX } from "lucide-react";
 
 function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => void} ) {
     const auth = useContext(AuthContext);
