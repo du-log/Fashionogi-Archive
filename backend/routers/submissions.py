@@ -493,13 +493,13 @@ def update_submission(
             sub_eq = models.SubmissionEquipment(
                 submission_id = sub.id,
                 base_equipment_id = base_item.id,
-                dyeable = eq['dyeable'],
-                part_a = eq.get('partA'),
-                part_b = eq.get('partB'),
-                part_c = eq.get('partC'),
-                part_d = eq.get('partD'),
-                part_e = eq.get('partE'),
-                part_f = eq.get('partF')
+                dyeable = eq.dyeable,
+                part_a = eq.partA,
+                part_b = eq.partB,
+                part_c = eq.partC,
+                part_d = eq.partD,
+                part_e = eq.partE,
+                part_f = eq.partF
             )
             db.add(sub_eq)
 
