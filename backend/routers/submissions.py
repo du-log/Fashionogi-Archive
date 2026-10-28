@@ -425,13 +425,13 @@ def get_submission_to_edit(id: int, db: Session = Depends(get_db), current_user:
 
 @router.patch('/update/{id}')
 def update_submission(
+    id: int,
     title: str = Form(...),
     description: str = Form(...),
     gender: str = Form(...),
     race: str = Form(...),
     tags: str = Form(...),
     equipment: str = Form(...),
-    id: int,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user)
 ):
