@@ -20,7 +20,7 @@ function Layout() {
     return (
         <div className="flex flex-col w-full bg-mabi-base transition-colors duration-200">
             <Navigation theme={theme} toggleTheme={toggleTheme} />
-            <div className="flex flex-col w-full pt-22 pb-58">
+            <div className="flex flex-col w-full pt-42 pb-58">
                 <Outlet />
             </div>
             <Footer />
