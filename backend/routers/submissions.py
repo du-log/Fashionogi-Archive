@@ -338,7 +338,7 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
         if not current_user:
             raise HTTPException(status_code = 404, detail = 'Submission not found.')
         
-        if not current_user.is_admin and current_user.id != sub.user_id:
+        if not current_user.is_admin or current_user.id != sub.user_id:
             raise HTTPException(status_code = 404, detail = 'Submission not found.')
 
     sorted_images = sorted(sub.images, key=lambda x: x.display_order)
