@@ -27,7 +27,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                 </div>
                 <div className="right relative flex flex-1 gap-10 justify-start items-center h-22">
                     <button aria-label="Toggle Theme" onClick={toggleTheme}
-                    className="group p-2 rounded-lg bg-mabi-surface hover:bg-mabi-surface-muted transition-colors flex items-center justify-center outline-1 outline-mabi-border cursor-pointer">
+                    className="group p-2 rounded-lg bg-mabi-surface hover:bg-mabi-surface-muted transition-colors duration-0 flex items-center justify-center outline-1 outline-mabi-border cursor-pointer">
                         {theme === "light" ? (
                             <Moon size={20} className="text-mabi-text-muted group-hover:text-mabi-text" />
                         ) : (
