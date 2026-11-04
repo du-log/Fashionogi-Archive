@@ -41,7 +41,7 @@ function NewsPage() {
             formData.append('context', context);
 
             const res = await fetch (`${NEWS_URL}`, {
-                method: 'post',
+                method: 'POST',
                 body: formData,
                 credentials: 'include'
             });
@@ -61,7 +61,7 @@ function NewsPage() {
         setLoading(true);
 
         const res = await fetch(`${NEWS_URL}`, {
-            method: 'get'
+            method: 'GET'
         });
         if (res.ok) {
             const data = await res.json();

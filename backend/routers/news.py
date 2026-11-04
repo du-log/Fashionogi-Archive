@@ -36,7 +36,7 @@ current_user: models.User = Depends(auth.get_current_user), db: Session = Depend
         description = description,
         type = type,
         context = context,
-        author_id = user.id
+        author_id = current_user.id
     )
 
     db.add(new_article)

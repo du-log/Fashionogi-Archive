@@ -1,5 +1,10 @@
 # Changelog
 
+## 11/4/2026
+Small error fix.
+
+- Fixed an error with news posting when assigning to the admin that I didn't catch. Super small, but super annoying.
+
 ## 10/29/2026
 Small changes.
 
