@@ -38,6 +38,7 @@ seed_equipment.py
 seed_tags.py
 fetch_equip.py
 equipment_seed.json
+PERSONAL.md
 
 # Editor directories and files
 .vscode/*

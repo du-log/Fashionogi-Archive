@@ -255,14 +255,28 @@ def check_email_availability(email: str, db: Session = Depends(get_db)):
 @router.get('/dashboard/queue')
 def get_my_submissions(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     stmt = (
-        select(models.Submission.id, models.Submission.title, models.Submission.status, models.Submission.created_at)
+        select(models.Submission)
         .where(models.Submission.user_id == current_user.id)
+        .options(
+            selectinload(models.Submission.images)
+        )
         .order_by(models.Submission.created_at.desc())
     )
 
-    results = db.execute(stmt).mappings().all()
+    queue = db.execute(stmt).scalars().unique().all()
 
-    return [dict(row) for row in results]
+    results = []
+    for sub in queue:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+
+        results.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': current_user.username,
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images]
+        })
+
+    return results
 
 @router.get('/dashboard/favorites')
 def get_my_favorites(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):

@@ -14,7 +14,6 @@ import TagManagement from './components/admin/TagManagement';
 import DeletionSubs from './components/admin/DeletionSubs';
 import EquipManagement from './components/admin/EquipManagement';
 import UserProfile from './components/user/UserProfile';
-import UserDashboard from './components/user/UserDashboard';
 import AccountSettings from './components/user/AccountSettings';
 import PrivacyPolicy from './components/static/PrivacyPolicy';
 import TermsConditions from './components/static/TermsConditions';
@@ -24,6 +23,7 @@ import NewsPage from './components/news/NewsPage';
 import ArticlePage from './components/news/ArticlePage';
 import { Analytics } from '@vercel/analytics/react';
 import SubmissionEdit from './components/submission/SubmissionEdit';
+import NewDashboard from './components/user/NewDashboard';
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
             <Route path='/fashion/id/:id' element={<SubmissionPage />} />
             <Route path='/fashion/edit/:id' element={<SubmissionEdit />} />
             <Route path='/profile/:username' element={<UserProfile />} />
-            <Route path='/account/dashboard' element={<UserDashboard />} />
+            <Route path='/account/dashboard' element={<NewDashboard />} />
             <Route path='/account/settings' element={<AccountSettings />} />
             <Route path='/privacy' element={<PrivacyPolicy />} />
             <Route path='/terms' element={<TermsConditions />} />
