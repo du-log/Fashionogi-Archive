@@ -44,6 +44,7 @@ function UserProfile() {
     const [topStyles, setTopStyles] = useState<GalleryItem[]>([]);
     const [latestStyles, setLatestStyles] = useState<GalleryItem[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
 
     const [followData, setFollowData] = useState<followData>();
 
@@ -92,6 +93,7 @@ function UserProfile() {
                 setTopStyles(galleryData.top);
                 setLatestStyles(galleryData.latest);
                 setTotal(Number(galleryData.total));
+                setFavoritesTotal(Number(galleryData.total_favorites))
             }
             const dataRes = await fetch(`${USERS_URL}/profiles/${username}/data`, {
                 credentials: 'include'
@@ -138,7 +140,7 @@ function UserProfile() {
                             </div>
                             <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Style Favorites:</p>
-                                <p>0</p>
+                                <p>{favoritesTotal}</p>
                             </div>
                             <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Followers:</p>

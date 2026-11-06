@@ -18,6 +18,8 @@ export default function NewDashboard() {
     const [activeTab, setActiveTab] = useState<string>('styles');
 
     const [styles, setStyles] = useState<GalleryItem[]>([]);
+    const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
+    const [favoriteStyles, setFavoriteStyles] = useState<GalleryItem[]>([]);
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;
@@ -40,7 +42,15 @@ export default function NewDashboard() {
                 })
                 if (styleRes.ok) {
                     const styleData = await styleRes.json();
-                    setStyles(styleData);
+                    setStyles(styleData.styles);
+                    setFavoritesTotal(styleData.total_favorites || 0);
+                }
+            const favoritesRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
+                    credentials: 'include'
+                })
+                if (favoritesRes.ok) {
+                    const favoritesData = await favoritesRes.json();
+                    setFavoriteStyles(favoritesData);
                 }
             if(res.ok && dataRes.ok && styleRes.ok) setTimeout(() => setLoading(false), 100);
         }
@@ -74,7 +84,7 @@ export default function NewDashboard() {
                     <div className="grid grid-cols-2 items-center">
                         <div className="flex flex-col gap-5 items-end">
                             <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Submitted: {styles.length} {styles.length === 1 ? 'Style' : 'Styles'}</p>
-                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Style Favorites: 0</p>
+                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Style Favorites: {favoritesTotal}</p>
                         </div>
                         <div className="flex flex-col gap-5 items-end">
                             <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Followers: {followData?.followers_count}</p>
@@ -108,8 +118,17 @@ export default function NewDashboard() {
                 </div>
                 <div className="flex flex-col items-center min-h-[50vh] w-full bg-mabi-surface mt-1">
                     {activeTab === 'styles' && (
-                        <div className="grid grid-cols-3 xl:grid-cols-5 h-full">
+                        <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
                             {styles.map((style) => (
+                                <div key={style.id} className="relative">
+                                    <GalleryCard item={style} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {activeTab === 'favorites' && (
+                        <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
+                            {favoriteStyles.map((style) => (
                                 <div key={style.id} className="relative">
                                     <GalleryCard item={style} />
                                 </div>
