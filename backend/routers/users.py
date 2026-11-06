@@ -189,12 +189,13 @@ def get_user_styles(username: str, db: Session = Depends(get_db)):
             'favorites': favorites_count
         })
     
-    stmtThree = (select(models.Submission.title, models.Submission.id, models.Submission.favorited_by).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
+    stmtThree = (select(models.Submission).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
     total = db.execute(stmtThree).scalars().unique().all()
 
     total_favorites = 0
     for sub in total:
-        total_favorites = total_favorites + len(sub.favorited_by)
+        favorites_count = len(sub.favorited_by)
+        total_favorites = total_favorites + favorites_count
     
     return {'latest': resultsL, 'top': resultsT, 'total': len(total), 'total_favorites': total_favorites}
 
