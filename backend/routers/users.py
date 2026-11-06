@@ -189,10 +189,14 @@ def get_user_styles(username: str, db: Session = Depends(get_db)):
             'favorites': favorites_count
         })
     
-    stmtThree = (select(models.Submission.title, models.Submission.id).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
+    stmtThree = (select(models.Submission.title, models.Submission.id, models.Submission.favorited_by).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
     total = db.execute(stmtThree).scalars().unique().all()
+
+    total_favorites = 0
+    for sub in total:
+        total_favorites = total_favorites + len(sub.favorited_by)
     
-    return {'latest': resultsL, 'top': resultsT, 'total': len(total)}
+    return {'latest': resultsL, 'top': resultsT, 'total': len(total), 'total_favorites': total_favorites}
 
 @router.patch('/profiles/me/update', response_model = UserProfileResponse)
 def update_profile(profile_data: UserProfileUpdate, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -255,14 +259,32 @@ def check_email_availability(email: str, db: Session = Depends(get_db)):
 @router.get('/dashboard/queue')
 def get_my_submissions(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     stmt = (
-        select(models.Submission.id, models.Submission.title, models.Submission.status, models.Submission.created_at)
+        select(models.Submission)
         .where(models.Submission.user_id == current_user.id)
+        .options(
+            selectinload(models.Submission.images)
+        )
         .order_by(models.Submission.created_at.desc())
     )
 
-    results = db.execute(stmt).mappings().all()
+    queue = db.execute(stmt).scalars().unique().all()
 
-    return [dict(row) for row in results]
+    results = []
+    total_favorites = 0
+    for sub in queue:
+        sorted_images = sorted(sub.images, key = lambda x: x.display_order)
+        favorites_count = len(sub.favorited_by)
+        total_favorites = total_favorites + favorites_count
+
+        results.append({
+            'id': sub.id,
+            'title': sub.title,
+            'author': current_user.username,
+            'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
+            'favorites': favorites_count
+        })
+
+    return {'styles': results, 'total_favorites': total_favorites}
 
 @router.get('/dashboard/favorites')
 def get_my_favorites(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
