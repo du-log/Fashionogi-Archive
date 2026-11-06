@@ -43,7 +43,7 @@ export default function NewDashboard() {
                 if (styleRes.ok) {
                     const styleData = await styleRes.json();
                     setStyles(styleData.styles);
-                    setFavoritesTotal(styleData.total_favorites || 0);
+                    setFavoritesTotal(Number(styleData.total_favorites) || 0);
                 }
             const favoritesRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
                     credentials: 'include'
@@ -52,7 +52,7 @@ export default function NewDashboard() {
                     const favoritesData = await favoritesRes.json();
                     setFavoriteStyles(favoritesData);
                 }
-            if(res.ok && dataRes.ok && styleRes.ok) setTimeout(() => setLoading(false), 100);
+            if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (user) fetchData();
     }, [user]);
