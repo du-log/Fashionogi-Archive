@@ -303,7 +303,8 @@ def get_submission_gallery(
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'favorites': favorites_count
+            'favorites': favorites_count,
+            'views': sub.views
         })
     
     return {
