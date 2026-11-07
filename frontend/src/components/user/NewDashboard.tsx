@@ -110,7 +110,7 @@ export default function NewDashboard() {
                 </div>
                 <div className="flex w-full xl:w-[80%] outline-1 outline-mabi-border-heavy bg-mabi-surface-muted justify-between">
                     <div className="flex gap-2 items-center p-2">
-                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-gold hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
                             My Styles [{styles.length}]
                         </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('favorites')}>
