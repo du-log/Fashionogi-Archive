@@ -31,7 +31,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
         }, [isHovered, hasImages, item.images.length, currentIndex])
 
     return (
-        <div className="group relative cursor-pointer w-full h-full bg-mabi-surface outline-2 outline-mabi-border-heavy outline-offset-2 rounded-lg transition-transform duration-[0.2s] hover:scale-105"
+        <div className="group relative cursor-pointer w-full h-full bg-mabi-surface outline-2 outline-mabi-border-heavy outline-offset-2 rounded-lg transition-colors duration-200 hover:outline-mabi-gold"
         onClick={() => navigate(`/fashion/id/${item.id}`)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>

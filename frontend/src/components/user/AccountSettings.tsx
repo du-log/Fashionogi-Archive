@@ -139,7 +139,7 @@ function AccountSettings() {
                     <span className="loading loading-spinner loading-xl"></span>
                 </div>
             )}
-            <div className={`flex gap-10 w-full h-[73.5vh] sm:px-[5%] xl:px-[20%] pt-10 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className={`flex gap-10 w-full h-[73.5vh] sm:px-[5%] xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                 <div className="flex flex-1 flex-col gap-3 outline text-lg p-5 h-fit bg-mabi-surface">
                     <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'personal' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('personal')}>Account Settings</p>
                     <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'notif' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('notif')}>Notifications</p>

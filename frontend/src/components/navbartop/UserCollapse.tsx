@@ -50,7 +50,7 @@ function UserCollapse() {
                     </div>
                     {isOpen && (
                         <ul id="Collapse" className="absolute flex flex-col items-start bg-mabi-surface-muted sm:text-md xl:text-lg outline-1 outline-mabi-border top-15 place-self-center w-55">
-                            <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>View Profile</p></li>
+                            <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>Public Profile</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>
                             {user?.is_admin && (
