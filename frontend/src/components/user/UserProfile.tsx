@@ -119,8 +119,8 @@ function UserProfile() {
                 <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border px-5 py-10 bg-mabi-surface">
                         <div className="flex gap-10 w-full">
-                            <div className="outline outline-mabi-border-heavy rounded-xl h-fit">
-                                {userData.avatar_id ? <img className="w-36 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
+                            <div className="outline outline-mabi-border-heavy h-fit">
+                                {userData.avatar_id ? <img className="w-36" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
                             </div>
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 items-center w-full">
@@ -172,7 +172,7 @@ function UserProfile() {
                                         <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <h1 className="text">Discord Username:</h1>
+                                        <h1 className="text">Discord:</h1>
                                         <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
                                     </div>
                                 </div>

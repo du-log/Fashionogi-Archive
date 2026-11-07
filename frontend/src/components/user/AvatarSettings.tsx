@@ -94,7 +94,7 @@ export default function AvatarSettings( {currentAvatarId} : {currentAvatarId?: s
         <div className="flex flex-col sm:flex-row gap-6 items-center text-mabi-text">
             {/* Left Side: Avatar Display */}
             <div className="flex-shrink-0">
-                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-[#ffffff90] flex items-center justify-center outline outline-2 outline-[#B59E6D]">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 overflow-hidden bg-[#ffffff90] flex items-center justify-center outline outline-2 outline-[#B59E6D]">
                     {displayAvatar ? (
                         <img src={displayAvatar} alt="User Avatar" className="w-full h-full object-cover" />
                     ) : (

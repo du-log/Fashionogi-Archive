@@ -20,13 +20,16 @@ function UserNameplate( {username} : {username: string} ) {
     }, [username])
 
     return (
-        <div className="flex justify-between gap-4 min-w-50 p-4 outline-2 outline-mabi-gold bg-mabi-surface-muted">
-            <div className="flex flex-col gap justify-start">
-                <h1 className="cursor-pointer text-lg hover:text-mabi-green" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
-                <p>{userData?.server ? userData.server : ''}</p>
+        <div className="flex gap-4 min-w-50 p-4 outline-2 outline-mabi-gold bg-mabi-surface-muted hover:bg-mabi-surface">
+            <div className="outline-1 outline-mabi-border-heavy items-center justify-center h-fit w-fit">
+                {userData?.avatar_id ? <img className="w-20" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
-            <div className="outline-1 outline-mabi-border-heavy rounded-xl items-center justify-center h-fit">
-                {userData?.avatar_id ? <img className="w-20 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
+            <div className="flex flex-col gap-1">
+                <div className="flex gap-5 items-center">
+                    <h1 className="cursor-pointer font-bold text-xl hover:text-mabi-gold" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
+                    <p className="text-md py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+                </div>
+                <p className="text-sm text-mabi-text-muted">{userData?.server ? userData.server : ''}</p>
             </div>
         </div>
     )

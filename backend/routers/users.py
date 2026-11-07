@@ -261,7 +261,10 @@ def check_email_availability(email: str, db: Session = Depends(get_db)):
 def get_my_submissions(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     stmt = (
         select(models.Submission)
-        .where(models.Submission.user_id == current_user.id)
+        .where(
+            models.Submission.user_id == current_user.id,
+            models.Submission.status != 'deleted'
+        )
         .options(
             selectinload(models.Submission.images)
         )
@@ -282,7 +285,8 @@ def get_my_submissions(current_user: models.User = Depends(auth.get_current_user
             'title': sub.title,
             'author': current_user.username,
             'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'favorites': favorites_count
+            'favorites': favorites_count,
+            'status': sub.status
         })
 
     return {'styles': results, 'total_favorites': total_favorites}
