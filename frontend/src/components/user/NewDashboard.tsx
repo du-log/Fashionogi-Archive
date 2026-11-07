@@ -83,8 +83,8 @@ export default function NewDashboard() {
             <div className={`flex flex-col items-center w-full min-h-[73.5vh] sm:px-[5%] xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${userLoading || isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <div className="flex gap-5 w-full xl:w-[80%] outline outline-mabi-border p-5 bg-mabi-surface justify-between">
                     <div className="flex gap-10 flex-1">
-                        <div className="outline outline-mabi-border-heavy rounded-xl h-fit">
-                            {userData?.avatar_id ? <img className="w-36 rounded-xl" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
+                        <div className="outline outline-mabi-border-heavy h-fit">
+                            {userData?.avatar_id ? <img className="w-36" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
                         </div>
                         <div className="flex flex-col w-full gap-5">
                             <div className="flex gap-5 items-center w-full">
@@ -110,7 +110,7 @@ export default function NewDashboard() {
                 </div>
                 <div className="flex w-full xl:w-[80%] outline-1 outline-mabi-border-heavy bg-mabi-surface-muted justify-between">
                     <div className="flex gap-2 items-center p-2">
-                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-gold hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
                             My Styles [{styles.length}]
                         </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('favorites')}>
@@ -126,7 +126,7 @@ export default function NewDashboard() {
                             Following
                         </button>
                     </div>
-                    <div className="flex items-center p-1">
+                    <div className="flex items-center p-2">
                         {activeTab === 'styles' && (
                             <Link to={'/upload'}><p className={"p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold"}>Submit a Style</p></Link>
                         )}
@@ -142,6 +142,12 @@ export default function NewDashboard() {
                                             <GalleryCard item={style} />
                                             <div className="absolute top-1 right-1 z-100">
                                                 <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} />
+                                            </div>
+                                            <div className="absolute top-1 left-1 z-100">
+                                                {style.status === 'pending' && (<p className="text-sm px-2 py-1 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</p>)}
+                                                {style.status === 'unlisted' && (<p className="text-sm px-2 py-1 rounded-lg bg-[#aa5500] text-[#ffffff]">Unlisted</p>)}
+                                                {style.status === 'flagged' && (<p className="text-sm px-2 py-1 rounded-lg bg-[#770000] text-[#ffffff]">Flagged</p>)}
+                                                {style.status === 'rejected' && (<p className="text-sm px-2 py-1 rounded-lg bg-[#111111] text-[#ffffff]">Rejected</p>)}
                                             </div>
                                         </div>
                                     ))}

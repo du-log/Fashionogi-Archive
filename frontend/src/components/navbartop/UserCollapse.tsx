@@ -33,23 +33,26 @@ function UserCollapse() {
     if(isLoading) return(<></>);
 
     return (
-        <div className="relative">
+        <div className="relative text-mabi-text">
             {!isAuth && !user && (
-                <div className={`flex gap-1 py-1`}>
+                <div className={`flex gap-2 px-2 py-3 bg-mabi-surface-muted rounded-lg min-w-50 h-fit min-h-16`}>
                     <button className="cursor-pointer bg-[#00bb0090] hover:bg-[#008000] border-2 border-[#ffffff] rounded-sm px-4 py-2 hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/login')}>Log In</button>
                     <button className="cursor-pointer bg-[#bb00bb90] hover:bg-[#800080] border-2 border-[#ffffff] rounded-sm px-4 py-2 hover:text-[#ffd700] font-bold text-md" onClick={() => navigate('/register')}>Sign Up</button>
                 </div>
             )}
             {isAuth && user && (
                 <div className={`relative`} ref={menuRef}>
-                    <div className={"flex items-center justify-between gap-3 w-45"}>
-                        <h2 className="text-lg hover:cursor-default truncate max-w-40">{user?.username}</h2>
-                        <div className={`flex flex-col justify-center items-center rounded-md cursor-pointer w-12 h-12 outline-2 outline-mabi-border-heavy hover:outline-mabi-gold`} onClick={() => setOpen(!isOpen)}>
+                    <div className={"group flex items-center justify-between bg-mabi-surface rounded-lg min-w-50 h-fit min-h-16 px-3 py-2 cursor-pointer hover:bg-mabi-surface-muted"} onClick={() => setOpen(!isOpen)}>
+                        <div className="flex flex-col">
+                            <h2 className="text-lg truncate max-w-40">{user?.username}</h2>
+                            <p className="text-xs py-1 px-2 outline outline-mabi-border-heavy w-fit">Member</p>
+                        </div>
+                        <div className={`flex flex-col justify-center items-center cursor-pointer w-12 h-12 outline-2 outline-mabi-border-heavy group-hover:outline-mabi-gold`}>
                             {user?.avatar_id ? <img src={user.avatar_id} /> : <User size={50} />}
                         </div>
                     </div>
                     {isOpen && (
-                        <ul id="Collapse" className="absolute flex flex-col items-start bg-mabi-surface-muted sm:text-md xl:text-lg outline-1 outline-mabi-border top-15 place-self-center w-55">
+                        <ul id="Collapse" className="absolute flex flex-col items-start bg-mabi-surface-muted sm:text-md xl:text-lg outline-1 outline-mabi-border top-19 place-self-center w-55">
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>Public Profile</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>
