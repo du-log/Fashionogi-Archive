@@ -1,6 +1,6 @@
 # Changelog
 
-# 11/6/2026
+## 11/6/2026
 Dashboard update and other minor site tweaks.
 
 - Started building out the new dashboard.
