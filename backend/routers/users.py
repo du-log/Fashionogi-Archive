@@ -192,8 +192,11 @@ def get_user_styles(username: str, db: Session = Depends(get_db)):
     stmtThree = (select(models.Submission).where(models.Submission.status == 'approved', models.Submission.user_id == user.id))
     total = db.execute(stmtThree).scalars().unique().all()
 
+    stmtFour = (select(models.Submission).where(models.Submission.status != 'deleted', models.Submission.user_id == user.id))
+    overall = db.execute(stmtFour).scalars().unique().all()
+
     total_favorites = 0
-    for sub in total:
+    for sub in overall:
         favorites_count = len(sub.favorited_by)
         total_favorites = total_favorites + favorites_count
     
@@ -286,7 +289,8 @@ def get_my_submissions(current_user: models.User = Depends(auth.get_current_user
             'author': current_user.username,
             'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'favorites': favorites_count,
-            'status': sub.status
+            'status': sub.status,
+            'views': sub.views
         })
 
     return {'styles': results, 'total_favorites': total_favorites}

@@ -176,7 +176,8 @@ def get_latest_ten(db: Session = Depends(get_db)):
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'favorites': favorites_count
+            'favorites': favorites_count,
+            'views': sub.views
         })
     
     return results
@@ -211,7 +212,8 @@ def get_top_five(db: Session = Depends(get_db)):
             'author': sub.author.username,
             #'images': [f'/uploads/submissions/{img.image_id.hex}.webp' for img in sorted_images],
             'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
-            'favorites': favorites_count
+            'favorites': favorites_count,
+            'views': sub.views
         })
     
     return results
@@ -360,6 +362,10 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
             'partE': eq.part_e,
             'partF': eq.part_f,
         })
+
+    if not current_user or current_user.id != sub.user_id and sub.status == 'approved':
+        sub.views = sub.views + 1
+        db.commit()
 
     return {
         'id': sub.id,

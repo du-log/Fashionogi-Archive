@@ -1,12 +1,14 @@
 # Changelog
 
-# 11/6/2026
+## 11/6/2026
 Dashboard update and other minor site tweaks.
 
 - Started building out the new dashboard.
   - Currently, it functions with managing your style submissions and favorites.
   - Still in the process of deciding how to implement the user profile editor.
   - Also need to create a component for followers/following. Might reuse the nameplate found on submission pages.
+
+- Added status badges for the style cards in under My Styles tab if the submission's not approved.
 
 - Changed the buttons for pagination in the gallery.
   - Switched them from text saying Previous/Next to left/right chevron icons.
@@ -15,6 +17,11 @@ Dashboard update and other minor site tweaks.
   - This was mainly to introduce the dropdown menu for the cards inside the dashboard.
 
 - Changed the text regarding the profile in the user collapse, switched from View Profile to Public Profile.
+
+- Modified the user collapse to show or hide the menu using the entire component rather than the avatar.
+  - Also added the placeholder title to give it more character.
+
+- Added views to the submissions table, and an associated icon and value to the GalleryCard
 
 ## 11/4/2026
 Small error fix.

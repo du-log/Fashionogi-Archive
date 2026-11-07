@@ -194,7 +194,7 @@ class Submission(Base):
     race: Mapped[str] = mapped_column(String(5), index = True, nullable = False)
     status: Mapped[str] = mapped_column(String(20), default = "pending", index = True, nullable = False)
     # "pending", "approved", "flagged", "rejected", "unlisted", "deleted"
-
+    views: Mapped[int] = mapped_column(Integer, default = 0, server_default = '0', index = True, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, server_default = 'true', nullable = False)
     delete_flag: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
 
