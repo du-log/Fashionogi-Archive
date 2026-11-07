@@ -21,6 +21,8 @@ Dashboard update and other minor site tweaks.
 - Modified the user collapse to show or hide the menu using the entire component rather than the avatar.
   - Also added the placeholder title to give it more character.
 
+- Added views to the submissions table, and an associated icon and value to the GalleryCard
+
 ## 11/4/2026
 Small error fix.
 
