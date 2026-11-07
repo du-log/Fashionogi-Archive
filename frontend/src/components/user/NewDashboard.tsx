@@ -126,7 +126,7 @@ export default function NewDashboard() {
                             Following
                         </button>
                     </div>
-                    <div className="flex items-center p-1">
+                    <div className="flex items-center p-2">
                         {activeTab === 'styles' && (
                             <Link to={'/upload'}><p className={"p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold"}>Submit a Style</p></Link>
                         )}

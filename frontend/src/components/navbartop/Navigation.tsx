@@ -34,7 +34,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                             <Sun size={20} className="text-mabi-text-muted group-hover:text-mabi-text" />
                         )}
                     </button>
-                    <div className={`relative flex place-items-center z-10 bg-mabi-surface-muted rounded-lg p-2 w-fit min-w-50 h-fit min-h-16`}>
+                    <div className={`relative flex place-items-center z-10`}>
                         <UserCollapse />
                         <div className="fixed top-22 z-[-100] flex w-fit justify-center px-4 py-2 bg-mabi-border">
                             <SearchBarComboBox />

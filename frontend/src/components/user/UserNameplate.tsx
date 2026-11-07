@@ -20,7 +20,7 @@ function UserNameplate( {username} : {username: string} ) {
     }, [username])
 
     return (
-        <div className="flex gap-4 min-w-50 p-4 outline-2 outline-mabi-gold bg-mabi-surface-muted hover:bg-mabi-surface">
+        <div className="flex gap-4 min-w-50 p-4 outline-2 outline-mabi-gold bg-mabi-surface-muted hover:bg-mabi-surface text-mabi-text">
             <div className="outline-1 outline-mabi-border-heavy items-center justify-center h-fit w-fit">
                 {userData?.avatar_id ? <img className="w-20" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
