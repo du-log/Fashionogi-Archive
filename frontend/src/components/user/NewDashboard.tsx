@@ -34,6 +34,7 @@ export default function NewDashboard() {
     }
 
     useEffect(() => {
+        if (!user && !userLoading) navigate('/login');
         document.documentElement.scrollTop = 0;
         const fetchData = async () => {
             setLoading(true);
@@ -66,12 +67,8 @@ export default function NewDashboard() {
                 }
             if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok) setTimeout(() => setLoading(false), 100);
         }
-        if (user) {
-            fetchData();
-        } else {
-            navigate('/login');
-        };
-    }, [user, navigate]);
+        if (user) fetchData();
+    }, [user, userLoading, navigate]);
 
     return (
         <div>
