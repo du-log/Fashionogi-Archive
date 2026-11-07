@@ -136,7 +136,7 @@ export default function NewDashboard() {
                     {activeTab === 'styles' && (
                         <>
                             {styles.length > 0 && (
-                                <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center w-full">
+                                <div className="grid grid-cols-5 gap-5 p-10 place-items-center w-full">
                                     {styles.map((style) => (
                                         <div key={style.id} className="relative">
                                             <GalleryCard item={style} />
@@ -164,7 +164,7 @@ export default function NewDashboard() {
                     {activeTab === 'favorites' && (
                         <>
                             {favoriteStyles.length > 0 && (
-                                <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
+                                <div className="grid grid-cols-5 place-items-center w-full">
                                     {favoriteStyles.map((style) => (
                                         <div key={style.id} className="relative">
                                             <GalleryCard item={style} />
