@@ -3,6 +3,7 @@ import GalleryCard from "./GalleryCard";
 import { useSearchParams } from "react-router-dom";
 import TagsComboBox from "./TagsComboBox";
 import { SUBS_URL } from "../../utilities/MiscUtility";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type GalleryItem = {
     id: number,
@@ -184,7 +185,7 @@ function Gallery() {
                         ))}
                     </div>
                     <div className="flex justify-center items-center gap-3 py-10">
-                        <button className={`btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+                        <button className={`btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage - 1)}><ChevronLeft size={20} /></button>
                         {pageNumbers.map((num, index) => (
                             num === '...' ? (
                                 <span key={`ellipsis-${index}`}>...</span>
@@ -192,7 +193,7 @@ function Gallery() {
                                 <button key={`page-${num}`} className={`btn btn-sm ${currentPage === num ? 'btn-active btn-success cursor-default' : ''}`} onClick={() => { if (currentPage !== num) handlePageChange(num as number) }}>{num}</button>
                             )
                         ))}
-                        <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                        <button className={`btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}`} onClick={() => handlePageChange(currentPage + 1)}><ChevronRight size={20} /></button>
                     </div>
                     <div className="flex flex-col justify-center items-center">
                         <p className="text-sm">Total Items: {totalItems}</p>

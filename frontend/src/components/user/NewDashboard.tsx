@@ -3,15 +3,17 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { UserIcon } from "lucide-react";
 import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import type { userProfile, followData } from "./UserProfile";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
+import DashboardDropdown from "./DashboardDropdown";
 
 export default function NewDashboard() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
     const userLoading= auth?.isLoading ?? true;
     const [isLoading, setLoading] = useState<boolean>(true);
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState<userProfile | null | undefined>();
     const [followData, setFollowData] = useState<followData>();
@@ -20,6 +22,16 @@ export default function NewDashboard() {
     const [styles, setStyles] = useState<GalleryItem[]>([]);
     const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
     const [favoriteStyles, setFavoriteStyles] = useState<GalleryItem[]>([]);
+
+    const fetchFavorites = async () => {
+        const res = await fetch(`${USERS_URL}/dashboard/favorites`, {
+            credentials: 'include'
+        })
+        if (res.ok) {
+            const data = await res.json();
+            setFavoriteStyles(data);
+        }
+    }
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;
@@ -54,8 +66,12 @@ export default function NewDashboard() {
                 }
             if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok) setTimeout(() => setLoading(false), 100);
         }
-        if (user) fetchData();
-    }, [user]);
+        if (user) {
+            fetchData();
+        } else {
+            navigate('/login');
+        };
+    }, [user, navigate]);
 
     return (
         <div>
@@ -64,7 +80,7 @@ export default function NewDashboard() {
                     <span className="loading loading-spinner loading-xl"></span>
                 </div>
             )}
-            <div className={`flex flex-col items-center w-full min-h-[73.5vh] sm:px-[5%] xl:px-[20%] pt-10 text-mabi-text transition-opacity duration-200 ease-in-out ${userLoading || isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex flex-col items-center w-full min-h-[73.5vh] sm:px-[5%] xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${userLoading || isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <div className="flex gap-5 w-full xl:w-[80%] outline outline-mabi-border p-5 bg-mabi-surface justify-between">
                     <div className="flex gap-10 flex-1">
                         <div className="outline outline-mabi-border-heavy rounded-xl h-fit">
@@ -76,8 +92,8 @@ export default function NewDashboard() {
                                 <p className="text-2xl py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
                             </div>
                             <div className="flex gap-5 items-center w-full">
-                                <button className="btn btn-success">Edit Profile</button>
-                                <button className="btn btn-primary">Change Title</button>
+                                <button className="btn btn-success" disabled>Edit Profile</button>
+                                <button className="btn btn-primary" disabled>Change Title</button>
                             </div>
                         </div>
                     </div>
@@ -94,19 +110,19 @@ export default function NewDashboard() {
                 </div>
                 <div className="flex w-full xl:w-[80%] outline-1 outline-mabi-border-heavy bg-mabi-surface-muted justify-between">
                     <div className="flex gap-2 items-center p-2">
-                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-gold hover:bg-mabi-border cursor-pointer'}`} onClick={activeTab !== 'styles' ? () => setActiveTab('styles') : () => ({})}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-gold hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
                             My Styles [{styles.length}]
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={activeTab !== 'favorites' ? () => setActiveTab('favorites') : () => ({})}>
-                            Favorites []
+                        <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('favorites')}>
+                            Favorites [{favoriteStyles.length}]
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'collections' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={activeTab !== 'collections' ? () => setActiveTab('collections') : () => ({})}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'collections' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('collections')}>
                             My Collections
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'followers' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={activeTab !== 'followers' ? () => setActiveTab('followers') : () => ({})}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'followers' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('followers')}>
                             Followers
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'following' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={activeTab !== 'following' ? () => setActiveTab('following') : () => ({})}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'following' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('following')}>
                             Following
                         </button>
                     </div>
@@ -116,24 +132,74 @@ export default function NewDashboard() {
                         )}
                     </div>
                 </div>
-                <div className="flex flex-col items-center min-h-[50vh] w-full bg-mabi-surface mt-1">
+                <div className="flex flex-col items-center min-h-[50vh] w-full xl:w-[80%] bg-mabi-surface mt-1">
                     {activeTab === 'styles' && (
-                        <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
-                            {styles.map((style) => (
-                                <div key={style.id} className="relative">
-                                    <GalleryCard item={style} />
+                        <>
+                            {styles.length > 0 && (
+                                <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center w-full">
+                                    {styles.map((style) => (
+                                        <div key={style.id} className="relative">
+                                            <GalleryCard item={style} />
+                                            <div className="absolute top-1 right-1 z-100">
+                                                <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                            {styles.length === 0 && (
+                                <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                    <p className="text-lg">You haven't submitted any styles yet!</p>
+                                    <p>Check back after you've made your first submission.</p>
+                                </div>
+                            )}
+                        </>
                     )}
                     {activeTab === 'favorites' && (
-                        <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
-                            {favoriteStyles.map((style) => (
-                                <div key={style.id} className="relative">
-                                    <GalleryCard item={style} />
+                        <>
+                            {favoriteStyles.length > 0 && (
+                                <div className="grid grid-cols-3 xl:grid-cols-5 place-items-center w-full">
+                                    {favoriteStyles.map((style) => (
+                                        <div key={style.id} className="relative">
+                                            <GalleryCard item={style} />
+                                            <div className="absolute top-1 right-1 z-100">
+                                                <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                            {favoriteStyles.length === 0 && (
+                                <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                    <p className="text-lg">You haven't favorited any styles yet!</p>
+                                    <p>Check back after you've found something you like.</p>
+                                </div>
+                            )}
+                        </>
+                    )}
+                    {activeTab === 'collections' && (
+                        <>
+                            <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                <p className="text-lg">Collections haven't been implemented yet... :(</p>
+                                <p>It's on the radar, though. Don't worry.</p>
+                            </div>
+                        </>
+                    )}
+                    {activeTab === 'followers' && (
+                        <>
+                            <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                <p className="text-lg">Your list of followers is missing!</p>
+                                <p>Patience, please. I'll get to it soon.</p>
+                            </div>
+                        </>
+                    )}
+                    {activeTab === 'following' && (
+                        <>
+                            <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                <p className="text-lg">The list of users you're following is gone!</p>
+                                <p>Not really, but it'll appear soon.</p>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
