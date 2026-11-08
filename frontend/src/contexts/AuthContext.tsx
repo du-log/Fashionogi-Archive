@@ -1,3 +1,5 @@
+/* Authentication Context file, all endpoint connections utilized for user auth are in AuthProvider */
+
 import { createContext } from "react"
 
 export type User = {

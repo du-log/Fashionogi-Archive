@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
 function UserCollapse() {
@@ -30,7 +30,12 @@ function UserCollapse() {
         return () => document.removeEventListener('mousedown', outsideClickHandle);
     }, []);
 
-    if(isLoading) return(<></>);
+    if(isLoading) return(
+    <>
+        <div className={`flex justify-center items-center gap-2 px-2 py-3 bg-mabi-surface-muted text-mabi-text-muted rounded-lg min-w-50 h-fit min-h-16`}>
+            <p>Loading...</p>
+        </div>
+    </>);
 
     return (
         <div className="relative text-mabi-text">
@@ -53,11 +58,11 @@ function UserCollapse() {
                     </div>
                     {isOpen && (
                         <ul id="Collapse" className="absolute flex flex-col items-start bg-mabi-surface-muted sm:text-md xl:text-lg outline-1 outline-mabi-border top-19 place-self-center w-55">
-                            <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate(`/profile/${user?.username}`); setOpen(false)}}>Public Profile</p></li>
-                            <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/dashboard'); setOpen(false)}}>Dashboard</p></li>
-                            <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => {navigate('/account/settings'); setOpen(false)}}>Settings</p></li>
+                            <Link to={`/profile/${user?.username}`} className="w-full"><p className="p-2 hover:bg-mabi-green" onClick={() => setOpen(false)}>Public Profile</p></Link>
+                            <Link to={`/account/dashboard`} className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => setOpen(false)}>Dashboard</p></Link>
+                            <Link to={`/account/settings`} className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => setOpen(false)}>Settings</p></Link>
                             {user?.is_admin && (
-                                <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={() => navigate('/admin')}>Admin Dashboard</p></li>
+                                <Link to={`/admin`} className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green">Admin Dashboard</p></Link>
                             )}
                             <li className="w-full"><p className="cursor-pointer p-2 hover:bg-mabi-green" onClick={logOutHandle}>Log Out</p></li>
                         </ul>

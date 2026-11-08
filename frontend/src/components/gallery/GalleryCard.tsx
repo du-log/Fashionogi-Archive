@@ -19,7 +19,7 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
             if (isHovered && hasImages && item.images.length > 1) {
                 interval = window.setInterval(() => {
                     setIndex((prev) => (prev === 1 ? 0 : 1));
-                }, 1000);
+                }, 750);
             } else {
                 if (currentIndex !== 0) timer = window.setInterval(() => setIndex(0), 0);
             }
@@ -43,16 +43,16 @@ function GalleryCard( {item} : {item: GalleryItem} ) {
                     <h5 className="sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#FEFEFE] truncate">{item.author}</h5>
                     <div className="relative flex items-center justify-center gap-1 sm:text-xs xl:text-sm text-transparent transition-[0.5s] group-hover:text-[#FEFEFE]">
                         {item.views !== undefined && (
-                            <>
+                            <div className="flex items-center">
                             <p>{formatFavorites(item.views)}</p>
-                            <View size={20} />
-                            </>
+                            <View size={15} />
+                            </div>
                         )}
                         {item.favorites !== undefined && (
-                            <>
+                            <div className="flex items-center">
                                 <p>{formatFavorites(item.favorites)}</p>
-                                <HeartIcon size={20} />
-                            </>
+                                <HeartIcon size={15} />
+                            </div>
                         )}
                     </div>
                 </div>

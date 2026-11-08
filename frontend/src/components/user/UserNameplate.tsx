@@ -1,15 +1,24 @@
 import { UserIcon } from "lucide-react"
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { userProfile } from "./UserProfile";
+import { Link } from "react-router-dom";
+import type { NameplateUser, userProfile } from "./UserProfile";
 import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 
-function UserNameplate( {username} : {username: string} ) {
-    const navigate = useNavigate();
+interface nameplateProps {
+    username: string,
+    intialData?: NameplateUser,
+    actionSlot?: React.ReactNode;
+}
+
+function UserNameplate( {username, intialData, actionSlot} : nameplateProps ) {
     const [userData, setUserData] = useState<userProfile>();
 
     useEffect(() => {
         const fetchDetail = async () => {
+            if (intialData) {
+                setUserData(intialData);
+                return;
+            }
             const res = await fetch(`${USERS_URL}/profiles/${username}`);
             if (res.ok) {
                 const data = await res.json();
@@ -17,21 +26,26 @@ function UserNameplate( {username} : {username: string} ) {
             }
         }
         fetchDetail();
-    }, [username])
+    }, [username, intialData])
 
     return (
-        <div className="flex gap-4 min-w-50 p-4 outline-2 outline-mabi-gold bg-mabi-surface-muted hover:bg-mabi-surface text-mabi-text">
-            <div className="outline-1 outline-mabi-border-heavy items-center justify-center h-fit w-fit">
-                {userData?.avatar_id ? <img className="w-20" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
+        <Link to={`/profile/${username}`}>
+        <div className="group flex gap-4 w-full p-4 rounded-lg outline-2 outline-mabi-gold bg-mabi-surface-muted hover:bg-mabi-surface text-mabi-text cursor-pointer">
+            <div className="outline-1 outline-mabi-border-heavy items-center justify-center h-20 w-20 shrink-0">
+                {userData?.avatar_id ? <img className="w-full h-full object-cover" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> : <UserIcon size={80} />}
             </div>
-            <div className="flex flex-col gap-1">
-                <div className="flex gap-5 items-center">
-                    <h1 className="cursor-pointer font-bold text-xl hover:text-mabi-gold" onClick={() => navigate(`/profile/${username}`)}>{username}</h1>
-                    <p className="text-md py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+            <div className="flex flex-col justify-center min-w-0 flex-1 gap-1">
+                <h1 className="font-bold text-lg leading-tight truncate">{username}</h1>
+                <p className="text-sm py-0.5 px-1.5 outline outline-mabi-border-heavy text-mabi-text-muted truncate w-fit max-w-full">Member</p>
+                <p className="text-xs text-mabi-text-muted truncate">{[userData?.server, userData?.in_game_name].filter(Boolean).join(" | ")}</p>
+            </div>
+            {actionSlot && (
+                <div className="shrink-0 ml-auto" onClick={(e) => e.stopPropagation()}>
+                    {actionSlot}
                 </div>
-                <p className="text-sm text-mabi-text-muted">{userData?.server ? userData.server : ''}</p>
-            </div>
+            )}
         </div>
+        </Link>
     )
 }
 
