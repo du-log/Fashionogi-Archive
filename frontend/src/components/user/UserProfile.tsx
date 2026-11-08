@@ -247,49 +247,45 @@ function UserProfile() {
             )}
             {followersOpen && (
                 <dialog className="modal modal-open">
-                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-mabi-surface-muted">
-                        <div className="flex flex-col gap-5 p-5 w-full">
+                    <div className="modal-box w-11/12 max-h-1/2 max-w-5xl bg-mabi-surface-muted">
+                        <div className="flex flex-col justify-center gap-5 p-5 w-full h-full">
                             {followersData.length > 0 && (
                                 <>
-                                    <h1 className="text-4xl text-center">{username}'s Followers</h1>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 place-items-center max-h-1/2 overflow-y-auto">
+                                    <h1 className="text-4xl text-center">Users following {username}</h1>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 py-5 gap-5 place-items-center overflow-y-auto">
                                         {followersData.map((user) => (
-                                            <UserNameplate key={user.username} intialData={user} username={user.username} />
+                                            <UserNameplate key={user.username} intialData={user} username={user.username} setOpen={setFollowersOpen} />
                                         ))}
                                     </div>
                                 </>
                             )}
                             {followersData.length === 0 && (
-                                <p className="text-center">{username} does not have any followers.</p>
+                                <h1 className="text-center text-lg">{username} does not have any followers.</h1>
                             )}
+                            <button className="btn btn-warning w-fit place-self-center" onClick={() => {setFollowersOpen(false); setFollowersData([])}}>Close</button>
                         </div>
-                    </div>
-                    <div className="modal-action">
-                        <button className="btn btn-warning" onClick={() => {setFollowersOpen(false); setFollowersData([])}}>Close</button>
                     </div>
                 </dialog>
             )}
             {followingOpen && (
                 <dialog className="modal modal-open">
-                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-mabi-surface-muted">
-                        <div className="flex flex-col gap-5 p-5 w-full">
+                    <div className="modal-box w-11/12 max-h-1/2 max-w-5xl bg-mabi-surface-muted">
+                        <div className="flex flex-col justify-center gap-5 p-5 w-full">
                             {followingData.length > 0 && (
                                 <>
-                                    <h1 className="text-4xl text-center">{username}'s Following</h1>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 place-items-center max-h-1/2 overflow-y-auto">
+                                    <h1 className="text-4xl text-center"> Users followed by {username}</h1>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 py-5 gap-5 place-items-center overflow-y-auto">
                                         {followingData.map((user) => (
-                                            <UserNameplate key={user.username} intialData={user} username={user.username} />
+                                            <UserNameplate key={user.username} intialData={user} username={user.username} setOpen={setFollowingOpen}/>
                                         ))}
                                     </div>
                                 </>
                             )}
                             {followingData.length === 0 && (
-                                <p className="text-center">{username} is not following anyone.</p>
+                                <p className="text-center text-lg">{username} is not following anyone.</p>
                             )}
+                            <button className="btn btn-warning w-fit place-self-center" onClick={() => {setFollowingOpen(false); setFollowingData([])}}>Close</button>
                         </div>
-                    </div>
-                    <div className="modal-action">
-                        <button className="btn btn-warning" onClick={() => {setFollowingOpen(false); setFollowingData([])}}>Close</button>
                     </div>
                 </dialog>
             )}
