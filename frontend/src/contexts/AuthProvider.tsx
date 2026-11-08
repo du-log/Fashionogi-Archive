@@ -1,3 +1,5 @@
+/* Provider file for Authentication Context */
+
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import axios from 'axios';
@@ -10,7 +12,7 @@ const api = axios.create({
         withCredentials: true
     });
 
-export default function AuthProvider({children}: {children: ReactNode}) {
+export default function AuthProvider( {children} : {children: ReactNode} ) {
     const [isAuth, setAuth] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setLoading] = useState<boolean>(true);

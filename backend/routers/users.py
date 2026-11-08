@@ -128,6 +128,29 @@ def get_profile_data(username: str, db: Session = Depends(get_db), current_user:
         'is_following': is_following
     }
 
+@router.get('/profiles/{username}/connections')
+def get_user_connections(username: str, db: Session = Depends(get_db)):
+    target_user = db.execute(
+        select(models.User).where(models.User.username == username)
+    ).scalars().first()
+    if not target_user:
+        raise HTTPException(status_code=404, detail='User not found')
+
+    def serialize_user(u: models.User):
+        # If server/IGN/avatar live on a 1-to-1 u.profile relation, read from u.profile instead
+        profile = getattr(u, 'profile', u)
+        return {
+            'username': u.username,
+            'avatar_id': getattr(profile, 'avatar_id', None),
+            'server': getattr(profile, 'server', None),
+            'in_game_name': getattr(profile, 'in_game_name', None),
+        }
+
+    return {
+        'followers': [serialize_user(u) for u in target_user.followers],
+        'following': [serialize_user(u) for u in target_user.following],
+    }
+
 @router.get('/profiles/{username}/styles')
 def get_user_styles(username: str, db: Session = Depends(get_db)):
     user = db.execute(select(models.User).where(models.User.username == username)).scalars().first()

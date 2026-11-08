@@ -8,6 +8,7 @@ import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import UserNameplate from "./UserNameplate";
 
 export type userProfile = {
     id?: number,
@@ -31,6 +32,13 @@ export type followData = {
     is_following: boolean
 }
 
+export type NameplateUser = {
+    username: string;
+    avatar_id?: string | undefined;
+    server?: string | undefined;
+    in_game_name?: string | undefined;
+}
+
 function UserProfile() {
     const { username } = useParams();
     const auth = useContext(AuthContext);
@@ -47,6 +55,11 @@ function UserProfile() {
     const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
 
     const [followData, setFollowData] = useState<followData>();
+    const [followersData, setFollowersData] = useState<NameplateUser[]>([]);
+    const [followingData, setFollowingData] = useState<NameplateUser[]>([]);
+
+    const [followersOpen, setFollowersOpen] = useState<boolean>(false);
+    const [followingOpen, setFollowingOpen] = useState<boolean>(false);
 
     const formattedDate: string = userData ? new Date(userData.joined ?? new Date().toString()).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -75,6 +88,24 @@ function UserProfile() {
             }
         } catch (err) {
             console.error('Follow toggle failed', err);
+        }
+    }
+
+    const fetchFollowing = async () => {
+        const res = await fetch(`${USERS_URL}/profiles/${username}/connections`);
+        if (res.ok) {
+            const data = await res.json()
+            setFollowingData(data.following);
+            setFollowingOpen(true);
+        }
+    }
+
+    const fetchFollowers = async () => {
+        const res = await fetch(`${USERS_URL}/profiles/${username}/connections`);
+        if (res.ok) {
+            const data = await res.json()
+            setFollowersData(data.followers);
+            setFollowersOpen(true);
         }
     }
 
@@ -142,11 +173,11 @@ function UserProfile() {
                                 <p>Style Favorites:</p>
                                 <p>{favoritesTotal}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
+                            <div className={`flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted ${followData && followData?.followers_count >= 0 ? 'cursor-pointer hover:bg-mabi-surface' : ''}`} onClick={() => {if (followData && followData?.followers_count >= 0) fetchFollowers()}}>
                                 <p>Followers:</p>
                                 <p>{followData?.followers_count}</p>
                             </div>
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
+                            <div className={`flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted ${followData && followData?.following_count >= 0 ? 'cursor-pointer hover:bg-mabi-surface' : ''}`} onClick={() => {if (followData && followData.following_count >= 0) fetchFollowing()}}>
                                 <p>Following:</p>
                                 <p>{followData?.following_count}</p>
                             </div>
@@ -213,6 +244,54 @@ function UserProfile() {
                     <h1 className="text-xl">User not found or profile is unavailable.</h1>
                     <Link to='/'><p className="outline p-2 rounded-xl">Return to Home</p></Link>
                 </div>
+            )}
+            {followersOpen && (
+                <dialog className="modal modal-open">
+                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-mabi-surface-muted">
+                        <div className="flex flex-col gap-5 p-5 w-full">
+                            {followersData.length > 0 && (
+                                <>
+                                    <h1 className="text-4xl text-center">{username}'s Followers</h1>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 place-items-center max-h-1/2 overflow-y-auto">
+                                        {followersData.map((user) => (
+                                            <UserNameplate key={user.username} intialData={user} username={user.username} />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                            {followersData.length === 0 && (
+                                <p className="text-center">{username} does not have any followers.</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="modal-action">
+                        <button className="btn btn-warning" onClick={() => {setFollowersOpen(false); setFollowersData([])}}>Close</button>
+                    </div>
+                </dialog>
+            )}
+            {followingOpen && (
+                <dialog className="modal modal-open">
+                    <div className="modal-box w-11/12 h-11/12 max-w-5xl bg-mabi-surface-muted">
+                        <div className="flex flex-col gap-5 p-5 w-full">
+                            {followingData.length > 0 && (
+                                <>
+                                    <h1 className="text-4xl text-center">{username}'s Following</h1>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 place-items-center max-h-1/2 overflow-y-auto">
+                                        {followingData.map((user) => (
+                                            <UserNameplate key={user.username} intialData={user} username={user.username} />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                            {followingData.length === 0 && (
+                                <p className="text-center">{username} is not following anyone.</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="modal-action">
+                        <button className="btn btn-warning" onClick={() => {setFollowingOpen(false); setFollowingData([])}}>Close</button>
+                    </div>
+                </dialog>
             )}
         </div>
     )

@@ -1,3 +1,5 @@
+/* Crop utility file for cropping avatars and submission images */
+
 type cropDimen = {
     x: number,
     y: number,

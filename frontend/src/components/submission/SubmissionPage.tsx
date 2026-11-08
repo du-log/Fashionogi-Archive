@@ -247,9 +247,9 @@ function SubmissionPage() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 p-4 outline outline-mabi-border-heavy bg-mabi-surface-muted">
+                            <div className="flex flex-col gap-2 p-4 outline outline-mabi-border-heavy bg-mabi-surface-muted w-75">
                                 <h1 className="text-xl text-start">Outfit Creator</h1>
-                            <UserNameplate username={submission.author} />
+                                <UserNameplate username={submission.author} />
                             </div>
                         </div>
                     </div>
