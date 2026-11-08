@@ -73,7 +73,7 @@ def update_avatar(file: UploadFile = File(...), current_user: models.User = Depe
     if file.content_type != 'image/webp':
         raise HTTPException(status_code = 400, detail = 'Invalid image format.')
     
-    old_avatar = user.avatar_id
+    old_avatar = current_user.avatar_id
     if old_avatar:
         try:
             s3_client.delete_object(
@@ -93,7 +93,7 @@ def update_avatar(file: UploadFile = File(...), current_user: models.User = Depe
         ExtraArgs = {'ContentType': 'image/webp'}
     )
 
-    user.avatar_id = new_uuid
+    current_user.avatar_id = new_uuid
     db.commit()
 
     return {
