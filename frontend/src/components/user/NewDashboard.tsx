@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { UserIcon } from "lucide-react";
 import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
-import type { userProfile, followData } from "./UserProfile";
+import type { userProfile, followData, NameplateUser } from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
 import DashboardDropdown from "./DashboardDropdown";
+import UserNameplate from "./UserNameplate";
 
 export default function NewDashboard() {
     const auth = useContext(AuthContext);
@@ -23,6 +24,9 @@ export default function NewDashboard() {
     const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
     const [favoriteStyles, setFavoriteStyles] = useState<GalleryItem[]>([]);
 
+    const [followersData, setFollowersData] = useState<NameplateUser[]>([]);
+    const [followingData, setFollowingData] = useState<NameplateUser[]>([]);
+
     const fetchFavorites = async () => {
         const res = await fetch(`${USERS_URL}/dashboard/favorites`, {
             credentials: 'include'
@@ -32,6 +36,16 @@ export default function NewDashboard() {
             setFavoriteStyles(data);
         }
     }
+
+    /*
+    const fetchFollowing = async () => {
+        const res = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
+        if (res.ok) {
+            const data = await res.json()
+            setFollowingData(data.following);
+        }
+    }
+    */
 
     useEffect(() => {
         if (!user && !userLoading) navigate('/login');
@@ -51,21 +65,27 @@ export default function NewDashboard() {
                 setFollowData(addiData);
             }
             const styleRes = await fetch(`${USERS_URL}/dashboard/queue`, {
-                    credentials: 'include'
-                })
-                if (styleRes.ok) {
-                    const styleData = await styleRes.json();
-                    setStyles(styleData.styles);
-                    setFavoritesTotal(Number(styleData.total_favorites) || 0);
-                }
+                credentials: 'include'
+            })
+            if (styleRes.ok) {
+                const styleData = await styleRes.json();
+                setStyles(styleData.styles);
+                setFavoritesTotal(Number(styleData.total_favorites) || 0);
+            }
             const favoritesRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
-                    credentials: 'include'
-                })
-                if (favoritesRes.ok) {
-                    const favoritesData = await favoritesRes.json();
-                    setFavoriteStyles(favoritesData);
-                }
-            if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok) setTimeout(() => setLoading(false), 100);
+                credentials: 'include'
+            })
+            if (favoritesRes.ok) {
+                const favoritesData = await favoritesRes.json();
+                setFavoriteStyles(favoritesData);
+            }
+            const fetchFollowRes = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
+            if (fetchFollowRes.ok) {
+                const fetchedFollowData = await fetchFollowRes.json();
+                setFollowersData(fetchedFollowData.followers);
+                setFollowingData(fetchedFollowData.following);
+            }
+            if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok && fetchFollowRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (user) fetchData();
     }, [user, userLoading, navigate]);
@@ -190,18 +210,36 @@ export default function NewDashboard() {
                     )}
                     {activeTab === 'followers' && (
                         <>
-                            <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
-                                <p className="text-lg">Your list of followers is missing!</p>
-                                <p>Patience, please. I'll get to it soon.</p>
-                            </div>
+                            {followersData.length > 0 && (
+                                <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
+                                    {followersData.map((user) => (
+                                        <UserNameplate key={user.username} username={user.username} intialData={user} />
+                                    ))}
+                                </div>
+                            )}
+                            {followersData.length === 0 && (
+                                <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
+                                    <p className="text-lg">You don't have any followers yet...</p>
+                                </div>
+                            )}
                         </>
                     )}
                     {activeTab === 'following' && (
                         <>
-                            <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
-                                <p className="text-lg">The list of users you're following is gone!</p>
-                                <p>Not really, but it'll appear soon.</p>
-                            </div>
+                            {followingData.length > 0 && (
+                                <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
+                                    {followingData.map((user) => (
+                                        <UserNameplate key={user.username} username={user.username} intialData={user} />
+                                    ))}
+                                </div>
+                            )}
+                            {
+                                followingData.length === 0 && (
+                                    <div className="flex flex-col justify-center items-center min-h-[20vh]">
+                                        <p>You're not following anyone yet!</p>
+                                    </div>
+                                )
+                            }
                         </>
                     )}
                 </div>
