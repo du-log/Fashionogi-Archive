@@ -53,7 +53,7 @@ function SubmissionPage() {
         day: 'numeric'
     }) : "";
 
-    const fetchSubmission = async () => {
+    const refetchSubmission = async () => {
         try {
             const res = await fetch(`${SUBS_URL}/id/${id}`, {
                 credentials: 'include'
@@ -79,7 +79,7 @@ function SubmissionPage() {
             if (res.ok) {
                 const data = await res.json();
                 console.log(data);
-                fetchSubmission();
+                refetchSubmission();
             }
         } catch (err) {
             console.error('Failed to toggle', err);
@@ -145,15 +145,15 @@ function SubmissionPage() {
                             <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-mabi-green w-fit h-fit">{tag}</p></Link>
                         ))}
                     </div>
-                    <div className="flex w-full gap-3 py-5 justify-center border-b border-[#ffffff90] bg-mabi-surface-muted">
+                    <div className="flex w-full gap-3 py-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted">
                         {submission.images.map((image) => (
-                            <img key={image} src={`${image}`} alt={submission.title} className="aspect-[9/16] w-[15%] outline outline-[#ffffff90] rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
+                            <img key={image} src={`${image}`} alt={submission.title} className="w-[15%] outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
                         ))}
                     </div>
                     {inflateImg && (
                         <dialog className="modal modal-open">
-                            <div className="modal-box">
-                                <img src={`${inflateImg}`} className="aspect-[9/16] place-self-center" />
+                            <div className="modal-box outline-1 outline-mabi-border-heavy flex justify-center">
+                                <img src={`${inflateImg}`} className="max-h-[80vh] w-auto outline-3 outline-mabi-border" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>

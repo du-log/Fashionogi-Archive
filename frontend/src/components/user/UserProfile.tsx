@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserIcon } from "lucide-react";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
@@ -43,8 +43,6 @@ function UserProfile() {
     const { username } = useParams();
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
-
-    const navigate = useNavigate();
 
     const [userData, setUserData] = useState<userProfile | null | undefined>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
@@ -165,10 +163,12 @@ function UserProfile() {
                             </div>
                         </div>
                         <div className="grid grid-cols-5 gap-5">
-                            <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
-                                <p>Styles Created:</p>
-                                <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
-                            </div>
+                            <Link to={`/gallery?username=${username}`}>
+                                <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted hover:bg-mabi-surface">
+                                    <p>Styles Created:</p>
+                                    <p>{total} {total === 1 ? 'Style' : 'Styles'}</p>
+                                </div>
+                            </Link>
                             <div className="flex flex-col gap-1 p-2 outline outline-mabi-border-heavy bg-mabi-surface-muted">
                                 <p>Style Favorites:</p>
                                 <p>{favoritesTotal}</p>
@@ -234,7 +234,7 @@ function UserProfile() {
                             ))}
                         </div>
                         {latestStyles.length === 10 && (
-                            <p className="py-1 px-2 outline outline-[#ffffff90] rounded w-fit cursor-pointer" onClick={() => navigate(`/gallery?username=${username}`)}>See more by {username}</p>
+                            <Link to={`/gallery?username=${username}`}><p className="py-1 px-2 outline outline-mabi-border rounded w-fit">See more by {username}</p></Link>
                         )}
                     </div>
                 </div>
