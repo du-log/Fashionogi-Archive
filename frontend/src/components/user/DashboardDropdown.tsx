@@ -44,7 +44,10 @@ export default function DashboardDropdown( {styleId, styleStatus, activeTab, act
             method: 'PATCH',
             credentials: 'include'
         })
-        if (res.ok) fetchQueue();
+        if (res.ok) {
+            fetchQueue();
+            setUnliConfOpen(false);
+        }
     }
     
     const relistSubmission = async (id: number) => {
@@ -52,7 +55,10 @@ export default function DashboardDropdown( {styleId, styleStatus, activeTab, act
             method: 'PATCH',
             credentials: 'include'
         })
-        if (res.ok) fetchQueue();
+        if (res.ok) {
+            fetchQueue();
+            setReliConfOpen(false);
+        }
     }
 
     useEffect(() => {
