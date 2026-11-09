@@ -141,6 +141,7 @@ def get_user_connections(username: str, db: Session = Depends(get_db)):
         profile = getattr(u, 'profile', u)
         return {
             'username': u.username,
+            'id': getattr(profile, 'id', u.id),
             'avatar_id': getattr(profile, 'avatar_id', None),
             'server': getattr(profile, 'server', None),
             'in_game_name': getattr(profile, 'in_game_name', None),

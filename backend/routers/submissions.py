@@ -364,9 +364,10 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
             'partF': eq.part_f,
         })
 
-    if not current_user or current_user.id != sub.user_id and sub.status == 'approved':
-        sub.views = sub.views + 1
-        db.commit()
+    if not current_user or current_user.id != sub.user_id:
+        if sub.status == 'approved':
+            sub.views = sub.views + 1
+            db.commit()
 
     return {
         'id': sub.id,
