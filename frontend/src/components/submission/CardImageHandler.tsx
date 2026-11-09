@@ -146,11 +146,11 @@ export default function CardImageHandler( {images, setImages, onPreview} : CardI
                             <span className="absolute top-1 left-1 text-xs bg-mabi-surface-muted px-1.5 py-0.5 rounded">
                                 {index === 0 ? "1st" : "2nd"}
                             </span>
-                            <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-600 text-white rounded p-0.5 cursor-pointer z-10"
+                            <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-[#CC0000] hover:bg-[#FF0000] text-[#FFF] rounded p-0.5 cursor-pointer z-10"
                                 title="Remove image">
                                 <X size={14} />
                             </button>
-                            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1.5 justify-center items-center p-2">
+                            <div className="absolute inset-0 bg-mabi-surface-muted/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1.5 justify-center items-center p-2">
                                 <button type="button" onClick={() => openCropper(index)} className="btn btn-xs w-full flex items-center gap-1">
                                     Crop
                                 </button>
@@ -164,7 +164,7 @@ export default function CardImageHandler( {images, setImages, onPreview} : CardI
             )}
 
             {images.length === 2 && (
-                        <button type="button" onClick={swapImages} className="btn btn-sm w-fit place-self-center flex items-center gap-1.5 bg-mabi-surface-muted border border-mabi-border"
+                        <button type="button" onClick={swapImages} className="btn btn-sm w-fit place-self-center flex items-center gap-1.5 bg-mabi-surface-muted hover:bg-mabi-surface border border-mabi-border"
                         title="Swap 1st and 2nd card images">
                             <ArrowLeftRight size={16} /> Swap Order
                         </button>
@@ -191,11 +191,11 @@ export default function CardImageHandler( {images, setImages, onPreview} : CardI
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-mabi-text-muted">Zoom: {zoom.toFixed(2)}x</span>
-                            <input className="w-full" type="range" value={zoom} min={1} max={3} step={0.05} onChange={(e) => setZoom(Number(e.target.value))} />
+                            <input className="w-full cursor-pointer" type="range" value={zoom} min={1} max={3} step={0.05} onChange={(e) => setZoom(Number(e.target.value))} />
                         </div>
                         <div className="flex justify-end gap-2">
-                            <button type="button" onClick={() => setEditingIndex(null)} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-bold text-sm">Cancel</button>
-                            <button type="button" onClick={handleConfirmCrop} className="px-4 py-2 bg-[#DAA700] hover:bg-yellow-500 text-black rounded font-bold text-sm">Confirm Crop</button>
+                            <button type="button" onClick={() => setEditingIndex(null)} className="px-4 py-2 bg-[#600000] hover:bg-[#800000] text-[#FFF] rounded font-bold text-sm cursor-pointer">Cancel</button>
+                            <button type="button" onClick={handleConfirmCrop} className="px-4 py-2 bg-mabi-orange hover:bg-mabi-gold text-[#000] rounded font-bold text-sm cursor-pointer">Confirm Crop</button>
                         </div>
                     </div>
                 </dialog>

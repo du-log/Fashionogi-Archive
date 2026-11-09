@@ -105,12 +105,12 @@ export default function GalleryImageHandler( {images, setImages, disabled = fals
             {images.length < 3 && (
                 <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-5 flex flex-col items-center justify-center text-center transition-colors
                 ${disabled ? "opacity-50 cursor-not-allowed border-mabi-border" : 
-                isDragActive ? "border-[#DAA700] bg-[#DAA700]/10 cursor-pointer" : "border-mabi-border hover:border-mabi-border-heavy hover:bg-white/5 cursor-pointer"}`}>
+                isDragActive ? "border-mabi-gold bg-mabi-surface-muted cursor-pointer" : "border-mabi-border hover:border-mabi-border-heavy hover:bg-white/5 cursor-pointer"}`}>
                     <input {...getInputProps()} />
                     <UploadCloud size={28} className="mb-1" />
                     <p className="text-sm">
                         {disabled ? "Select 2 Card Cover Images above to unlock additional gallery slots" : 
-                        isDragActive ? "Drop gallery image(s) here..." : "Drag & drop or click to select Gallery Images (Any Aspect Ratio)"}
+                        isDragActive ? "Drop gallery image(s) here..." : "Drag & drop or click to select Gallery Images"}
                     </p>
                 </div>
             )}
@@ -118,16 +118,16 @@ export default function GalleryImageHandler( {images, setImages, disabled = fals
             {images.length > 0 && (
                 <div className="flex gap-3 flex-wrap py-2 place-self-center">
                     {images.map((img, index) => (
-                        <div key={img.id} className="relative group w-32 h-24 bg-black/40 rounded-lg overflow-hidden outline outline-mabi-border-heavy">
+                        <div key={img.id} className="relative group w-32 h-24 bg-mabi-surface-muted/50 rounded-lg overflow-hidden outline outline-mabi-border-heavy">
                             <img src={img.previewUrl} alt={`Gallery ${index + 1}`} className="w-full h-full object-contain" />
                             <span className="absolute top-1 left-1 text-xs bg-mabi-surface-muted px-1.5 py-0.5 rounded">
                                 #{index + 3}
                             </span>
-                            <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-600 text-white rounded p-0.5 cursor-pointer z-10"
+                            <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-[#CC0000] hover:bg-[#FF0000] text-white rounded p-0.5 cursor-pointer z-10"
                             title="Remove image">
                                 <X size={14} />
                             </button>
-                            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1.5 justify-center items-center p-2">
+                            <div className="absolute inset-0 bg-mabi-surface-muted/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1.5 justify-center items-center p-2">
                                 {images.length > 1 && (
                                     <div className="flex gap-1 w-full justify-center">
                                         <button type="button" disabled={index === 0} onClick={() => moveImage(index, -1)} className="btn btn-xs flex-1" title="Move earlier">
