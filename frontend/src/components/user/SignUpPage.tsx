@@ -48,6 +48,8 @@ function SignUpPage() {
     const [isNameChecking, setNameChecking] = useState<boolean>(false);
     const [isRegistered, setRegistered] = useState<boolean>(false);
 
+    const [registering, setRegistering] = useState<boolean>(false);
+
     const navigate = useNavigate();
 
     const strength = getPasswordStrength(password);
@@ -111,6 +113,7 @@ function SignUpPage() {
         if (!username || !email || !password || verify !== password) return;
 
         try {
+            setRegistering(true);
             const trim = email.trim();
             const res = await register(username, trim, password);
             const success = typeof res === 'boolean' ? res : res.success;
@@ -129,6 +132,8 @@ function SignUpPage() {
             }
         } catch (err) {
             console.error('Could not register', err);
+        } finally {
+            setRegistering(false);
         }
     }
 
@@ -281,14 +286,14 @@ function SignUpPage() {
                             <span className="text-[#ff0000]">{pwErr}</span>
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I have read the <a href="/privacy" target="_blank" className="hover:text-mabi-green">Privacy Policy</a>.</label>
+                            <label>I have read the <a href="/privacy" target="_blank" className="hover:text-mabi-orange">Privacy Policy</a>.</label>
                             <input type="checkbox" checked={privacyAgree} onChange={(e) => setPrivacyAgree(e.target.checked)} />
                         </div>
                         <div className="flex items-center gap-5">
-                            <label>I agree to the <a href="/terms" target="_blank" className="hover:text-mabi-green">Terms and Conditions</a>.</label>
+                            <label>I agree to the <a href="/terms" target="_blank" className="hover:text-mabi-orange">Terms and Conditions</a>.</label>
                             <input type="checkbox" checked={termsAgree} onChange={(e) => setTermsAgree(e.target.checked)} />
                         </div>
-                        <button type="submit" className={`btn btn-xl btn-success ${(!privacyAgree || !termsAgree) ? 'btn-disabled' : ''}`}>Register</button>
+                        <button type="submit" className={`btn btn-xl btn-success ${(!privacyAgree || !termsAgree) ? 'btn-disabled' : ''}`} disabled={registering}>{registering ? 'Registering...' : 'Register'}</button>
                         <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-mabi-text-muted hover:text-mabi-gold" onClick={() => navigate('/login')}>Return to Login</p>
                         <p className="place-self-center text-sm rounded px-2 py-1 outline w-fit cursor-pointer text-mabi-text-muted hover:text-mabi-gold" onClick={() => navigate('/')}>Return to Home</p>
                     </form>
@@ -299,7 +304,7 @@ function SignUpPage() {
                     <h1 className="text-3xl">Registration Successful</h1>
                     {/*<p>Please check your email to verify your account.</p>*/}
                     <p>Thanks for joining the community!</p>
-                    <p>Click <Link className="hover:text-mabi-gold" to='/login'>here</Link> to return to login.</p>
+                    <p>Click <Link className="hover:text-mabi-gold text-mabi-orange" to='/login'>here</Link> to return to login.</p>
                 </div>
             )}
         </div>

@@ -47,6 +47,17 @@ export default function NewDashboard() {
     }
     */
 
+    const fetchQueue = async () => {
+        const res = await fetch(`${USERS_URL}/dashboard/queue`, {
+            credentials: 'include'
+        })
+        if (res.ok) {
+            const data = await res.json();
+            setStyles(data.styles);
+            setFavoritesTotal(Number(data.total_favorites) || 0);
+        }
+    }
+
     useEffect(() => {
         if (!user && !userLoading) navigate('/login');
         document.documentElement.scrollTop = 0;
@@ -158,7 +169,7 @@ export default function NewDashboard() {
                                         <div key={style.id} className="relative">
                                             <GalleryCard item={style} />
                                             <div className="absolute top-1 right-1 z-100">
-                                                <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} />
+                                                <DashboardDropdown styleId={style.id} styleStatus={style.status} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} fetchQueue={fetchQueue} />
                                             </div>
                                             <div className="absolute top-1 left-1 z-100">
                                                 {style.status === 'pending' && (<p className="text-sm px-2 py-1 rounded-lg bg-[#55aa00] text-[#ffffff]">Pending</p>)}
@@ -186,7 +197,7 @@ export default function NewDashboard() {
                                         <div key={style.id} className="relative">
                                             <GalleryCard item={style} />
                                             <div className="absolute top-1 right-1 z-100">
-                                                <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} />
+                                                <DashboardDropdown styleId={style.id} activeTab={activeTab} activeUser={user} fetchFavorites={fetchFavorites} fetchQueue={fetchQueue} />
                                             </div>
                                         </div>
                                     ))}

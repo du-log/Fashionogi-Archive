@@ -27,6 +27,7 @@ export default function SubmissionEdit() {
     const [isLoading, setLoading] = useState<boolean>(true);
     const [rulesAgree, setRulesAgree] = useState<boolean>(false);
     const [inReview, setInReview] = useState<boolean>(false);
+    const [isUpdating, setUpdating] = useState<boolean>(false);
 
     const [r, setR] = useState<number>(0);
     const [g, setG] = useState<number>(0);
@@ -126,6 +127,7 @@ export default function SubmissionEdit() {
     const handleUpdate = async () => {
         if (!title || !description || !equipment || !tags) return alert('One or more fields are missing or empty.');
         try {
+            setUpdating(true);
             const formData = new FormData();
         
             formData.append('title', title);
@@ -154,6 +156,8 @@ export default function SubmissionEdit() {
         } catch (err) {
             console.error('Update Failed', err);
             alert('Update failed. Server may be down.');
+        } finally {
+            setUpdating(false);
         }
     }
 
@@ -387,7 +391,7 @@ export default function SubmissionEdit() {
                         </div>
                         <p className="font-bold">Note: Updating the style will set its status back to Pending.</p>
                         <div className="modal-action justify-center">
-                            <button className={`btn btn-success ${!rulesAgree ? 'btn-disabled' : ''}`} onClick={handleUpdate}>Update Style</button>
+                            <button className={`btn btn-success ${!rulesAgree ? 'btn-disabled' : ''}`} onClick={handleUpdate} disabled={isUpdating}>{isUpdating ? 'Updating...' : 'Update Style'}</button>
                             <button className="btn btn-warning" onClick={() => setInReview(false)}>Edit Style</button>
                         </div>
                     </div>

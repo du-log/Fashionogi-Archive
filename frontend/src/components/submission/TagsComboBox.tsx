@@ -63,7 +63,7 @@ function TagsComboBox ( {tags, onSelect} :  ComboBoxProps) {
             className="w-full p-1 outline bg-mabi-surface-muted" />
             
             {isOpen && results.length > 0 && (
-                <ul className="absolute z-10 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
+                <ul className="absolute z-50 w-full outline mt-1 max-h-60 overflow-y-auto" ref={menuRef}>
                     {results.map((item: Tag) => (
                         <li key={item.id} 
                         onClick={() => {
