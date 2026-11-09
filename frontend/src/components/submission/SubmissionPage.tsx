@@ -128,8 +128,8 @@ function SubmissionPage() {
                             {submission.status === 'pending' && (
                                 <h4 className="p-2 bg-[#55aa00] text-[#ffffff]">Pending</h4>
                             )}
-                            {submission.status === 'flagged_for_deletion' && (
-                                <h4 className="p-2 bg-[#770000] text-[#ffffff]">Flagged for Deletion</h4>
+                            {submission.status === 'unlisted' && (
+                                <h4 className="p-2 bg-[#770000] text-[#ffffff]">Unlisted</h4>
                             )}
                             {submission.status === 'rejected' && (
                                 <h4 className="p-2 bg-[#111111] text-[#ffffff]">Rejected</h4>
