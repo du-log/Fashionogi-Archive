@@ -336,7 +336,7 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
     if not sub:
         raise HTTPException(status_code = 404, detail = 'Submission not found.')
 
-    if sub.status != 'approved':
+    if sub.status == 'pending':
         if not current_user:
             raise HTTPException(status_code = 404, detail = 'Submission not found.')
         
