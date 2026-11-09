@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { UserIcon } from "lucide-react";
+import { UserIcon, UserMinus } from "lucide-react";
 import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import type { userProfile, followData, NameplateUser } from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
@@ -40,8 +40,15 @@ export default function NewDashboard() {
     const fetchFollowing = async () => {
         const res = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
         if (res.ok) {
-            const data = await res.json()
+            const data = await res.json();
             setFollowingData(data.following);
+        }
+        const dataRes = await fetch(`${USERS_URL}/profiles/${user?.username}/data`, {
+            credentials: 'include'
+        });
+        if (dataRes.ok) {
+            const addiData = await dataRes.json();
+            setFollowData(addiData);
         }
     }
 
@@ -254,7 +261,7 @@ export default function NewDashboard() {
                                     {followingData.map((user) => (
                                         <div className="group relative">
                                             <UserNameplate key={user.username} username={user.username} intialData={user} />
-                                            <button className="absolute bottom-1 right-1 btn btn-sm btn-disabled z-100 opacity-100 group-hover:opacity-0 group-hover:btn-error" onClick={() => toggleFollow(user.id)}>Unfollow</button>
+                                            <button className="absolute top-1 left-1 btn w-fit h-fit p-1 z-100 opacity-0 group-hover:opacity-100 group-hover:btn-error" onClick={() => toggleFollow(user.id)}><UserMinus size={20} /></button>
                                         </div>
                                     ))}
                                 </div>
