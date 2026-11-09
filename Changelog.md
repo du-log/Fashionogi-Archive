@@ -1,5 +1,49 @@
 # Changelog
 
+## 11/9/2026
+Changes to the submission page component and other things.
+
+- Integrated an image "carousel" to replace the old flex box.
+  - This works better for the new gallery images, previously all the images were mapped to 9/16 aspect ratio.
+
+- Added indicators to the submission uploading & updating, and user signup.
+  - Respective buttons for confirmation should now show text for better user feedback on processing.
+
+- Added functionality to dropdown for my styles tab in dashboard.
+  - You can now delete (softly), unlist, and relist submissions.
+
+- Fixed z-index on the tags dropdown so it doesn't get overlapped by the X buttons on the card images.
+
+## 11/8/2026
+Updated image handling for the submission uploading and follow displays.
+
+- Added two new components for managing images in the submissions.
+  - Card images are handled with one component, max images is 2.
+  - Other gallery images are handled with another component, max images is 3, requires all card image slots to be used.
+  - The new components allow users to remove specific images. Previously, they would need to reselect all images again if they wanted to remove any.
+  - This also allows users to share full-sized images if they want to show more scenery or whatnot, something that the previous handling prevented.
+
+- Updated the user nameplate component with a better layout.
+  - This is also utilized for showing the user's followers and who the user is following.
+
+- Added display modals in the user profile for followers and following.
+  - Those will show up when you click the respective containers in the profile header.
+
+- Populated the tabs for followers and following in the user dashboard.
+  - If you don't have any followers or you're not following anyone, respective messages will appear instead.
+
+- Fixed the avatar update logic, forgot to correct the user variable. Avatars work now.
+
+## 11/7/2026
+Small fixes and changes.
+
+- Fixed the refresh when a user's on the dashboard and logs out.
+  - Properly redirects back to login now.
+
+- Changed the column count in dashboard for styles and favorites to always be 5 columns.
+
+- Added the views count when fetching submissions in the gallery.
+
 ## 11/6/2026
 Dashboard update and other minor site tweaks.
 

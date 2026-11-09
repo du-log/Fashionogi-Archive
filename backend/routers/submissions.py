@@ -519,6 +519,72 @@ def update_submission(
     
     return {'success': True, 'message': 'Updated submission'}
 
+@router.patch('/delete/{id}')
+def softdelete_submission(id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.id == id)
+    )
+    sub = db.execute(stmt).scalars().first()
+    if not sub:
+        raise HTTPException(status_code = 404, detail = 'Submission not found')
+    
+    if not current_user or current_user.id != sub.user_id:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+
+    try:
+        sub.status = 'deleted'
+        sub.is_active = False
+
+        db.commit()
+        return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been deleted'}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code = 500, detail = f'Could not delete the submission: {str(e)}')
+
+@router.patch('/unlist/{id}')
+def unlist_submission(id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.id == id)
+    )
+    sub = db.execute(stmt).scalars().first()
+    if not sub:
+        raise HTTPException(status_code = 404, detail = 'Submission not found')
+    
+    if not current_user or current_user.id != sub.user_id:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    try:
+        sub.status = 'unlisted'
+
+        db.commit()
+        return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been unlisted'}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code = 500, detail = f'Could not unlist the submission: {str(e)}')
+
+@router.patch('/relist/{id}')
+def relist_submission(id: int, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    stmt = (
+        select(models.Submission)
+        .where(models.Submission.id == id)
+    )
+    sub = db.execute(stmt).scalars().first()
+    if not sub:
+        raise HTTPException(status_code = 404, detail = 'Submission not found')
+    
+    if not current_user or current_user.id != sub.user_id:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    try:
+        sub.status = 'pending'
+
+        db.commit()
+        return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been relisted'}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code = 500, detail = f'Could not relist the submission: {str(e)}')
 
 @router.post('/id/{submission_id}/favorite')
 def toggle_favorite(submission_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
