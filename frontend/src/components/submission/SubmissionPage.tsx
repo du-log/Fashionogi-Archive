@@ -41,6 +41,7 @@ function SubmissionPage() {
     const [isLoading, setLoading] = useState<boolean>(true);
     const [isVisible, setVisible] = useState<boolean>(false);
     const [inflateImg, setInflateImg] = useState<string | null>(null);
+    const [activeImg, setActiveImg] = useState<string | undefined>(submission?.images[0]);
 
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
@@ -145,15 +146,30 @@ function SubmissionPage() {
                             <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-mabi-green w-fit h-fit">{tag}</p></Link>
                         ))}
                     </div>
-                    <div className="flex w-full gap-3 py-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted">
-                        {submission.images.map((image) => (
-                            <img key={image} src={`${image}`} alt={submission.title} className="w-[15%] outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer" onClick={() => setInflateImg(image)} />
-                        ))}
+                    <div className="flex flex-col w-full gap-3 py-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted">
+                        <div className="flex items-center justify-center w-full h-100 xl:h-120">
+                            <img src={activeImg || submission.images[0]} alt={submission.title}
+                            className="max-w-8/12 max-h-full object-contain outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer"
+                            onClick={() => setInflateImg(activeImg || submission.images[0])} />
+                        </div>
+                        {submission.images.length > 1 &&(
+                            <div className="flex justify-center flex-wrap gap-5">
+                                {submission.images.map((image) => {
+                                    const selected = (activeImg || submission.images[0]) === image;
+                                    return (
+                                        <img key={image} src={`${image}`} alt={submission.title}
+                                        className={`w-16 xl:w-20 h-16 xl:h-20 object-cover outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer
+                                        ${selected ? 'outline-mabi-gold' : 'opacity-50 hover:opacity-100 hover:outline-mabi-orange'}`}
+                                        onClick={() => setActiveImg(image)} />
+                                    )
+                                })}
+                            </div>
+                        )}
                     </div>
                     {inflateImg && (
                         <dialog className="modal modal-open">
-                            <div className="modal-box outline-1 outline-mabi-border-heavy flex justify-center">
-                                <img src={`${inflateImg}`} className="max-h-[80vh] w-auto outline-3 outline-mabi-border" />
+                            <div className="modal-box outline-1 w-fit max-w-[80vw] outline-mabi-border-heavy flex justify-center">
+                                <img src={`${inflateImg}`} className="w-full outline-3 outline-mabi-border" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>

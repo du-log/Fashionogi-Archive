@@ -56,6 +56,7 @@ function SubmissionUpload() {
     const [isLoading, setLoading] = useState<boolean>(true);
     const [inReview, setInReview] = useState<boolean>(false);
     const [rulesAgree, setRulesAgree] = useState<boolean>(false);
+    const [isUploading, setUploading] = useState<boolean>(false);
 
     const [inflateImg, setInflateImg] = useState<string | null>(null);
 
@@ -157,6 +158,7 @@ function SubmissionUpload() {
         if (cardImages.length < 1 || !title || !description || !equipment || !tags) return alert('One or more fields are missing or empty.');
 
         try {
+            setUploading(true);
             const formData = new FormData();
 
             formData.append('title', title);
@@ -194,6 +196,8 @@ function SubmissionUpload() {
         } catch (err) {
             console.error('Upload Failed', err);
             alert('Upload failed. Server may be down.');
+        } finally {
+            setUploading(false);
         }
     }
 
@@ -446,7 +450,7 @@ function SubmissionUpload() {
                             <input type="checkbox" checked={rulesAgree} onChange={(e) => setRulesAgree(e.target.checked)} />
                         </div>
                         <div className="modal-action justify-center">
-                            <button className={`btn btn-success ${!rulesAgree ? 'btn-disabled' : ''}`} onClick={handleUpload}>Submit Style</button>
+                            <button className={`btn btn-success ${!rulesAgree ? 'btn-disabled' : ''}`} onClick={handleUpload} disabled={isUploading}>{isUploading ? 'Uploading...' : 'Submit Style'}</button>
                             <button className="btn btn-warning" onClick={() => setInReview(false)}>Edit Style</button>
                         </div>
                     </div>
