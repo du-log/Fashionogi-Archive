@@ -37,7 +37,6 @@ export default function NewDashboard() {
         }
     }
 
-    /*
     const fetchFollowing = async () => {
         const res = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
         if (res.ok) {
@@ -45,7 +44,20 @@ export default function NewDashboard() {
             setFollowingData(data.following);
         }
     }
-    */
+
+    const toggleFollow = async (id: number) => {
+        try {
+            const res = await fetch(`${USERS_URL}/${id}/follow`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (res.ok) {
+                fetchFollowing();
+            }
+        } catch (err) {
+            console.error('Follow toggle failed', err);
+        }
+    }
 
     const fetchQueue = async () => {
         const res = await fetch(`${USERS_URL}/dashboard/queue`, {
@@ -240,7 +252,10 @@ export default function NewDashboard() {
                             {followingData.length > 0 && (
                                 <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
                                     {followingData.map((user) => (
-                                        <UserNameplate key={user.username} username={user.username} intialData={user} />
+                                        <div className="group relative">
+                                            <UserNameplate key={user.username} username={user.username} intialData={user} />
+                                            <button className="absolute bottom-1 right-1 btn btn-sm btn-disabled z-100 opacity-100 group-hover:opacity-0 group-hover:btn-error" onClick={() => toggleFollow(user.id)}>Unfollow</button>
+                                        </div>
                                     ))}
                                 </div>
                             )}

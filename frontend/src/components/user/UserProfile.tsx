@@ -33,10 +33,11 @@ export type followData = {
 }
 
 export type NameplateUser = {
-    username: string;
-    avatar_id?: string | undefined;
-    server?: string | undefined;
-    in_game_name?: string | undefined;
+    username: string,
+    id: number,
+    avatar_id?: string | undefined
+    server?: string | undefined
+    in_game_name?: string | undefined
 }
 
 function UserProfile() {

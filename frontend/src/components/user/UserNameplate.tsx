@@ -7,11 +7,10 @@ import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 interface nameplateProps {
     username: string,
     intialData?: NameplateUser,
-    actionSlot?: React.ReactNode,
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function UserNameplate( {username, intialData, actionSlot, setOpen} : nameplateProps ) {
+function UserNameplate( {username, intialData, setOpen} : nameplateProps ) {
     const [userData, setUserData] = useState<userProfile>();
 
     useEffect(() => {
@@ -40,11 +39,6 @@ function UserNameplate( {username, intialData, actionSlot, setOpen} : nameplateP
                     <p className="text-sm py-0.5 px-1.5 outline outline-mabi-border-heavy text-mabi-text-muted truncate w-fit max-w-full">Member</p>
                     <p className="text-xs text-mabi-text-muted truncate">{[userData?.server, userData?.in_game_name].filter(Boolean).join(" | ")}</p>
                 </div>
-                {actionSlot && (
-                    <div className="shrink-0 ml-auto z-10" onClick={(e) => e.stopPropagation()}>
-                        {actionSlot}
-                    </div>
-                )}
             </div>
         </Link>
     )
