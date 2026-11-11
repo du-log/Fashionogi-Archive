@@ -157,8 +157,7 @@ function UserProfile() {
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
-                                    <TitleBadge name={userData.active_title?.name} category={userData.active_title?.stat_type} size="md" />
-                                    <p className="text-2xl py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+                                    <TitleBadge name={userData.active_title?.name} category={userData.active_title?.stat_type} />
                                     {user && user.username !== username && (
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
                                     )}

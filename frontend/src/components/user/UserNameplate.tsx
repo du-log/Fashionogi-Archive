@@ -38,7 +38,6 @@ function UserNameplate( {username, intialData, setOpen} : nameplateProps ) {
                 <div className="flex flex-col justify-center min-w-0 flex-1 gap-1">
                     <h1 className="font-bold text-lg leading-tight truncate">{username}</h1>
                     <TitleBadge name={userData?.active_title?.name} category={userData?.active_title?.stat_type} size="sm" />
-                    <p className="text-sm py-0.5 px-1.5 outline outline-mabi-border-heavy text-mabi-text-muted truncate w-fit max-w-full">Member</p>
                     <p className="text-xs text-mabi-text-muted truncate">{[userData?.server, userData?.in_game_name].filter(Boolean).join(" | ")}</p>
                 </div>
             </div>

@@ -143,6 +143,8 @@ def admin_approve_sub(sub_id: int, current_user: models.User = Depends(auth.get_
         raise HTTPException(status_code = 404, detail = 'Submission not found.')
 
     submission.status = 'approved'
+    if not submission.was_approved:
+        submission.was_approved = True
     db.commit()
 
     return {'message': 'Approved submission', 'id': submission.id, 'status': submission.status}
