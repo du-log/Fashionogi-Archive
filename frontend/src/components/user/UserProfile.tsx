@@ -9,6 +9,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import UserNameplate from "./UserNameplate";
+import TitleBadge from "./TitleBadge";
 
 export type userProfile = {
     id?: number,
@@ -23,7 +24,8 @@ export type userProfile = {
     discord_username?: string,
     twitter_link?: string,
     twitch_link?: string,
-    youtube_link?: string
+    youtube_link?: string,
+    active_title?: {name: string, stat_type: string},
 }
 
 export type followData = {
@@ -155,6 +157,7 @@ function UserProfile() {
                             <div className="flex flex-col w-full gap-10">
                                 <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
+                                    <TitleBadge name={userData.active_title?.name} category={userData.active_title?.stat_type} size="md" />
                                     <p className="text-2xl py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
                                     {user && user.username !== username && (
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>

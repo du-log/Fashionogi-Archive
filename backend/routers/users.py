@@ -49,13 +49,21 @@ class UserProfileUpdate(BaseModel):
     twitch_link: Optional[str] = None
     youtube_link: Optional[str] = None
 
+class ActiveTitleSchema(BaseModel):
+    name: str = 'Member'
+    stat_type: str = 'default'
+
 class UserProfileResponse(UserProfileUpdate):
     id: int
     joined: datetime
     avatar_id: Optional[str] = None
+    active_title: ActiveTitleSchema
 
     class Config:
-        from_attributes: True
+        from_attributes = True
+
+class EquipTitlePayload(BaseModel):
+    title_id: Optional[int] = None
 
 @router.get('/me')
 def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -63,7 +71,14 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     current_user.last_active = func.now()
     
-    return { 'id': current_user.id, 'username': current_user.username, 'is_admin': current_user.is_admin, 'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' if current_user.avatar_id else None }
+    return {
+        'id': current_user.id,
+        'username': current_user.username,
+        'is_admin': current_user.is_admin,
+        'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' if current_user.avatar_id else None,
+        'title_name': current_user.equipped_title.name if current_user.equipped_title else 'Member',
+        'title_type': current_user.equipped_title.stat_type if current_user.equipped_title else 'default'
+    }
 
 @router.post('/me/avatar')
 def update_avatar(file: UploadFile = File(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -145,6 +160,7 @@ def get_user_connections(username: str, db: Session = Depends(get_db)):
             'avatar_id': getattr(profile, 'avatar_id', None),
             'server': getattr(profile, 'server', None),
             'in_game_name': getattr(profile, 'in_game_name', None),
+            'active_title': profile.active_title if profile else {'name': 'Member', 'stat_type': 'default'}
         }
 
     return {
@@ -397,3 +413,93 @@ def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: mod
     return {
         'followed': followed
     }
+
+@router.get('/me/titles')
+def get_my_titles(db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    approved_subs = [s for s in current_user.submissions if s.is_active and (s.status == 'approved' or s.was_approved)]
+    stats = {
+        'styles': len(approved_subs),
+        'favorites': sum(len(s.favorited_by) for s in approved_subs),
+        'views': sum(s.views or 0 for s in approved_subs),
+        'followers': len(current_user.followers),
+        'following': len(current_user.following)
+    }
+
+    owned_ids = {
+        row.title_id for row in db.execute(
+            select(models.UserTitle).where(models.UserTitle.user_id == current_user.id)
+        ).scalars().all()
+    }
+    all_titles = db.execute(select(models.Title).order_by(models.Title.id)).scalars().all()
+
+    new_unlocks = False
+    for t in all_titles:
+        if t.stat_type == 'special' or t.id in owned_ids:
+            continue
+        reqs = t.requirements or {}
+        if reqs and all(stats.get(stat_key, 0) >= req_val for stat_key, req_val in reqs.items()):
+            db.add(models.UserTitle(user_id = current_user.id, title_id = t.id))
+            owned_ids.add(t.id)
+            new_unlocks = True
+    
+    if new_unlocks:
+        db.commit()
+
+    catalog = []
+    for t in all_titles:
+        is_unlocked = t.id in owned_ids
+        if t.stat_type in ('special', 'hybrid') and not is_unlocked:
+            continue
+        
+        catalog.append({
+            'id': t.id,
+            'name': t.name,
+            'description': t.description,
+            'stat_type': t.stat_type,
+            'requirements': t.requirements or {},
+            'is_unlocked': is_unlocked
+        })
+    
+    return {
+        'equipped_title_id': current_user.equipped_title_id,
+        'equipped_title': ({
+            'id': current_user.equipped_title.id,
+            'name': current_user.equipped_title.name,
+            'stat_type': current_user.equipped_title.stat_type
+        }
+        if current_user.equipped_title else {
+            'id': None,
+            'name': 'Member',
+            'stat_type': 'default'
+        }),
+        'stats': stats,
+        'titles': catalog
+    }
+
+@router.patch('/me/title')
+def equip_title(payload: EquipTitlePayload, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code = 401, detail = 'Unauthorized')
+    
+    stmt = (
+        select(models.UserTitle)
+        .where(
+            models.UserTitle.user_id == current_user.id,
+            models.UserTitle.title_id == payload.title_id
+        )
+    )
+    if payload.title_id is not None:
+        owns_title = db.execute(stmt).scalars().first()
+
+        if not owns_title:
+            raise HTTPException(status_code = 403, detail = 'Title locked or does not exist')
+    
+    current_user.equipped_title_id = payload.title_id
+    db.commit()
+    db.refresh(current_user)
+
+    active = current_user.equipped_title
+    return {'success': True, 'equipped_title_id': current_user.equipped_title_id, 'title_name': active.name if active else 'Member', 'title_type': active.stat_type if active else 'default'}

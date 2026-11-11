@@ -2,7 +2,7 @@ import uuid
 from typing import Optional, List
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table, DateTime, UniqueConstraint, Date, Text
 from sqlalchemy.sql import func
-from sqlalchemy.dialects.postgresql import UUID, TEXT
+from sqlalchemy.dialects.postgresql import UUID, TEXT, JSON
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from database import Base
 
@@ -71,6 +71,9 @@ class User(Base):
     following = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.follower_id, secondaryjoin = id == user_followers.c.followed_id, back_populates = "followers")
     followers = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.followed_id, secondaryjoin = id == user_followers.c.follower_id, back_populates = "following")
 
+    equipped_title_id: Mapped[Optional[int]] = mapped_column(ForeignKey("titles.id", ondelete = "SET NULL"), nullable = True)
+    equipped_title: Mapped[Optional["Title"]] = relationship("Title", lazy = "joined")
+
 # User Profile Model
 class UserProfile(Base):
     __tablename__ = "user_profiles"
@@ -98,6 +101,12 @@ class UserProfile(Base):
     @property
     def avatar_id(self):
         return self.user.avatar_id.hex if self.user.avatar_id else None
+
+    @property
+    def active_title(self) -> dict:
+        if self.user and self.user.equipped_title:
+            return {"name": self.user.equipped_title.name, "stat_type": self.user.equipped_title.stat_type}
+        return {"name": "Member", "stat_type": "default"}
 
 # Global Equipment Dict Model
 class BaseEquipment(Base):
@@ -197,6 +206,8 @@ class Submission(Base):
     views: Mapped[int] = mapped_column(Integer, default = 0, server_default = '0', index = True, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, server_default = 'true', nullable = False)
     delete_flag: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
+    was_approved: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
+    rejected_msg: Mapped[Optional[str]] = mapped_column(TEXT, nullable = True)
 
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
 
@@ -236,6 +247,7 @@ class Submission(Base):
         cascade = "all, delete-orphan"
     )
 
+# News Model
 class News(Base):
     __tablename__ = "news_announcements"
 
@@ -259,3 +271,20 @@ class DailyVisitor(Base):
     __table_args__ = (
         UniqueConstraint("visit_date", "session_id", name = "uix_daily_session"),
     )
+
+class UserTitle(Base):
+    __tablename__ = "user_titles"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True)
+    title_id: Mapped[int] = mapped_column(ForeignKey("titles.id", ondelete = "CASCADE"), primary_key = True)
+    unlocked_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+
+class Title(Base):
+    __tablename__ = "titles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+    name: Mapped[str] = mapped_column(String(50), unique = True, nullable = False)
+    description: Mapped[str] = mapped_column(String(200), nullable = False)
+    stat_type: Mapped[str] = mapped_column(String(30), nullable = False)
+    # styles, favorites views, followers, following, hybrid, special
+    requirements: Mapped[dict] = mapped_column(JSON, default = dict, server_default = "{}", nullable = False)
