@@ -12,26 +12,26 @@ My hope is that the Archive will successfully serve a niche in the Mabinogi comm
 
 ## Current Features
 * User registration and access, with authentication provided by http-Only JWT.
-* Style uploading and favoriting, with images saved in WebP format.
+* Style uploading and favoriting, with images saved in WebP format. Post-editing pipeline included.
 * Gallery for displaying all approved styles, with ability to filter based on style gender, race, username, style title, and tag.
-* User profiles and private dashboard to view personally uploaded styles and favorites.
+* User profiles and private dashboard to view personally uploaded styles, your favorites, and followers/following.
 * Ability to change your username, avatar, and password (no email yet).
 * Basic news system for sharing any site news and updates.
-* Search bar for searching users and outfit names, hidden by default.
+* Search bar for searching users and outfit names.
+* Two themes, light and dark.
 
 ## Roadmap
 Below is the current feature roadmap for the future, in no particular order.
 * Website UI Improvements.
-* Follower System.
 * Time-Window Trending Feeds.
 * Extended Profile UI, if requested.
-* Custom Profile Banners.
-* Site Themes.
-* Custom titles and colored community names.
+* Custom profile options.
+* More site themes.
+* Preset & custom titles and colored community names.
 * Grouping outfits into shareable public collections.
 * Email verification, password recovery, and OAuth (Discord/Google).
-* Post-Editing Pipeline: Reverting edited live submissions to pending status for re-review.
 * Deep Equipment Search: Direct queries for specific items.
+* Lightweight notification system.
 
 ## Support & Contact
 Please post any bug reports under Issues.
@@ -45,7 +45,7 @@ Lastly, I am looking for anyone that would like to assist with development and/o
 This is more of a volunteering role, so if you are interested please contact me.
 
 ## Legal & IP Disclaimer
-The Fashionogi Archive is an unofficial fan project. Mabinogi and all related in-game assets, character designs, and terminology are the property and copyright of Nexon. This project is not affiliated with, endorsed by, or sponsored by Nexon.
+Fashionogi Archive is an unofficial fan project. Mabinogi and all related in-game assets, character designs, and terminology are the property and copyright of Nexon. This project is not affiliated with, endorsed by, or sponsored by Nexon.
 
 ## Copyright & License
 © 2026 Brandon Dulog. All Rights Reserved.
