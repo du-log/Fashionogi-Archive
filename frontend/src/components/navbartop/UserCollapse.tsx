@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import TitleBadge from "../user/TitleBadge";
 
 function UserCollapse() {
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -50,7 +51,7 @@ function UserCollapse() {
                     <div className={"group flex items-center justify-between bg-mabi-surface rounded-lg min-w-50 h-fit min-h-16 px-3 py-2 cursor-pointer hover:bg-mabi-surface-muted"} onClick={() => setOpen(!isOpen)}>
                         <div className="flex flex-col">
                             <h2 className="text-lg truncate max-w-40">{user?.username}</h2>
-                            <p className="text-xs py-1 px-2 outline outline-mabi-border-heavy w-fit">Member</p>
+                            <TitleBadge name={user.title_name} category={user.title_type} size="sm" />
                         </div>
                         <div className={`flex flex-col justify-center items-center cursor-pointer w-12 h-12 outline-2 outline-mabi-border-heavy group-hover:outline-mabi-gold`}>
                             {user?.avatar_id ? <img src={user.avatar_id} /> : <User size={50} />}
