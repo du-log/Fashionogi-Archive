@@ -25,16 +25,15 @@ function AccountSettings() {
     const [server, setServer] = useState<string | null | undefined>('');
     //const [guild, setGuild] = useState<string | null | undefined>('');
     const [ign, setIgn] = useState<string | null | undefined>('');
-    //const [race, setRace] = useState<string | null | undefined>('');
-    //const [gender, setGender] = useState<string | null | undefined>('');
     const [discord, setDiscord] = useState<string | null | undefined>('');
-    //const [twitter, setTwitter] = useState<string | null | undefined>('');
-    //const [twitch, setTwitch] = useState<string | null | undefined>('');
-    //const [youtube, setYoutube] = useState<string | null | undefined>('');
 
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
         setChecking(true);
+        if (username.length <= 2) {
+            setAvailMsg('Username must be at least 3 characters.');
+            return;
+        }
         if (username.length > 15) {
             setAvailMsg('Username is over 15 characters.');
             return;

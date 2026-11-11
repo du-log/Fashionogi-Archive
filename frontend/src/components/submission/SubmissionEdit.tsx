@@ -18,7 +18,9 @@ export default function SubmissionEdit() {
     const navigate = useNavigate();
 
     const [title, setTitle] = useState<string>('');
+    const [oldTitle, setOldTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [oldDescription, setOldDescription] = useState<string>('');
     const [gender, setGender] = useState<string>('all');
     const [race, setRace] = useState<string>('all');
 
@@ -169,7 +171,9 @@ export default function SubmissionEdit() {
             if (res.ok) {
                 const data = await res.json();
                 setTitle(data.title);
+                setOldTitle(data.title);
                 setDescription(data.description);
+                setOldDescription(data.description);
                 setGender(data.gender);
                 setRace(data.race);
                 setTags(data.tags);
@@ -314,11 +318,17 @@ export default function SubmissionEdit() {
                 <dialog className="modal modal-open">
                     <div className="modal-box flex flex-col justify-center max-w-4xl min-h-[60vh] gap-5 px-10 py-20 bg-mabi-surface-muted">
                         <h1 className="text-center text-4xl">Review Style</h1>
-                        <p className="py-5 text-lg">Title: {title}</p>
-                        <div className="flex flex-col">
-                            <p>Description:</p>
-                            <div className=""><Markdown remarkPlugins={[remarkGfm, remarkBreaks,remarkRehype]}>{description}</Markdown></div>
+                        <p className="py-5 text-lg bg-mabi-surface p-2">{title !== oldTitle ? `Old Title: ${oldTitle} -> New Title: ${title}` : `Title (Unchanged): ${title}`}</p>
+                        <div className="flex flex-col bg-mabi-surface p-2">
+                            <p>{description !== oldDescription ? 'Old Description:' : 'Description (Unchanged):'}</p>
+                            <div className=""><Markdown remarkPlugins={[remarkGfm, remarkBreaks,remarkRehype]}>{description !== oldDescription ? oldDescription : description}</Markdown></div>
                         </div>
+                        {description !== oldDescription && (
+                            <div className="flex flex-col bg-mabi-surface p-2">
+                                <p>New Description:</p>
+                                <div className=""><Markdown remarkPlugins={[remarkGfm, remarkBreaks,remarkRehype]}>{description}</Markdown></div>
+                            </div>
+                        )}
                         <div className="flex gap-2 items-center">
                             <h2 className="text-md">Tags: </h2> 
                             {tags.map((tag) => (

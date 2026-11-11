@@ -9,7 +9,7 @@ Changes to the submission page component and other things.
 - Added indicators to the submission uploading & updating, and user signup.
   - Respective buttons for confirmation should now show text for better user feedback on processing.
 
-- Added functionality to dropdown for my styles tab in dashboard.
+- Added more options to dropdown for my styles tab in dashboard.
   - You can now delete (softly), unlist, and relist submissions.
 
 - Fixed z-index on the tags dropdown so it doesn't get overlapped by the X buttons on the card images.

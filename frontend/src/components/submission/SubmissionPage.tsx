@@ -126,13 +126,13 @@ function SubmissionPage() {
                         <button className="cursor-pointer outline outline-mabi-border py-1 px-2 rounded bg-mabi-surface-muted hover:text-mabi-green sm:text-sm xl:text-md h-fit" onClick={() => navigate('/gallery')}>{'<-'} Gallery</button>
                         <div className="flex flex-col gap-2 items-end">
                             {submission.status === 'pending' && (
-                                <h4 className="p-2 bg-[#55aa00] text-[#ffffff]">Pending</h4>
+                                <h4 className="p-2 bg-[#55AA00] text-[#FFF]">Pending</h4>
                             )}
                             {submission.status === 'unlisted' && (
-                                <h4 className="p-2 bg-[#770000] text-[#ffffff]">Unlisted</h4>
+                                <h4 className="p-2 bg-[#770000] text-[#FFF]">Unlisted</h4>
                             )}
                             {submission.status === 'rejected' && (
-                                <h4 className="p-2 bg-[#111111] text-[#ffffff]">Rejected</h4>
+                                <h4 className="p-2 bg-[#111] text-[#FFF]">Rejected</h4>
                             )}
                             {submission.author === user?.username && (
                                 <Link to={`/fashion/edit/${submission.id}`}><p className="outline-1 outline-mabi-border rounded text-mabi-text px-2 py-1 hover:text-mabi-gold bg-mabi-surface-muted">Edit Style</p></Link>
@@ -146,20 +146,20 @@ function SubmissionPage() {
                             <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-mabi-green w-fit h-fit">{tag}</p></Link>
                         ))}
                     </div>
-                    <div className="flex flex-col w-full gap-3 py-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted">
+                    <div className={`flex flex-col w-full gap-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted ${submission.images.length > 1 ? 'pt-5' : 'py-5'}`}>
                         <div className="flex items-center justify-center w-full h-100 xl:h-120">
                             <img src={activeImg || submission.images[0]} alt={submission.title}
                             className="max-w-8/12 max-h-full object-contain outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer"
                             onClick={() => setInflateImg(activeImg || submission.images[0])} />
                         </div>
                         {submission.images.length > 1 &&(
-                            <div className="flex justify-center flex-wrap gap-5">
+                            <div className={"flex justify-center flex-wrap gap-5 py-2 bg-mabi-border"}>
                                 {submission.images.map((image) => {
                                     const selected = (activeImg || submission.images[0]) === image;
                                     return (
                                         <img key={image} src={`${image}`} alt={submission.title}
                                         className={`w-16 xl:w-20 h-16 xl:h-20 object-cover outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer
-                                        ${selected ? 'outline-mabi-gold' : 'opacity-50 hover:opacity-100 hover:outline-mabi-orange'}`}
+                                        ${selected ? 'outline-mabi-gold' : 'opacity-60 hover:opacity-100 hover:outline-mabi-orange'}`}
                                         onClick={() => setActiveImg(image)} />
                                     )
                                 })}
