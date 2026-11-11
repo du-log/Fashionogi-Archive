@@ -35,6 +35,10 @@ function AccountSettings() {
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
         setChecking(true);
+        if (username.length <= 2) {
+            setAvailMsg('Username must be at least 3 characters.');
+            return;
+        }
         if (username.length > 15) {
             setAvailMsg('Username is over 15 characters.');
             return;
