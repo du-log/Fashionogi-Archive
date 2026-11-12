@@ -5,7 +5,7 @@ interface TitleBadgeProps {
 }
 
 const CATEGORY_STYLES: Record<string, string> = {
-    default: "outline-1 outline-mabi-border text-mabi-text-muted bg-black/20",
+    default: "outline-1 outline-mabi-border text-[#FFF]",
     styles: "outline-1 outline-emerald-400/80 text-emerald-300 bg-emerald-500/10",
     favorites: "outline-1 outline-rose-400/80 text-rose-300 bg-rose-500/10",
     followers: "outline-1 outline-sky-400/80 text-sky-300 bg-sky-500/10",
