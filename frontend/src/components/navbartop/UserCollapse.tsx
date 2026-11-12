@@ -51,7 +51,7 @@ function UserCollapse() {
                     <div className={"group flex items-center justify-between bg-mabi-surface rounded-lg min-w-50 h-fit min-h-16 px-3 py-2 cursor-pointer hover:bg-mabi-surface-muted"} onClick={() => setOpen(!isOpen)}>
                         <div className="flex flex-col">
                             <h2 className="text-lg truncate max-w-40">{user?.username}</h2>
-                            <div className="bg-[#000]/20"><TitleBadge name={user.title_name} category={user.title_type} size="sm" /></div>
+                            <div className="bg-[#000]/20 w-fit"><TitleBadge name={user.title_name} category={user.title_type} size="sm" /></div>
                         </div>
                         <div className={`flex flex-col justify-center items-center cursor-pointer w-12 h-12 outline-2 outline-mabi-border-heavy group-hover:outline-mabi-gold`}>
                             {user?.avatar_id ? <img src={user.avatar_id} /> : <User size={50} />}
