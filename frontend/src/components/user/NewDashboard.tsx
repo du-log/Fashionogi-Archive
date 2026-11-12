@@ -8,11 +8,15 @@ import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
 import DashboardDropdown from "./DashboardDropdown";
 import UserNameplate from "./UserNameplate";
+import TitleBadge from "./TitleBadge";
+import type { TitleProps } from "./TitleModalBody";
+import TitleModalBody from "./TitleModalBody";
 
 export default function NewDashboard() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
-    const userLoading= auth?.isLoading ?? true;
+    const userLoading = auth?.isLoading ?? true;
+    const checkSession = auth?.checkSession ?? (() => {});
     const [isLoading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
@@ -26,6 +30,17 @@ export default function NewDashboard() {
 
     const [followersData, setFollowersData] = useState<NameplateUser[]>([]);
     const [followingData, setFollowingData] = useState<NameplateUser[]>([]);
+
+    const [titleModalOpen, setTitleModalOpen] = useState<boolean>(false);
+    const [titles, setTitles] = useState<TitleProps | null>(null);
+
+    const fetchUserData = async () => {
+        const res = await fetch(`${USERS_URL}/profiles/${user?.username}`);
+        if (res.ok) {
+            const data = await res.json();
+            setUserData(data);
+        }
+    }
 
     const fetchFavorites = async () => {
         const res = await fetch(`${USERS_URL}/dashboard/favorites`, {
@@ -74,6 +89,39 @@ export default function NewDashboard() {
             const data = await res.json();
             setStyles(data.styles);
             setFavoritesTotal(Number(data.total_favorites) || 0);
+        }
+    }
+
+    const fetchTitles = async () => {
+        const res = await fetch(`${USERS_URL}/me/titles`, {
+            credentials: 'include'
+        })
+        if (res.ok) {
+            const data = await res.json()
+            setTitles(data);
+            setTitleModalOpen(true);
+        }
+    }
+
+    const titleChangeHandler = async (title_id?: number) => {
+        try {
+            const res = await fetch(`${USERS_URL}/me/title`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({title_id: title_id ?? null}),
+                credentials: 'include'
+            })
+            if (res.ok) {
+                fetchUserData();
+                checkSession();
+                alert('Title changed!');
+                setTitleModalOpen(false);
+            }
+        } catch (e) {
+            console.error('Could not update title', e);
+            alert('Could not update your title. Possibly some API error.');
         }
     }
 
@@ -136,11 +184,11 @@ export default function NewDashboard() {
                         <div className="flex flex-col w-full gap-5">
                             <div className="flex gap-5 items-center w-full">
                                 <h1 className="text-4xl">{user?.username}</h1>
-                                <p className="text-2xl py-1 px-2 outline outline-mabi-border-heavy w-fit cursor-default">Member</p>
+                                <div className="bg-[#000]/20"><TitleBadge name={userData?.active_title?.name} category={userData?.active_title?.stat_type} /></div>
                             </div>
                             <div className="flex gap-5 items-center w-full">
                                 <button className="btn btn-success" disabled>Edit Profile</button>
-                                <button className="btn btn-primary" disabled>Change Title</button>
+                                <button className="btn btn-primary" onClick={fetchTitles}>Change Title</button>
                             </div>
                         </div>
                     </div>
@@ -261,7 +309,9 @@ export default function NewDashboard() {
                                     {followingData.map((user) => (
                                         <div className="group relative">
                                             <UserNameplate key={user.username} username={user.username} intialData={user} />
-                                            <button className="absolute top-1 left-1 btn w-fit h-fit p-1 z-100 opacity-0 group-hover:opacity-100 group-hover:btn-error" onClick={() => toggleFollow(user.id)}><UserMinus size={20} /></button>
+                                            <button className="absolute top-1 left-1 btn w-fit h-fit p-1 z-100 opacity-0 group-hover:opacity-100 group-hover:btn-error" onClick={() => toggleFollow(user.id)}>
+                                                <UserMinus size={20} />
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -277,6 +327,14 @@ export default function NewDashboard() {
                     )}
                 </div>
             </div>
+            {titles && titleModalOpen && (
+                <dialog className="modal modal-open">
+                    <div className="modal-body w-fit">
+                        <TitleModalBody equipped_title_id={titles.equipped_title_id} equipped_title={titles.equipped_title} stats={titles.stats} titles={titles.titles}
+                        setTitleModalOpen={setTitleModalOpen} titleChangeHandler={titleChangeHandler} />
+                    </div>
+                </dialog>
+            )}
         </div>
     )
 }
