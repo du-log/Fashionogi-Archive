@@ -184,7 +184,7 @@ export default function NewDashboard() {
                         <div className="flex flex-col w-full gap-5">
                             <div className="flex gap-5 items-center w-full">
                                 <h1 className="text-4xl">{user?.username}</h1>
-                                <div className="bg-[#000]/20"><TitleBadge name={userData?.active_title?.name} category={userData?.active_title?.stat_type} /></div>
+                                <div className="bg-[#000]/20 w-fit"><TitleBadge name={userData?.active_title?.name} category={userData?.active_title?.stat_type} /></div>
                             </div>
                             <div className="flex gap-5 items-center w-full">
                                 <button className="btn btn-success" disabled>Edit Profile</button>
