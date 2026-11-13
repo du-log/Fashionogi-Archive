@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MailIcon, KeyIcon } from "lucide-react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
@@ -16,7 +16,6 @@ function LoginPage() {
     const [loginMsg, setLoginMsg] = useState<string>('');
     const [isSuccess, setSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
 
     const handleLogin = async (e: React.SubmitEvent) => {
         setLoginMsg('');
@@ -38,29 +37,8 @@ function LoginPage() {
     }
 
     useEffect(() => {
-        const oauthToken = searchParams.get('oauth_token');
-        if (!oauthToken) return;
-
-        const completeOAuthLogin = async () => {
-            try {
-                const res = await fetch(`${BASE_URL}/api/auth/oauth/session`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({token: oauthToken}),
-                    credentials: 'include'
-                })
-                if (res.ok) {
-                    await checkSession();
-                    navigate('/');
-                } else {
-                    alert('Could not complete OAuth login.');
-                }
-            } catch (err) {
-                console.error('OAuth session exchange error:', err);
-            }
-        }
-        completeOAuthLogin();
-    }, [searchParams, checkSession, navigate])
+        if (auth?.isAuth) navigate('/');
+    }, [auth?.isAuth, navigate])
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-mabi-text bg-mabi-surface-muted">

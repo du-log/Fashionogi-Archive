@@ -85,8 +85,16 @@ export default function AuthProvider( {children} : {children: ReactNode} ) {
     }
 
     useEffect(() => {
-        const checkSession = async () => {
+        const initSession = async () => {
             try {
+                const params = new URLSearchParams(window.location.search);
+                const oauthToken = params.get('oauth_token');
+
+                if (oauthToken) {
+                    await api.post('/api/auth/oauth/session', {token: oauthToken});
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
+
                 const res = await api.get('/api/users/me');
                 if (res) {
                     setUser(res.data);
@@ -100,7 +108,7 @@ export default function AuthProvider( {children} : {children: ReactNode} ) {
                 setLoading(false);
             }
         }
-        checkSession();
+        initSession();
     }, [])
 
     return (
