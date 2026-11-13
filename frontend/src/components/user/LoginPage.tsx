@@ -25,9 +25,9 @@ function LoginPage() {
             setLoginMsg('Authenticating...');
             const res = await login(email, password);
             if (res) {
-                setSuccess(true)
+                setSuccess(true);
                 setLoginMsg('Success! Redirecting...');
-                setTimeout(() => {checkSession(); navigate('/')}, 1000);
+                checkSession();
             } else {
                 setLoginMsg('Invalid email or password.');
             }
@@ -37,8 +37,10 @@ function LoginPage() {
     }
 
     useEffect(() => {
-        if (auth?.isAuth) navigate('/');
-    }, [auth?.isAuth, navigate])
+        if (auth?.isAuth) {
+            setTimeout(() => {navigate('/')}, 1000);
+        }
+    }, [auth?.isAuth, navigate, checkSession])
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-mabi-text bg-mabi-surface-muted">
