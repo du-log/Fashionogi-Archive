@@ -77,16 +77,16 @@ def set_auth_cookie(response: Response, user_id: int):
         secure = True
     )
 
-def get_unique_username(base_name: str, db: Session = Depends(get_db)) -> str:
+def get_unique_username(base_name: str, db: Session) -> str:
     clean = re.sub(r'[^a-zA-Z0-9_]', '', base_name)[:16] or 'Milletian'
     candidate = clean
 
-    stmt = (select(User).where(User.username == candidate))
-    while db.execute(stmt).scalars().first():
+    
+    while db.execute(select(User).where(User.username == candidate)).scalars().first():
         candidate = f'{clean}_{secrets.token_hex(2)}'
     return candidate
 
-def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], email_verified: bool, display_name: str, current_user: Optional[User] = Depends(get_optional_current_user), db: Session = Depends(get_db)) -> User:
+def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], email_verified: bool, display_name: str, current_user: Optional[User], db: Session) -> User:
     id_attribute = 'discord_id' if provider == 'discord' else 'google_id'
     id_column = User.discord_id if provider == 'discord' else User.google_id
 
