@@ -1,14 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import UserCollapse from "./UserCollapse";
-import { useContext } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import SearchBarComboBox from "./SearchBarComboBox";
 import { Moon, Sun } from "lucide-react";
 
 function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => void} ) {
-    const auth = useContext(AuthContext);
-    const user = auth?.user ?? null;
-
     const navigate = useNavigate();
 
     return (
@@ -16,7 +11,6 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                 <div className="left relative flex flex-1 gap-5 items-center justify-end text-md">
                     <Link to='/'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Home</p></Link>
                     <Link to='/gallery'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Gallery</p></Link>
-                    <Link to={user ? '/upload' : '/login'}><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Upload</p></Link>
                     <Link to='/news'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>News</p></Link>
                 </div>
                 <div className="middle relative flex flex-1 justify-center items-center">

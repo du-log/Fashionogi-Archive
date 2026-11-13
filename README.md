@@ -17,17 +17,18 @@ My hope is that the Archive will successfully serve a niche in the Mabinogi comm
 * User profiles and private dashboard to view personally uploaded styles, your favorites, and followers/following.
 * Ability to change your username, avatar, and password (no email yet).
 * Basic news system for sharing any site news and updates.
-* Search bar for searching users and outfit names.
+* Search bar for looking up users and submissions.
 * Two themes, light and dark.
+* Preset titles with ways to unlock them.
 
 ## Roadmap
 Below is the current feature roadmap for the future, in no particular order.
-* Website UI Improvements.
+* General UI Improvements.
 * Time-Window Trending Feeds.
 * Extended Profile UI, if requested.
 * Custom profile options.
 * More site themes.
-* Preset & custom titles and colored community names.
+* Custom titles and colored community names.
 * Grouping outfits into shareable public collections.
 * Email verification, password recovery, and OAuth (Discord/Google).
 * Deep Equipment Search: Direct queries for specific items.

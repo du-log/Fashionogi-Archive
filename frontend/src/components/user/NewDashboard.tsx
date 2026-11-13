@@ -227,7 +227,7 @@ export default function NewDashboard() {
                         )}
                     </div>
                 </div>
-                <div className="flex flex-col items-center min-h-[50vh] w-full xl:w-[80%] bg-mabi-surface mt-1">
+                <div className="flex flex-col items-center min-h-[50vh] w-full xl:w-[80%] bg-mabi-surface/10 mt-1 rounded-b-lg">
                     {activeTab === 'styles' && (
                         <>
                             {styles.length > 0 && (
