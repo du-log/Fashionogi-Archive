@@ -172,34 +172,53 @@ def discord_login():
     })
     return RedirectResponse(f'https://discord.com/api/oauth2/authorize?{params}')
 
+@router.get('/google/login')
+def google_login():
+    params = urlencode({
+        'client_id': GOOGLE_CLIENT_ID,
+        'redirect_uri': GOOGLE_REDIRECT_URI,
+        'response_type': 'code',
+        'scope': 'openid email profile',
+        'access_type': 'online'
+    })
+    return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{params}')
+
 @router.get('/discord/callback')
-def discord_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def discord_callback(
+    code: Optional[str] = None,
+    error: Optional[str] = None,
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
+):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_cancelled')
 
-    with httpx.Client(timeout = 10.0) as client:
-        token_res = client.post(
-            'https://discord.com/api/oauth2/token',
-            data = {
-                'client_id': DISCORD_CLIENT_ID,
-                'client_secret': DISCORD_CLIENT_SECRET,
-                'grant_type': 'authorization_code',
-                'code': code,
-                'redirect_uri': DISCORD_REDIRECT_URI,
-            },
-            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        )
-        if token_res.status_code != 200:
-            return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_failed')
+    try:
+        with httpx.Client(timeout = 10.0) as client:
+            token_res = client.post(
+                'https://discord.com/api/oauth2/token',
+                data = {
+                    'client_id': DISCORD_CLIENT_ID,
+                    'client_secret': DISCORD_CLIENT_SECRET,
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'redirect_uri': DISCORD_REDIRECT_URI,
+                },
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            )
+            if token_res.status_code != 200:
+                return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_failed')
 
-        access_token = token_res.json().get('access_token')
-        user_res = client.get(
-            'https://discord.com/api/users/@me',
-            headers = {'Authorization': f'Bearer {access_token}'}
-        )
-        if user_res.status_code != 200:
-            return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_failed')
-        profile = user_res.json()
+            access_token = token_res.json().get('access_token')
+            user_res = client.get(
+                'https://discord.com/api/users/@me',
+                headers = {'Authorization': f'Bearer {access_token}'}
+            )
+            if user_res.status_code != 200:
+                return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_failed')
+            profile = user_res.json()
+    except httpx.RequestError:
+        return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_timeout')
 
     try:
         user = auth.resolve_oauth_user(
@@ -218,44 +237,41 @@ def discord_callback(code: Optional[str] = None, error: Optional[str] = None, db
     auth.set_auth_cookie(response, user.id)
     return response
 
-@router.get('/google/login')
-def google_login():
-    params = urlencode({
-        'client_id': GOOGLE_CLIENT_ID,
-        'redirect_uri': GOOGLE_REDIRECT_URI,
-        'response_type': 'code',
-        'scope': 'openid email profile',
-        'access_type': 'online'
-    })
-    return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{params}')
-
 @router.get('/google/callback')
-def google_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def google_callback(
+    code: Optional[str] = None,
+    error: Optional[str] = None,
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
+):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=google_cancelled')
 
-    with httpx.Client(timeout = 10.0) as client:
-        token_res = client.post(
-            'https://oauth2.googleapis.com/token',
-            data = {
-                'client_id': GOOGLE_CLIENT_ID,
-                'client_secret': GOOGLE_CLIENT_SECRET,
-                'code': code,
-                'grant_type': 'authorization_code',
-                'redirect_uri': GOOGLE_REDIRECT_URI,
-            }
-        )
-        if token_res.status_code != 200:
-            return RedirectResponse(f'{FRONTEND_URL}/login?error=google_failed')
+    try:
+        with httpx.Client(timeout = 10.0) as client:
+            token_res = client.post(
+                'https://oauth2.googleapis.com/token',
+                data = {
+                    'client_id': GOOGLE_CLIENT_ID,
+                    'client_secret': GOOGLE_CLIENT_SECRET,
+                    'code': code,
+                    'grant_type': 'authorization_code',
+                    'redirect_uri': GOOGLE_REDIRECT_URI,
+                }
+            )
+            if token_res.status_code != 200:
+                return RedirectResponse(f'{FRONTEND_URL}/login?error=google_failed')
 
-        access_token = token_res.json().get('access_token')
-        user_res = client.get(
-            'https://www.googleapis.com/oauth2/v2/userinfo',
-            headers = {'Authorization': f'Bearer {access_token}'}
-        )
-        if user_res.status_code != 200:
-            return RedirectResponse(f'{FRONTEND_URL}/login?error=google_failed')
-        profile = user_res.json()
+            access_token = token_res.json().get('access_token')
+            user_res = client.get(
+                'https://www.googleapis.com/oauth2/v2/userinfo',
+                headers = {'Authorization': f'Bearer {access_token}'}
+            )
+            if user_res.status_code != 200:
+                return RedirectResponse(f'{FRONTEND_URL}/login?error=google_failed')
+            profile = user_res.json()
+    except httpx.RequestError:
+        return RedirectResponse(f'{FRONTEND_URL}/login?error=google_timeout')
 
     try:
         user = auth.resolve_oauth_user(
@@ -264,7 +280,7 @@ def google_callback(code: Optional[str] = None, error: Optional[str] = None, db:
             email = profile.get('email'),
             email_verified = bool(profile.get('verified_email')),
             display_name = profile.get('name', 'Milletian'),
-            current_user =current_user,
+            current_user = current_user,
             db = db
         )
     except HTTPException:
