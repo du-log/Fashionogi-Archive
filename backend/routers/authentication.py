@@ -170,8 +170,6 @@ def discord_login(current_user: Optional[models.User] = Depends(auth.get_optiona
         'response_type': 'code',
         'scope': 'identify email'
     }
-    if current_user:
-        params['state'] = auth.create_token(data = {'sub': str(current_user.id)})
     return RedirectResponse(f'https://discord.com/api/oauth2/authorize?{urlencode(params)}')
 
 @router.get('/google/login')
@@ -183,8 +181,6 @@ def google_login(current_user: Optional[models.User] = Depends(auth.get_optional
         'scope': 'openid email profile',
         'access_type': 'online'
     }
-    if current_user:
-        params['state'] = auth.create_token(data = {'sub': str(current_user.id)})
     return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}')
 
 @router.get('/discord/link')
