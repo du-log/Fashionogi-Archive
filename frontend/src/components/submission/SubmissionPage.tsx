@@ -146,7 +146,7 @@ function SubmissionPage() {
                             <Link key={tag} to={`/gallery?tag=${tag}`}><p className="text-md py-1 px-2 rounded bg-mabi-green w-fit h-fit">{tag}</p></Link>
                         ))}
                     </div>
-                    <div className={`flex flex-col w-full gap-5 justify-center border-b-1 border-mabi-border-heavy bg-mabi-surface-muted ${submission.images.length > 1 ? 'pt-5' : 'py-5'}`}>
+                    <div className={`flex flex-col w-full gap-5 justify-center border-b-1 border-mabi-border-heavy bg-gradient-to-t from-mabi-surface-muted to-transparent ${submission.images.length > 1 ? 'pt-5' : 'py-5'}`}>
                         <div className="flex items-center justify-center w-full h-100 xl:h-120">
                             <img src={activeImg || submission.images[0]} alt={submission.title}
                             className="max-w-8/12 max-h-full object-contain outline-1 outline-mabi-border hover:outline-mabi-gold rounded-lg cursor-pointer"
@@ -169,7 +169,7 @@ function SubmissionPage() {
                     {inflateImg && (
                         <dialog className="modal modal-open">
                             <div className="modal-box outline-1 w-fit max-w-[80vw] outline-mabi-border-heavy flex justify-center">
-                                <img src={`${inflateImg}`} className="w-full outline-3 outline-mabi-border" />
+                                <img src={`${inflateImg}`} className="w-full max-h-[80vh] outline-3 outline-mabi-border" />
                             </div>
                             <form method="dialog" className="modal-backdrop">
                                 <button onClick={() => setInflateImg(null)}></button>
@@ -188,7 +188,7 @@ function SubmissionPage() {
                                 <h2 className="text-lg font-bold">Equipment</h2>
                                 <div className="flex flex-wrap gap-3">
                                     {submission.equipment.map((item) => (
-                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 outline outline-mabi-border bg-mabi-green">
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 outline outline-mabi-border bg-mabi-green/50">
                                             <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
                                             <h4 className="text-md">{item.name}</h4>
                                             {!item.dyeable && (
