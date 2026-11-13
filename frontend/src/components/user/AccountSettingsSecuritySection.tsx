@@ -42,6 +42,24 @@ export function AccountSecuritySection({
         }
     };
 
+    const handleOAuthLink = async (provider: "discord" | "google") => {
+        try {
+            const res = await fetch(`${AUTH_URL}/${provider}/link`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                window.location.href = data.url;
+            } else {
+                alert("Your session expired or changed. Please log out and log back in first.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert(`Could not start ${provider} linking.`);
+        }
+    };
+
     return (
         <div className="flex flex-col gap-4 p-3 bg-mabi-surface outline-2 outline-mabi-border text-mabi-text">
             <div className="flex items-center justify-between border-b border-mabi-border pb-2">
@@ -105,12 +123,13 @@ export function AccountSecuritySection({
                             Discord Connected ✓
                         </span>
                     ) : (
-                        <a
-                            href={`${AUTH_URL}/discord/login`}
+                        <button
+                            type="button"
+                            onClick={() => handleOAuthLink("discord")}
                             className="btn btn-xs bg-[#5865F2] hover:bg-[#4752C4] text-white border-none"
                         >
                             Link Discord
-                        </a>
+                        </button>
                     )}
 
                     {authStatus?.google_linked ? (
@@ -118,12 +137,13 @@ export function AccountSecuritySection({
                             Google Connected ✓
                         </span>
                     ) : (
-                        <a
-                            href={`${AUTH_URL}/google/login`}
+                        <button
+                            type="button"
+                            onClick={() => handleOAuthLink("google")}
                             className="btn btn-xs bg-white hover:bg-gray-200 text-black border border-mabi-border"
                         >
                             Link Google
-                        </a>
+                        </button>
                     )}
                 </div>
             </div>
