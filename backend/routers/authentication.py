@@ -163,17 +163,19 @@ def reset_password_using_recovery_code(payload: RecoveryResetPayload, db: Sessio
     return {'success': True, 'message': 'Password has been changed. For your safety, please generate a new recovery code.'}
 
 @router.get('/discord/login')
-def discord_login():
+def discord_login(current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
     params = urlencode({
         'client_id': DISCORD_CLIENT_ID,
         'redirect_uri': DISCORD_REDIRECT_URI,
         'response_type': 'code',
         'scope': 'identify email'
     })
+    if current_user:
+        params['state'] = auth.create_token(data = {'sub': str(current_user.id)})
     return RedirectResponse(f'https://discord.com/api/oauth2/authorize?{params}')
 
 @router.get('/google/login')
-def google_login():
+def google_login(current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
     params = urlencode({
         'client_id': GOOGLE_CLIENT_ID,
         'redirect_uri': GOOGLE_REDIRECT_URI,
@@ -181,17 +183,29 @@ def google_login():
         'scope': 'openid email profile',
         'access_type': 'online'
     })
+    if current_user:
+        params['state'] = auth.create_token(data = {'sub': str(current_user.id)})
     return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{params}')
 
 @router.get('/discord/callback')
 def discord_callback(
     code: Optional[str] = None,
     error: Optional[str] = None,
+    state: Optional[str] = None,
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
 ):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_cancelled')
+
+    if not current_user and state:
+        try:
+            payload = auth.jwt.decode(state, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+            user_id = payload.get('sub')
+            if user_id:
+                current_user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+        except Exception:
+            pass
 
     try:
         with httpx.Client(timeout = 10.0) as client:
@@ -241,11 +255,21 @@ def discord_callback(
 def google_callback(
     code: Optional[str] = None,
     error: Optional[str] = None,
+    state: Optional[str] = None,
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
 ):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=google_cancelled')
+
+    if not current_user and state:
+        try:
+            payload = auth.jwt.decode(state, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+            user_id = payload.get('sub')
+            if user_id:
+                current_user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+        except Exception:
+            pass
 
     try:
         with httpx.Client(timeout = 10.0) as client:
