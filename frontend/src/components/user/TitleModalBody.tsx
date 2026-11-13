@@ -61,7 +61,7 @@ export default function TitleModalBody( {equipped_title_id, equipped_title, stat
                         ))}
                     </div>
                     <div className="items-center w-full"><hr className="w-full border-2 border-mabi-border" /></div>
-                    <div className="flex flex-col w-60">
+                    <div className="flex flex-col w-65">
                         {titles.map((title) => (
                             !title.is_unlocked && (
                             <div key={title.id} className={`cursor-pointer w-full p-1 text-mabi-text-muted
@@ -72,7 +72,7 @@ export default function TitleModalBody( {equipped_title_id, equipped_title, stat
                         ))}
                     </div>
                 </div>
-                <div className="flex flex-col w-60 max-h-100 gap-4 px-2 border-l-1 border-mabi-border">
+                <div className="flex flex-col w-65 max-h-100 gap-4 px-2 border-l-1 border-mabi-border">
                     <div className="flex gap-2 w-full items-center">
                         <p>Title:</p>
                         <div className="bg-[#000]/35 w-fit"><TitleBadge name={selectedTitle?.name || 'Member'} category={selectedTitle?.stat_type || 'default'} /></div>
