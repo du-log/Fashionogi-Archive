@@ -1,14 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { USERS_URL } from "../../utilities/MiscUtility";
+import { BASE_URL, USERS_URL } from "../../utilities/MiscUtility";
 import PwChangeForm from "./PwChangeForm";
 import AvatarSettings from "./AvatarSettings";
+import { AccountSecuritySection } from "./AccountSettingsSecuritySection";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
     const userLoading = auth?.isLoading ?? true;
+    const checkSession = auth?.checkSession ?? (() => {});
     const logout = auth?.logout ?? (async () => {});
     const [isLoading, setLoading] = useState<boolean>(true);
     const [isChecking, setChecking] = useState<boolean>(false);
@@ -217,6 +219,7 @@ function AccountSettings() {
                                 <h1 className="text-xl">Change Password</h1>
                                 <PwChangeForm />
                             </div>
+                            <AccountSecuritySection AUTH_URL={`${BASE_URL}/api/auth`} authStatus={user?.auth_status} onRefreshUser={checkSession} />
                             <div className="flex flex-col gap-2 py-2 w-full">
                                 <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
                                 <p>If you wish to have your account deactivated, please click the button below.</p>
