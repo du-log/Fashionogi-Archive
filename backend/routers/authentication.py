@@ -173,12 +173,12 @@ def discord_login():
     return RedirectResponse(f'https://discord.com/api/oauth2/authorize?{params}')
 
 @router.get('/discord/callback')
-async def discord_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def discord_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_cancelled')
 
-    async with httpx.AsyncClient() as client:
-        token_res = await client.post(
+    with httpx.Client(timeout = 10.0) as client:
+        token_res = client.post(
             'https://discord.com/api/oauth2/token',
             data = {
                 'client_id': DISCORD_CLIENT_ID,
@@ -193,7 +193,7 @@ async def discord_callback(code: Optional[str] = None, error: Optional[str] = No
             return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_failed')
 
         access_token = token_res.json().get('access_token')
-        user_res = await client.get(
+        user_res = client.get(
             'https://discord.com/api/users/@me',
             headers = {'Authorization': f'Bearer {access_token}'}
         )
@@ -230,12 +230,12 @@ def google_login():
     return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{params}')
 
 @router.get('/google/callback')
-async def google_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def google_callback(code: Optional[str] = None, error: Optional[str] = None, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=google_cancelled')
 
-    async with httpx.AsyncClient() as client:
-        token_res = await client.post(
+    with httpx.Client(timeout = 10.0) as client:
+        token_res = client.post(
             'https://oauth2.googleapis.com/token',
             data = {
                 'client_id': GOOGLE_CLIENT_ID,
@@ -249,7 +249,7 @@ async def google_callback(code: Optional[str] = None, error: Optional[str] = Non
             return RedirectResponse(f'{FRONTEND_URL}/login?error=google_failed')
 
         access_token = token_res.json().get('access_token')
-        user_res = await client.get(
+        user_res = client.get(
             'https://www.googleapis.com/oauth2/v2/userinfo',
             headers = {'Authorization': f'Bearer {access_token}'}
         )
