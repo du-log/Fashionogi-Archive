@@ -50,7 +50,7 @@ function LoginPage() {
                     credentials: 'include'
                 })
                 if (res.ok) {
-                    checkSession();
+                    await checkSession();
                     navigate('/');
                 } else {
                     alert('Could not complete OAuth login.');
