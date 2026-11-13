@@ -163,7 +163,7 @@ def reset_password_using_recovery_code(payload: RecoveryResetPayload, db: Sessio
     return {'success': True, 'message': 'Password has been changed. For your safety, please generate a new recovery code.'}
 
 @router.get('/discord/login')
-def discord_login(current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def discord_login():
     params = {
         'client_id': DISCORD_CLIENT_ID,
         'redirect_uri': DISCORD_REDIRECT_URI,
@@ -173,7 +173,7 @@ def discord_login(current_user: Optional[models.User] = Depends(auth.get_optiona
     return RedirectResponse(f'https://discord.com/api/oauth2/authorize?{urlencode(params)}')
 
 @router.get('/google/login')
-def google_login(current_user: Optional[models.User] = Depends(auth.get_optional_current_user)):
+def google_login():
     params = {
         'client_id': GOOGLE_CLIENT_ID,
         'redirect_uri': GOOGLE_REDIRECT_URI,
