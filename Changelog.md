@@ -1,5 +1,22 @@
 # Changelog
 
+## 11/12/2026
+Title system and small UI changes.
+
+- Added a title system with over 50 titles to unlock, each with varying requirements.
+  - Some titles are hidden by default and have multiple requirements to unlock them.
+
+- Added a modal in the user dashboard to integrate the title system.
+
+- Updated all user components that feature a title to use the new title badge component instead of that placeholder Member badge.
+
+- Updated the site background with a gradient and images.
+  - Gradient color depends on the theme used.
+  - Coco and Ropa featured to fill in empty space on the sides for larger screens.
+    - Since they're the beauty shop NPCs, I thought it would be fitting to find a use for their portraits since they're not seen in-game anymore.
+
+- Added a slight background gradient for the footer.
+
 ## 11/9/2026
 Changes to the submission page component and other things.
 
