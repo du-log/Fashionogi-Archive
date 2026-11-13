@@ -179,7 +179,8 @@ def google_login():
         'redirect_uri': GOOGLE_REDIRECT_URI,
         'response_type': 'code',
         'scope': 'openid email profile',
-        'access_type': 'online'
+        'access_type': 'online',
+        'prompt': 'select_account'
     }
     return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}')
 
@@ -211,13 +212,13 @@ def discord_callback(
     code: Optional[str] = None,
     error: Optional[str] = None,
     state: Optional[str] = None,
-    db: Session = Depends(get_db),
-    current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
+    db: Session = Depends(get_db)
 ):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_cancelled')
 
-    if not current_user and state:
+    current_user = None
+    if state:
         try:
             payload = auth.jwt.decode(state, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
             user_id = payload.get('sub')
@@ -279,13 +280,13 @@ def google_callback(
     code: Optional[str] = None,
     error: Optional[str] = None,
     state: Optional[str] = None,
-    db: Session = Depends(get_db),
-    current_user: Optional[models.User] = Depends(auth.get_optional_current_user)
+    db: Session = Depends(get_db)
 ):
     if error or not code:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=google_cancelled')
 
-    if not current_user and state:
+    current_user = None
+    if state:
         try:
             payload = auth.jwt.decode(state, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
             user_id = payload.get('sub')
