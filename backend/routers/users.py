@@ -368,7 +368,7 @@ def verify_password(password: str, current_user: models.User = Depends(auth.get_
     if not current_user:
         raise HTTPException(status_code = 403, detail = 'Unauthorized.')
     
-    if not auth.verify_pw(password, current_user.hashed_password):
+    if not current_user.hashed_password or not auth.verify_pw(password, current_user.hashed_password):
         raise HTTPException(status_code = 400, detail = 'Passwords do not match.')
 
     return {'success': True,'message': 'Password successfully verified.'}
