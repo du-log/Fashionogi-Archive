@@ -77,7 +77,8 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
         'is_admin': current_user.is_admin,
         'avatar_id': f'{R2_PUBLIC_URL}/avatars/{current_user.avatar_id.hex}.webp' if current_user.avatar_id else None,
         'title_name': current_user.equipped_title.name if current_user.equipped_title else 'Member',
-        'title_type': current_user.equipped_title.stat_type if current_user.equipped_title else 'default'
+        'title_type': current_user.equipped_title.stat_type if current_user.equipped_title else 'default',
+        'auth_status': current_user.auth_status
     }
 
 @router.post('/me/avatar')

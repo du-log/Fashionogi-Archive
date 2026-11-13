@@ -389,7 +389,7 @@ function SubmissionUpload() {
                             <div className="flex flex-wrap gap-3">
                                 {Object.values(equipment).map((item) => (
                                     item.name && (
-                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green">
+                                        <div key={item.name} className="flex flex-col gap-2 py-2 px-4 rounded outline outline-mabi-border bg-mabi-green/50">
                                             <h5 className="text-xs text-mabi-text-muted">{item.slot}</h5>
                                             <h4 className="text-md">{item.name}</h4>
                                             {!item.dyeable && (

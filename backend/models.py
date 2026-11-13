@@ -49,12 +49,26 @@ class User(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), default = uuid.uuid4, unique = True, nullable = False)
     username: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
     email: Mapped[str] = mapped_column(String(255), unique = True, index = True, nullable = False)
-    hashed_password: Mapped[str] = mapped_column(String(255), nullable = False)
+    hashed_password: Mapped[Optional[str]] = mapped_column(String(255), nullable = True)
     avatar_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), unique = True, nullable = True)
 
     is_admin: Mapped[bool] = mapped_column(Boolean, default = False, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
+
+    hashed_recovery_code: Mapped[Optional[str]] = mapped_column(String, nullable = True)
+    discord_id: Mapped[Optional[str]] = mapped_column(String(64), unique = True, index = True, nullable = True)
+    google_id: Mapped[Optional[str]] = mapped_column(String(64), unique = True, index = True, nullable = True)
+
+    @property
+    def auth_status(self) -> dict:
+        return {
+            "is_verified": self.is_verified,
+            "has_password": self.hashed_password is not None,
+            "has_recovery_code": self.hashed_recovery_code is not None,
+            "discord_linked": self.discord_id is not None,
+            "google_linked": self.google_id is not None,
+        }
 
     verification_token: Mapped[str] = mapped_column(String, nullable = True)
 
