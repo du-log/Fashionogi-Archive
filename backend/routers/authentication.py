@@ -187,6 +187,29 @@ def google_login(current_user: Optional[models.User] = Depends(auth.get_optional
         params['state'] = auth.create_token(data = {'sub': str(current_user.id)})
     return RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}')
 
+@router.get('/discord/link')
+def discord_link(current_user: models.User = Depends(auth.get_current_user)):
+    params = {
+        'client_id': DISCORD_CLIENT_ID,
+        'redirect_uri': DISCORD_REDIRECT_URI,
+        'response_type': 'code',
+        'scope': 'identify email',
+        'state': auth.create_token(data = {'sub': str(current_user.id)})
+    }
+    return {'url': f'https://discord.com/api/oauth2/authorize?{urlencode(params)}'}
+
+@router.get('/google/link')
+def google_link(current_user: models.User = Depends(auth.get_current_user)):
+    params = {
+        'client_id': GOOGLE_CLIENT_ID,
+        'redirect_uri': GOOGLE_REDIRECT_URI,
+        'response_type': 'code',
+        'scope': 'openid email profile',
+        'access_type': 'online',
+        'state': auth.create_token(data = {'sub': str(current_user.id)})
+    }
+    return {'url': f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}'}
+
 @router.get('/discord/callback')
 def discord_callback(
     code: Optional[str] = None,
