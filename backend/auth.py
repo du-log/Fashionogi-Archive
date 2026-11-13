@@ -92,6 +92,10 @@ def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], em
 
     linkingStmt = (select(User).where(id_column == provider_id))
     if current_user:
+        existing_id = getattr(current_user, id_attribute)
+        if existing_id and existing_id != provider_id:
+            raise HTTPException(status_code = 400, detail = f'Your account is already linked to a different {provider.title()} account.')
+
         existing_owner = db.execute(linkingStmt).scalars().first()
         if existing_owner and existing_owner.id != current_user.id:
             raise HTTPException(status_code = 400, detail = f'This {provider.title()} account is already linked to another user.')
@@ -113,7 +117,8 @@ def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], em
     if email and email_verified:
         user = db.execute(existingVerifiedStmt).scalars().first()
         if user:
-            setattr(user, id_attribute, provider_id)
+            if getattr(user, id_attribute) is None:
+                setattr(user, id_attribute, provider_id)
             user.is_verified = True
             user.last_login = func.now()
             db.commit()
