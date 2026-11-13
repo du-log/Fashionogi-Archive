@@ -270,9 +270,13 @@ def discord_callback(
     except HTTPException:
         return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=discord_already_linked')
 
-    response = RedirectResponse(f'{FRONTEND_URL}/account/settings')
-    auth.set_auth_cookie(response, user.id)
-    return response
+    # If state was present, the user was already logged in and linking from /account/settings
+    if state:
+        return RedirectResponse(f'{FRONTEND_URL}/account/settings')
+
+    # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
+    handoff_token = auth.create_token(data = {'sub': str(user.id)})
+    return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
 
 @router.get('/google/callback')
 def google_callback(
@@ -333,6 +337,37 @@ def google_callback(
     except HTTPException:
         return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=google_already_linked')
 
-    response = RedirectResponse(f'{FRONTEND_URL}/account/settings')
+    # If state was present, the user was already logged in and linking from /account/settings
+    if state:
+        return RedirectResponse(f'{FRONTEND_URL}/account/settings')
+
+    # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
+    handoff_token = auth.create_token(data = {'sub': str(user.id)})
+    return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
+
+class OAuthSessionPayload(BaseModel):
+    token: str
+
+@router.post('/oauth/session')
+def exchange_oauth_session(
+    payload: OAuthSessionPayload,
+    response: Response,
+    db: Session = Depends(get_db)
+):
+    try:
+        decoded = auth.jwt.decode(payload.token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+        user_id = decoded.get('sub')
+        if not user_id:
+            raise HTTPException(status_code = 401, detail = 'Invalid OAuth token')
+    except Exception:
+        raise HTTPException(status_code = 401, detail = 'Invalid or expired OAuth token')
+
+    user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+    if not user:
+        raise HTTPException(status_code = 404, detail = 'User not found')
+
     auth.set_auth_cookie(response, user.id)
-    return response
+    return {
+        'message': 'Logged in successfully',
+        'user': { 'id': user.id, 'username': user.username, 'user_id': user.user_id }
+    }
