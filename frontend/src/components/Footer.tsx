@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
     return (
-        <div className="flex flex-col bottom-0 items-center bg-mabi-surface-muted border-t-1 border-mabi-border w-full p-4 text-mabi-text">
+        <div className="flex flex-col bottom-0 items-center bg-gradient-to-b from-mabi-surface-muted to-mabi-surface border-t-1 border-mabi-border w-full p-4 text-mabi-text z-10">
             <p>© 2026 Fashionogi Archive. All Rights Reserved.</p>
             <div className="grid grid-cols-2 py-2 border-t border-mabi-border-heavy">
                 <div className="flex flex-col gap-1 items-end text-sm pr-2">
