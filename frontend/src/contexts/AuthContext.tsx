@@ -1,6 +1,7 @@
 /* Authentication Context file, all endpoint connections utilized for user auth are in AuthProvider */
 
 import { createContext } from "react"
+import type { AuthStatus } from "../components/user/AccountSettingsSecuritySection";
 
 export type User = {
     id: number,
@@ -8,7 +9,8 @@ export type User = {
     is_admin: boolean,
     avatar_id: string,
     title_name: string,
-    title_type: string
+    title_type: string,
+    auth_status: AuthStatus
 }
 
 type AuthContextType = {

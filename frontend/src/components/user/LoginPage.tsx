@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { MailIcon, KeyIcon } from "lucide-react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useState } from "react";
+import { LoginOAuthAndRecovery } from "./OAuthLoginAndRecovery";
+import { BASE_URL } from "../../utilities/MiscUtility";
 
 function LoginPage() {
     const auth = useContext(AuthContext);
@@ -50,17 +52,11 @@ function LoginPage() {
                             <label><KeyIcon size={25} /></label>
                             <input type="password" className="bg-mabi-surface-muted p-1" autoComplete="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
-                        {/*<Link to='/'><p className="text-xs text-[#ffffff90] hover:text-[#a5f500]">Forgot password?</p></Link>*/}
                     </div>
-                    {/*
-                    <div className="flex gap-3 items-center">
-                        <label className="text-md text-[#eeeeee]">Remember Me</label>
-                        <input type="checkbox" className="cursor-pointer w-5 h-5" />
-                    </div>
-                    */}
                     <span className={`text-sm ${isSuccess ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{loginMsg}</span>
                     <button type="submit" className="rounded-lg bg-[#006000] px-2 py-3 cursor-pointer transition-color duration-50 hover:bg-[#008000] font-bold text-[#eeeeee] outline outline-[#ffffff90]">Log In</button>
                 </form>
+                <LoginOAuthAndRecovery AUTH_URL={`${BASE_URL}/api/auth`} />
                 <div className="flex flex-col items-center">Don't have an account?<Link to='/register'><p className="text-md text-mabi-text-muted hover:text-mabi-gold">Register here!</p></Link></div>
                 <Link to={'/'} className="w-fit"><p className="place-self-center text-sm rounded px-2 py-1 outline hover:text-mabi-gold">Return to Home</p></Link>
                 {/*
