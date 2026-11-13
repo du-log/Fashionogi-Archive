@@ -1,19 +1,22 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MailIcon, KeyIcon } from "lucide-react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginOAuthAndRecovery } from "./OAuthLoginAndRecovery";
 import { BASE_URL } from "../../utilities/MiscUtility";
+
+const noopCheckSession = async (): Promise<void> => {};
 
 function LoginPage() {
     const auth = useContext(AuthContext);
     const login = auth?.login ?? (() => {});
-    const checkSession = auth?.checkSession ?? (() => {});
+    const checkSession = auth?.checkSession ?? noopCheckSession;
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loginMsg, setLoginMsg] = useState<string>('');
     const [isSuccess, setSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const handleLogin = async (e: React.SubmitEvent) => {
         setLoginMsg('');
@@ -33,6 +36,31 @@ function LoginPage() {
             console.log('Could not login', err);
         }
     }
+
+    useEffect(() => {
+        const oauthToken = searchParams.get('oauth_token');
+        if (!oauthToken) return;
+
+        const completeOAuthLogin = async () => {
+            try {
+                const res = await fetch(`${BASE_URL}/api/auth/oauth/session`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({token: oauthToken}),
+                    credentials: 'include'
+                })
+                if (res.ok) {
+                    checkSession();
+                    navigate('/');
+                } else {
+                    alert('Could not complete OAuth login.');
+                }
+            } catch (err) {
+                console.error('OAuth session exchange error:', err);
+            }
+        }
+        completeOAuthLogin();
+    }, [searchParams, checkSession, navigate])
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-mabi-text bg-mabi-surface-muted">
