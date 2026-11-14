@@ -4,7 +4,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkRehype from "remark-rehype";
-import { NEWS_URL } from "../../utilities/MiscUtility";
+import { NEWS_URL, useDocTitle } from "../../utilities/MiscUtility";
 import type { Article } from "./NewsPage";
 
 function ArticlePage() {
@@ -19,6 +19,8 @@ function ArticlePage() {
         month: 'long',
         day: 'numeric'
     }) : "";
+
+    useDocTitle(pageData ? `Article: ${pageData.title} | Fashionogi Archive` : (pageLoading ? 'Loading... | Fashionogi Archive' : 'Style not found | Fashionogi Archive'));
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;

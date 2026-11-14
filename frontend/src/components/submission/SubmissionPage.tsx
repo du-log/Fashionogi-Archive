@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserNameplate from "../user/UserNameplate";
-import { SUBS_URL } from "../../utilities/MiscUtility";
+import { SUBS_URL, useDocTitle } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
@@ -86,6 +86,8 @@ function SubmissionPage() {
             console.error('Failed to toggle', err);
         }
     }
+
+    useDocTitle(submission ? `Style: ${submission.title} | Fashionogi Archive` : (isLoading ? 'Loading... | Fashionogi Archive' : 'Style not found | Fashionogi Archive'));
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;

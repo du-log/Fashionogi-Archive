@@ -44,6 +44,7 @@ function LoginPage() {
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-mabi-text bg-mabi-surface-muted">
+            <title>Log In | Fashionogi Archive</title>
             <div className="flex flex-col items-center py-5 px-10 outline-1 rounded-xl bg-[#00660070]">
                 <h1 className="text-4xl text-[#ffffff] italic">Fashionogi Archive</h1>
                 <h5 className="text-lg text-[#ffd700] italic">Discover your Erinn Style</h5>

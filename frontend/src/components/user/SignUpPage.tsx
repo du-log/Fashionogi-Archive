@@ -219,6 +219,7 @@ function SignUpPage() {
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center w-full h-[100vh] text-lg text-mabi-text bg-mabi-surface-muted">
+            <title>Sign Up | Fashionogi Archive</title>
             {!isRegistered && (
                 <div className="flex flex-col gap-5 items-center outline outline-mabi-border-heavy pt-10 pb-5 px-5 bg-mabi-surface">
                     <h1 className="text-4xl text-mabi-text-muted">Sign Up</h1>

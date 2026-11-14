@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { UserIcon } from "lucide-react";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
-import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
+import { R2_PUBLIC_URL, useDocTitle, USERS_URL } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -109,6 +109,8 @@ function UserProfile() {
             setFollowersOpen(true);
         }
     }
+
+    useDocTitle(username ? `User Profile: ${username} | Fashionogi Archive` : (isLoading ? 'Loading... | Fashionogi Archive' : 'User not found | Fashionogi Archive'));
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;

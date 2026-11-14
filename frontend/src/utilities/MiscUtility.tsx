@@ -1,10 +1,18 @@
 /* Miscellaneous utility file for exports that don't really group wih other things */
 
+import { useEffect } from "react";
+
 export function formatFavorites(count: number): string {
     if (count >= 1000) {
         return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
     }
     return count.toString();
+}
+
+export function useDocTitle(title: string) {
+  useEffect(() => {
+    document.title = title;
+  }, [title])
 }
 
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL;

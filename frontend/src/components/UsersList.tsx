@@ -21,6 +21,7 @@ export default function UsersList() {
 
     return (
         <>  
+            <title>Users List | Fashionogi Archive</title>
             {isLoading && (
                 <div className="w-full h-[69.1vh] flex flex-col justify-center items-center">
                     <span>Loading...</span>

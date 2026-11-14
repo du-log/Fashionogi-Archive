@@ -98,6 +98,7 @@ function NewsPage() {
 
     return (
         <div className={`flex flex-col gap-5 min-h-[86vh] px-5 xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <title>News and Announcements | Fashionogi Archive</title>
             <div className="relative flex items-center border-b border-mabi-border-heavy pb-2">
                 <h1 className="text-4xl">Site News and Announcements</h1>
                 {user && user.is_admin && (
