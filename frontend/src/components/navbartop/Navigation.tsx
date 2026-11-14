@@ -12,6 +12,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                     <Link to='/'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Home</p></Link>
                     <Link to='/gallery'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Gallery</p></Link>
                     <Link to='/news'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>News</p></Link>
+                    <Link to='/users'><p className={`${theme === 'light' ? 'hover:text-mabi-green' : 'hover:text-mabi-orange'}`}>Users</p></Link>
                 </div>
                 <div className="middle relative flex flex-1 justify-center items-center">
                     <div className="flex flex-col justify-center items-center p-2 rounded-2xl w-fit bg-[#00700050] outline-1 outline-mabi-border cursor-pointer" onClick={() => navigate('/')}>
