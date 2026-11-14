@@ -156,7 +156,7 @@ function UserProfile() {
                             <div className="outline outline-mabi-border-heavy h-fit">
                                 {userData.avatar_id ? <img className="w-36" src={`${R2_PUBLIC_URL}/avatars/${userData.avatar_id}.webp`} /> :  <UserIcon size={119} />}
                             </div>
-                            <div className="flex flex-col w-full gap-10">
+                            <div className="flex flex-col w-full gap-2">
                                 <div className="flex gap-5 items-center w-full">
                                     <h1 className="text-4xl">{username}</h1>
                                     <div className="bg-[#000]/20 w-fit"><TitleBadge name={userData.active_title?.name} category={userData.active_title?.stat_type} /></div>
@@ -164,7 +164,7 @@ function UserProfile() {
                                         <button className={`btn btn-soft ${followData?.is_following ? 'btn-warning' : 'btn-primary'}`} onClick={toggleFollow}>{followData?.is_following ? 'Unfollow' : 'Follow'}</button>
                                     )}
                                 </div>
-                                {followData?.is_following && <p className="text-2xl py-1 px-2 outline outline-mabi-orange bg-mabi-surface-muted text-mabi-gold w-fit cursor-default">Following</p>}
+                                {followData?.is_following && <p className="text-2xl py-1 px-2 outline outline-mabi-orange bg-mabi-base text-mabi-gold w-fit cursor-default">Following</p>}
                             </div>
                         </div>
                         <div className="grid grid-cols-5 gap-5">
