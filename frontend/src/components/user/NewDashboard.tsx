@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { UserIcon, UserMinus } from "lucide-react";
+import { Cog, UserIcon, UserMinus } from "lucide-react";
 import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import type { userProfile, followData, NameplateUser } from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
@@ -170,6 +170,7 @@ export default function NewDashboard() {
 
     return (
         <div>
+            <title>Dashboard | Fashionogi Archive</title>
             {userLoading || isLoading && (
                 <div className="flex justify-center items-center min-h-[50vh]">
                     <span className="loading loading-spinner loading-xl"></span>
@@ -192,14 +193,13 @@ export default function NewDashboard() {
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 items-center">
-                        <div className="flex flex-col gap-5 items-end">
-                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Submitted: {styles.length} {styles.length === 1 ? 'Style' : 'Styles'}</p>
-                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Style Favorites: {favoritesTotal}</p>
-                        </div>
-                        <div className="flex flex-col gap-5 items-end">
-                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Followers: {followData?.followers_count}</p>
-                            <p className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit cursor-default bg-mabi-surface-muted">Following: {followData?.following_count}</p>
+                    <div className="grid grid-cols-1 items-center">
+                        <div className="flex flex-col gap-5 items-end justify-between">
+                            <div className="flex gap-5 items-center">
+                                <Link to={`/profile/${user?.username}`}><p className={`p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold`}>View Profile</p></Link>
+                                <Link to='/account/settings'><div className="flex gap-2 items-center p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold"><Cog /><p>Settings</p></div></Link>
+                            </div>
+                            <h1 className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit bg-mabi-surface-muted">Total Style Favorites: {favoritesTotal}</h1>
                         </div>
                     </div>
                 </div>
@@ -215,10 +215,10 @@ export default function NewDashboard() {
                             My Collections
                         </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'followers' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('followers')}>
-                            Followers
+                            Followers [{followData?.followers_count}]
                         </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'following' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('following')}>
-                            Following
+                            Following [{followData?.following_count}]
                         </button>
                     </div>
                     <div className="flex items-center p-2">
@@ -305,12 +305,14 @@ export default function NewDashboard() {
                     {activeTab === 'following' && (
                         <>
                             {followingData.length > 0 && (
-                                <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
                                     {followingData.map((user) => (
                                         <div className="group relative">
-                                            <UserNameplate key={user.username} username={user.username} intialData={user} />
-                                            <button className="absolute top-1 left-1 btn w-fit h-fit p-1 z-100 opacity-0 group-hover:opacity-100 group-hover:btn-error" onClick={() => toggleFollow(user.id)}>
-                                                <UserMinus size={20} />
+                                            <div className="w-75">
+                                                <UserNameplate key={user.id} username={user.username} intialData={user} />
+                                            </div>
+                                            <button className="absolute bottom-1 right-1 btn btn-error w-fit h-fit p-1 z-100 opacity-0 group-hover:opacity-100" onClick={() => toggleFollow(user.id)} title="Unfollow this user">
+                                                <UserMinus size={24} />
                                             </button>
                                         </div>
                                     ))}

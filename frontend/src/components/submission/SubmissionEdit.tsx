@@ -227,6 +227,7 @@ export default function SubmissionEdit() {
 
     return (
         <div className={`flex flex-col gap-3 w-full min-h-[86vh] sm:px-[15%] xl:px-[20%] pt-5 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <title>Edit Style | Fashionogi Archive</title>
             <h2 className="text-3xl">Edit Style</h2>
             <div className="relative flex w-full">
                 <input className="p-3 border-1 w-full text-md bg-mabi-surface-muted"

@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { UserIcon } from "lucide-react";
 import type { GalleryItem } from "../gallery/Gallery";
 import GalleryCard from "../gallery/GalleryCard";
-import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
+import { R2_PUBLIC_URL, useDocTitle, USERS_URL } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -109,6 +109,8 @@ function UserProfile() {
             setFollowersOpen(true);
         }
     }
+
+    useDocTitle(username ? `User Profile: ${username} | Fashionogi Archive` : (isLoading ? 'Loading... | Fashionogi Archive' : 'User not found | Fashionogi Archive'));
 
     useEffect(() => {
         document.documentElement.scrollTop = 0;
@@ -216,14 +218,16 @@ function UserProfile() {
                                 Not yet implemented.
                             </div>
                         </div>
-                        <div className="flex flex-col gap-5 p-1">
-                            <h1 className="text-xl xl:text-2xl pb-2 border-b border-mabi-border">Most Popular Styles</h1>
-                            <div className="grid grid-cols-3 gap-5 place-items-center py-5">
-                                {topStyles.map((style) => (
-                                    <GalleryCard key={style.id} item={style} />
-                                ))}
+                        {topStyles.length === 3 && (
+                            <div className="flex flex-col gap-5 p-1">
+                                <h1 className="text-xl xl:text-2xl pb-2 border-b border-mabi-border">Most Favorited Styles</h1>
+                                <div className="grid grid-cols-3 gap-5 place-items-center py-5">
+                                    {topStyles.map((style) => (
+                                        <GalleryCard key={style.id} item={style} />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%]">
                         <h1 className="text-xl xl:text-2xl border-b border-mabi-border pb-2">Latest Styles</h1>
@@ -232,6 +236,9 @@ function UserProfile() {
                                 <GalleryCard key={style.id} item={style} />
                             ))}
                         </div>
+                        {latestStyles.length === 0 && (
+                            <p>{username} has not submitted any styles yet...</p>
+                        )}
                         {latestStyles.length === 10 && (
                             <Link to={`/gallery?username=${username}`}><p className="py-1 px-2 outline outline-mabi-border rounded w-fit">See more by {username}</p></Link>
                         )}
@@ -251,9 +258,11 @@ function UserProfile() {
                             {followersData.length > 0 && (
                                 <>
                                     <h1 className="text-4xl text-center">Users following {username}</h1>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 py-5 gap-5 place-items-center overflow-y-auto">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 py-5 gap-5 place-items-center overflow-y-auto">
                                         {followersData.map((user) => (
-                                            <UserNameplate key={user.username} intialData={user} username={user.username} setOpen={setFollowersOpen} />
+                                            <div className="w-75">
+                                                <UserNameplate key={user.id} username={user.username} intialData={user} setOpen={setFollowersOpen} />
+                                            </div>
                                         ))}
                                     </div>
                                 </>
@@ -273,9 +282,11 @@ function UserProfile() {
                             {followingData.length > 0 && (
                                 <>
                                     <h1 className="text-4xl text-center"> Users followed by {username}</h1>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 py-5 gap-5 place-items-center overflow-y-auto">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 py-5 gap-5 place-items-center overflow-y-auto">
                                         {followingData.map((user) => (
-                                            <UserNameplate key={user.username} intialData={user} username={user.username} setOpen={setFollowingOpen}/>
+                                            <div className="w-75">
+                                                <UserNameplate key={user.id} username={user.username} intialData={user} setOpen={setFollowingOpen} />
+                                            </div>
                                         ))}
                                     </div>
                                 </>
