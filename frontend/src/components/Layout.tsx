@@ -25,11 +25,11 @@ function Layout() {
             <div className="flex flex-col w-full pt-42 pb-58 z-10">
                 <Outlet />
             </div>
-            <Footer />
+            <Footer theme={theme} />
             <div className="fixed flex justify-center items-end w-[100vw] h-[100vh] opacity-10">
                 <div className="flex w-full h-full justify-between items-end px-20">
-                    <img src={Coco} className="w-auto h-[30%] lg:h-[25%] xl:h-[40%]" />
                     <img src={Ropa} className="w-auto h-[30%] lg:h-[25%] xl:h-[40%]" />
+                    <img src={Coco} className="w-auto h-[30%] lg:h-[25%] xl:h-[40%]" />
                 </div>
             </div>
         </div>
