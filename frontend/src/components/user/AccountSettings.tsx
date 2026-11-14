@@ -5,6 +5,7 @@ import { BASE_URL, USERS_URL } from "../../utilities/MiscUtility";
 import PwChangeForm from "./PwChangeForm";
 import AvatarSettings from "./AvatarSettings";
 import { AccountSecuritySection } from "./AccountSettingsSecuritySection";
+import type { userProfile } from "./UserProfile";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
@@ -16,18 +17,16 @@ function AccountSettings() {
     const [isChecking, setChecking] = useState<boolean>(false);
     
     const navigate = useNavigate();
-    const [currentTab, setTab] = useState<string>('personal');
     const [username, setUsername] = useState<string>('');
     const [isAvailable, setAvailable] = useState<boolean>(false);
     const [availMsg, setAvailMsg] = useState<string>('');
 
     const [nameFlag, setNameFlag] = useState<boolean>(false);
 
+    const [currentProfile, setProfile] = useState<userProfile>();
     const [bio, setBio] = useState<string | null | undefined>('');
     const [server, setServer] = useState<string | null | undefined>('');
-    //const [guild, setGuild] = useState<string | null | undefined>('');
     const [ign, setIgn] = useState<string | null | undefined>('');
-    const [discord, setDiscord] = useState<string | null | undefined>('');
 
     const handleNameCheck = async (username: string) => {
         setAvailable(false);
@@ -75,8 +74,7 @@ function AccountSettings() {
         const payload = {
             bio: bio,
             server: server,
-            in_game_name: ign,
-            discord_username: discord
+            in_game_name: ign
         }
 
         try {
@@ -90,16 +88,10 @@ function AccountSettings() {
             })
             if (res.ok) {
                 const newData = await res.json();
+                setProfile(newData);
                 setBio(newData?.bio);
                 setServer(newData?.server);
-                //setGuild(userData?.guild);
                 setIgn(newData?.in_game_name);
-                //setRace(userData?.main_race);
-                //setGender(userData?.main_gender);
-                setDiscord(newData?.discord_username);
-                //setTwitter(userData?.twitter_link);
-                //setTwitch(userData?.twitch_link);
-                //setYoutube(userData?.youtube_link);
                 alert('Profile successfully updated.');
             } else {
                 console.error('Profile update failed.');
@@ -117,16 +109,10 @@ function AccountSettings() {
             const res = await fetch(`${USERS_URL}/profiles/${user?.username}`);
             if (res.ok) {
                 const data = await res.json();
+                setProfile(data);
                 setBio(data?.bio);
                 setServer(data?.server);
-                //setGuild(userData?.guild);
                 setIgn(data?.in_game_name);
-                //setRace(userData?.main_race);
-                //setGender(userData?.main_gender);
-                setDiscord(data?.discord_username);
-                //setTwitter(userData?.twitter_link);
-                //setTwitch(userData?.twitch_link);
-                //setYoutube(userData?.youtube_link);
             }
             if(res.ok) setTimeout(() => setLoading(false), 100);
         }
@@ -140,93 +126,84 @@ function AccountSettings() {
                     <span className="loading loading-spinner loading-xl"></span>
                 </div>
             )}
-            <div className={`flex gap-10 w-full h-[73.5vh] sm:px-[5%] xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-                <div className="flex flex-1 flex-col gap-3 outline text-lg p-5 h-fit bg-mabi-surface">
-                    <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'personal' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('personal')}>Account Settings</p>
-                    <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'notif' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('notif')}>Notifications</p>
-                    <p className={`p-2 outline rounded-lg cursor-pointer ${currentTab === 'security' ? 'bg-mabi-green' : 'hover:bg-mabi-green'}`} onClick={() => setTab('security')}>Security</p>
-                </div>
-                <div className="flex flex-3 flex-col w-full min-h-[50vh] px-10 py-5 outline overflow-y-auto bg-mabi-surface-muted">
-                    {currentTab === 'personal' && (
-                        <div className="flex flex-col gap-5 p-2">
-                            <h1 className="text-2xl border-b border-mabi-border-heavy pb-2">Account Settings</h1>
-                            <div className="flex flex-col gap-2 py-2 w-full">
-                                <h1 className="text-xl">Avatar</h1>
-                                <AvatarSettings currentAvatarId={user?.avatar_id} />
+            <div className={`flex gap-10 w-full min-h-[69.1vh] sm:px-[5%] xl:px-[20%] py-20 text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                <div className="flex flex-3 flex-col w-full gap-10 outline bg-mabi-surface-muted pb-10">
+                    <h1 className="text-2xl border-b-1 border-mabi-border-heavy p-3 bg-mabi-surface">Account Settings</h1>
+                    <div className="flex flex-col gap-5 px-10">
+                        <div className="flex flex-col gap-2 py-2 w-full">
+                            <h1 className="text-xl">Avatar</h1>
+                            <AvatarSettings currentAvatarId={user?.avatar_id} />
+                        </div>
+                        <div className="flex flex-col gap-2 py-2 w-full">
+                            <h1 className="text-xl">Change Username</h1>
+                            <div className="flex gap-5 items-center">
+                                <input type="text" className="bg-mabi-surface p-1" maxLength={15} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user?.username} />
+                                <button className={`btn btn-warning w-fit ${username.length < 3 || username === user?.username ? 'btn-disabled' : ''} ${isChecking && 'btn-disabled'}`} onClick={() => handleNameCheck(username)}>{isChecking ? 'Checking...' : 'Check'}</button>
                             </div>
-                            <div className="flex flex-col gap-2 py-2 w-full">
-                                <h1 className="text-xl">Change Username</h1>
-                                <div className="flex gap-5 items-center">
-                                    <input type="text" className="bg-mabi-surface p-1" maxLength={15} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={user?.username} />
-                                    <button className={`btn btn-warning w-fit ${username.length < 3 || username === user?.username ? 'btn-disabled' : ''} ${isChecking && 'btn-disabled'}`} onClick={() => handleNameCheck(username)}>{isChecking ? 'Checking...' : 'Check'}</button>
-                                </div>
-                                <p className={`text-sm ${isAvailable && availMsg.length > 0 ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{availMsg}</p>
-                                {nameFlag && (
-                                    <>
-                                        <div className="flex flex-col gap-2 py-5">
-                                            <p className="text-wrap">Changing your username will affect these things:</p>
-                                            <ul className="list-disc pl-5">
-                                                <li><p>The URL to access your profile.</p></li>
-                                                <li><p>The username featured on your submissions.</p></li>
-                                                {user?.is_admin && (<li><p>Any admin-related actions that display your username.</p></li>)}
-                                            </ul>
-                                            <p>Are you sure? After confirming, you will need to sign in again.</p>
-                                        </div>
-                                        <div className="modal-action justify-center pb-5">
-                                            <button className="btn btn-success" onClick={() => handleNameChange(username)}>Change</button>
-                                            <button className="btn btn-error" onClick={() => {setNameFlag(false); handleNameReset()}}>Cancel</button>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            <p className={`text-sm ${isAvailable && availMsg.length > 0 ? 'text-[#00aa00]' : 'text-[#aa0000]'}`}>{availMsg}</p>
+                            {nameFlag && (
+                                <>
+                                    <div className="flex flex-col gap-2 py-5">
+                                        <p className="text-wrap">Changing your username will affect these things:</p>
+                                        <ul className="list-disc pl-5">
+                                            <li><p>The URL to access your profile.</p></li>
+                                            <li><p>The username featured on your submissions.</p></li>
+                                            {user?.is_admin && (<li><p>Any admin-related actions that display your username.</p></li>)}
+                                        </ul>
+                                        <p>Are you sure? After confirming, you will need to sign in again.</p>
+                                    </div>
+                                    <div className="modal-action justify-center pb-5">
+                                        <button className="btn btn-success" onClick={() => handleNameChange(username)}>Change</button>
+                                        <button className="btn btn-error" onClick={() => {setNameFlag(false); handleNameReset()}}>Cancel</button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <h1 className="text-xl">Edit Profile</h1>
                             <div className="flex flex-col gap-2">
-                                <h1 className="text-xl">Edit Profile</h1>
-                                <div className="flex flex-col gap-2 p-5 outline-1 outline-mabi-border-heavy">
-                                    <h1 className="text-md text-mabi-text-muted">Bio</h1>
-                                    <div className="relative w-full">
-                                        <textarea className="bg-mabi-surface outline-1 outline-mabi-border w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
-                                        <p className="absolute bottom-1 right-1">{bio && 200 - bio.length}</p>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <h1 className="text-md text-mabi-text-muted">Region/Server</h1>
+                                <h1 className="text-md text-mabi-text-muted">Bio</h1>
+                                <div className="relative w-full">
+                                    <textarea className="bg-mabi-surface outline-1 outline-mabi-border w-full p-1 resize-none" value={bio || ''} onChange={(e) => setBio(e.target.value)} rows={8} maxLength={200} />
+                                    <p className="absolute bottom-1 right-0 text-xs text-mabi-text-muted">{bio && 200 - bio.length}</p>
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-md text-mabi-text-muted">Region/Server</h1>
+                                    <div className="relative w-fit">
                                         <input className="bg-mabi-surface outline-1 outline-mabi-border p-1 w-50" maxLength={20} value={server || ''} onChange={(e) => setServer(e.target.value)} />
+                                        <p className="absolute text-xs text-mabi-text-muted leading-none bottom-0 right-0">{(20 - Number(server?.length))}</p>
                                     </div>
-                                    <div className="flex flex-col">
-                                        <h1 className="text-md text-mabi-text-muted">IGN:</h1>
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-md text-mabi-text-muted">IGN:</h1>
+                                    <div className="relative w-fit">
                                         <input className="bg-mabi-surface outline-1 outline-mabi-border p-1 w-50" maxLength={30} value={ign || ''} onChange={(e) => setIgn(e.target.value)} />
+                                        <p className="absolute text-xs text-mabi-text-muted leading-none bottom-0 right-0">{(30 - Number(ign?.length))}</p>
                                     </div>
-                                    <div className="flex flex-col">
-                                        <h1 className="text-md text-mabi-text-muted">Discord Username</h1>
-                                        <input className="bg-mabi-surface outline-1 outline-mabi-border p-1 w-50" maxLength={50} value={discord || ''} onChange={(e) => setDiscord(e.target.value)} />
-                                    </div>
-                                    <div className="flex w-full justify-center">
-                                        <button className="btn btn-success w-fit" onClick={handleProfileUpdate}>Update</button>
-                                    </div>
+                                </div>
+                                <div className="flex w-full justify-center">
+                                    <button className="btn btn-success w-fit" onClick={handleProfileUpdate} disabled={currentProfile?.bio === bio && currentProfile?.in_game_name === ign && currentProfile?.server === server}>Update</button>
                                 </div>
                             </div>
                         </div>
-                    )}
-                    {currentTab === 'notif' && (
-                        <div className="flex flex-col gap-5 p-2">
-                            <h1 className="text-2xl border-b border-mabi-border-heavy pb-2">Notifications</h1>
-                            <p>Not currently implemented.</p>
+                    </div>
+                    <h1 className="text-2xl border-y-1 border-mabi-border-heavy p-3 bg-mabi-surface">Security</h1>
+                    <div className="flex flex-col gap-5 px-10">
+                        <div className="flex flex-col gap-2 py-2 w-full">
+                            <h1 className="text-xl">Change Password</h1>
+                            <PwChangeForm />
                         </div>
-                    )}
-                    {currentTab === 'security' && (
-                        <div className="flex flex-col gap-5 p-2">
-                            <h1 className="text-2xl border-b border-mabi-border-heavy pb-2">Security</h1>
-                            <div className="flex flex-col gap-2 py-2 w-full">
-                                <h1 className="text-xl">Change Password</h1>
-                                <PwChangeForm />
-                            </div>
-                            <AccountSecuritySection AUTH_URL={`${BASE_URL}/api/auth`} authStatus={user?.auth_status} onRefreshUser={checkSession} />
-                            <div className="flex flex-col gap-2 py-2 w-full">
-                                <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
-                                <p>If you wish to have your account deactivated, please click the button below.</p>
-                                <button className="btn btn-error btn-disabled w-fit">Request Account Deactivation</button>
-                            </div>
+                        <AccountSecuritySection AUTH_URL={`${BASE_URL}/api/auth`} authStatus={user?.auth_status} onRefreshUser={checkSession} />
+                        <div className="flex flex-col gap-2 py-2 w-full">
+                            <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
+                            <p>If you wish to have your account deactivated, please click the button below.</p>
+                            <button className="btn btn-error btn-disabled w-fit">Request Account Deactivation</button>
                         </div>
-                    )}
+                    </div>
+                    <h1 className="text-2xl border-y-1 border-mabi-border-heavy p-3 bg-mabi-surface">Notifications</h1>
+                    <div className="flex flex-col gap-5 px-10">
+                        <p>Not currently implemented.</p>
+                    </div>
                 </div>
             </div>
         </>

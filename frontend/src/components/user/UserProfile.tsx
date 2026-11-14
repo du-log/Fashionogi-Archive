@@ -134,21 +134,21 @@ function UserProfile() {
                 const addiData = await dataRes.json();
                 setFollowData(addiData);
             }
-            if(res.ok && imgRes.ok && dataRes.ok) setTimeout(() => setLoading(false), 100);
+            if(res.ok && imgRes.ok && dataRes.ok) setTimeout(() => setLoading(false), 200);
         }
         if (username) fetchProfile();
     }, [username])
 
     return (
-        <div className="flex flex-col w-full min-h-[86vh] text-mabi-text">
+        <div className="text-mabi-text">
             {isLoading && (
-                <div className={`flex flex-col items-center justify-center min-h-[90vh] w-full transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className={`flex flex-col items-center justify-center min-h-[69.1vh]`}>
                     <span>Loading...</span>
                     <span className="loading loading-ring loading-xl" />
                 </div>
             )}
             {userData && !isLoading && (
-                <div className={`flex flex-col items-center gap-10 w-full sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                <div className={`flex flex-col items-center gap-10 w-full min-h-[69.1vh] sm:px-[5%] xl:px-[20%] py-20 transition-opacity duration-200 ease-in-out ${!isLoading ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
                     <div className="flex flex-col gap-5 w-full xl:w-[80%] outline outline-mabi-border px-5 py-10 bg-mabi-surface">
                         <div className="flex gap-10 w-full">
                             <div className="outline outline-mabi-border-heavy h-fit">
@@ -199,15 +199,11 @@ function UserProfile() {
                                 <div className="flex flex-col gap-2 outline outline-mabi-border-heavy bg-mabi-surface-muted p-4 max-h-40 overflow-y-auto">
                                     <div className="flex gap-2">
                                         <h1 className="text">Region/Server:</h1>
-                                        <p className="text-wrap">{userData.server ? userData.server : 'Not stated.'}</p>
+                                        <p className="text-wrap">{userData.server ? userData.server : 'Not shared.'}</p>
                                     </div>
                                     <div className="flex gap-2">
                                         <h1 className="text">IGN:</h1>
-                                        <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not stated.'}</p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <h1 className="text">Discord:</h1>
-                                        <p className="text-wrap">{userData.discord_username ? userData.discord_username : 'Not stated.'}</p>
+                                        <p className="text-wrap">{userData.in_game_name ? userData.in_game_name : 'Not shared.'}</p>
                                     </div>
                                 </div>
                             </div>
