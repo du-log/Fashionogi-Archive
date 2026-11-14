@@ -13,8 +13,8 @@ export default function About() {
         }, [])
     
     return (
-        <div className={`prose prose-invert max-w-none pt-20 px-[5%] xl:px-[20%] min-h-[86vh] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-            <div className="w-full bg-mabi-surface-muted p-[5%]">
+        <div className={`prose prose-invert max-w-none pt-20 px-[5%] xl:px-[20%] min-h-[69.1vh] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+            <div className="w-full bg-gradient-to-t from-mabi-surface-muted/50 to-mabi-surface/50 p-[5%]">
                 <Markdown remarkPlugins={[remarkGfm,remarkBreaks, remarkRehype]}>
                     {about}
                 </Markdown>

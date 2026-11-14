@@ -172,7 +172,7 @@ function Gallery() {
                         <button type="button" onClick={resetFiltersHandler} className="btn btn-error btn-soft">Reset Filters</button>
                     </div>
                 </form>
-                {isLoading && (
+                {isLoading && gallery.length === 0 && (
                     <div className="absolute flex flex-col items-center justify-center min-h-[86vh] w-full">
                         <span>Loading...</span>
                         <span className="loading loading-ring loading-xl" />
