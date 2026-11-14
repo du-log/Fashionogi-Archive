@@ -24,6 +24,7 @@ import ArticlePage from './components/news/ArticlePage';
 import { Analytics } from '@vercel/analytics/react';
 import SubmissionEdit from './components/submission/SubmissionEdit';
 import NewDashboard from './components/user/NewDashboard';
+import UsersList from './components/UsersList';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path='/guidelines' element={<Rules />} />
             <Route path='/news' element={<NewsPage />} />
             <Route path='/news/article/:id' element={<ArticlePage />} />
+            <Route path='/users' element={<UsersList />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<SignUpPage />} />
