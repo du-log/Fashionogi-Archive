@@ -99,3 +99,27 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
         'users': names,
         'submissions': titles
     }
+
+@router.get('/users/all')
+def get_all_users(db: Session = Depends(get_db)):
+    stmt = (
+        select(models.User)
+        .where(models.User.is_active)
+        .order_by(models.User.created_at.desc())
+    )
+    users = db.execute(stmt).scalars().all()
+
+    def serialize_user(u: models.User):
+        profile = getattr(u, 'profile', u)
+        return {
+            'username': u.username,
+            'id': getattr(profile, 'id', u.id),
+            'avatar_id': getattr(profile, 'avatar_id', None),
+            'server': getattr(profile, 'server', None),
+            'in_game_name': getattr(profile, 'in_game_name', None),
+            'active_title': profile.active_title if profile else {'name': 'Member', 'stat_type': 'default'}
+        }
+
+    list = [serialize_user(u) for u in users]
+
+    return list
