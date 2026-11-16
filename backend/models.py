@@ -43,22 +43,29 @@ collection_items = Table(
 # User Model
 class User(Base):
     __tablename__ = "users"
-
+    #ID PK
     id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
-
+    #Base Fields
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), default = uuid.uuid4, unique = True, nullable = False)
     username: Mapped[str] = mapped_column(String(50), unique = True, index = True, nullable = False)
     email: Mapped[str] = mapped_column(String(255), unique = True, index = True, nullable = False)
     hashed_password: Mapped[Optional[str]] = mapped_column(String(255), nullable = True)
     avatar_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid = True), unique = True, nullable = True)
-
+    #Boolean Fields
     is_admin: Mapped[bool] = mapped_column(Boolean, default = False, nullable = False)
     is_active: Mapped[bool] = mapped_column(Boolean, default = True, nullable = False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default = False, server_default = 'false', nullable = False)
-
+    #Recovery Code and OAuth
     hashed_recovery_code: Mapped[Optional[str]] = mapped_column(String, nullable = True)
     discord_id: Mapped[Optional[str]] = mapped_column(String(64), unique = True, index = True, nullable = True)
     google_id: Mapped[Optional[str]] = mapped_column(String(64), unique = True, index = True, nullable = True)
+    #Discord OAuth additional fields
+    discord_username: Mapped[Optional[str]] = mapped_column(String(64), nullable = True)
+    discord_avatar: Mapped[Optional[str]] = mapped_column(String(256), nullable = True)
+    #Google OAuth additional fields
+    google_name: Mapped[Optional[str]] = mapped_column(String(128), nullable = True)
+    google_email: Mapped[Optional[str]] = mapped_column(String(128), nullable = True)
+    google_avatar: Mapped[Optional[str]] = mapped_column(String(256), nullable = True)
 
     @property
     def auth_status(self) -> dict:
@@ -67,21 +74,26 @@ class User(Base):
             "has_password": self.hashed_password is not None,
             "has_recovery_code": self.hashed_recovery_code is not None,
             "discord_linked": self.discord_id is not None,
+            "discord_username": self.discord_username,
+            "discord_avatar": self.discord_avatar,
             "google_linked": self.google_id is not None,
+            "google_name": self.google_name,
+            "google_email": self.google_email,
+            "google_avatar": self.google_avatar,
         }
-
+    #Possible unused string, not sure where to implement yet, maybe will remove
     verification_token: Mapped[str] = mapped_column(String, nullable = True)
-
+    #General date tracking for the user i.e. joined date, activity
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
     last_login = mapped_column(DateTime(timezone = True), nullable = True)
     last_active = mapped_column(DateTime(timezone = True), nullable = True)
-
+    #Submissions-related fields (See related models for structure)
     submissions: Mapped[List["Submission"]] = relationship("Submission", back_populates = "author", cascade = "all, delete-orphan")
     collections = relationship("Collection", back_populates = "owner", cascade = "all, delete-orphan")
     favorite_submissions = relationship("Submission", secondary = user_favorites, back_populates = "favorited_by")
-
+    #User's profile (See UserProfile model below for structure)
     profile: Mapped[Optional["UserProfile"]] = relationship("UserProfile", back_populates = "user", uselist = False, cascade = "all, delete-orphan")
-
+    #Followers/Following relationships
     following = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.follower_id, secondaryjoin = id == user_followers.c.followed_id, back_populates = "followers")
     followers = relationship("User", secondary = user_followers, primaryjoin = id == user_followers.c.followed_id, secondaryjoin = id == user_followers.c.follower_id, back_populates = "following")
 
@@ -91,21 +103,21 @@ class User(Base):
 # User Profile Model
 class UserProfile(Base):
     __tablename__ = "user_profiles"
-
+    #ID PK
     id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete = "CASCADE"), primary_key = True, index = True)
-
+    #Base Fields
     bio: Mapped[Optional[str]] = mapped_column(Text, index = True, nullable = True)
     server: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
     guild: Mapped[Optional[str]] = mapped_column(String(20), index = True, nullable = True)
     in_game_name: Mapped[Optional[str]] = mapped_column(String(30), index = True, nullable = True)
     main_race: Mapped[Optional[str]] = mapped_column(String(10), index = True, nullable = True)
     main_gender: Mapped[Optional[str]] = mapped_column(String(10), index = True, nullable = True)
-
+    #Social fields, though I might remove these
     discord_username: Mapped[Optional[str]] = mapped_column(String(50), index = True, nullable = True)
     twitter_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
     twitch_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
     youtube_link: Mapped[Optional[str]] = mapped_column(String(100), index = True, nullable = True)
-
+    #Mapping the profile back to the respective user to get other related fields like avatar and join date
     user: Mapped["User"] = relationship("User", back_populates = "profile")
 
     @property

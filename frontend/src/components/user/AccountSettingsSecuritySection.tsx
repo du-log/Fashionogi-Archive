@@ -1,11 +1,16 @@
 import { useState } from "react";
 
 export interface AuthStatus {
-    is_verified: boolean;
-    has_password: boolean;
-    has_recovery_code: boolean;
-    discord_linked: boolean;
-    google_linked: boolean;
+    is_verified: boolean,
+    has_password: boolean,
+    has_recovery_code: boolean,
+    discord_linked: boolean,
+    discord_username?: string | null,
+    discord_avatar?: string | null,
+    google_linked: boolean,
+    google_name?: string | null,
+    google_email?: string | null,
+    google_avatar?: string | null
 }
 
 export function AccountSecuritySection({

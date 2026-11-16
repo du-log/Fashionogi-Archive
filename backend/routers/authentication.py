@@ -207,6 +207,27 @@ def google_link(current_user: models.User = Depends(auth.get_current_user)):
     }
     return {'url': f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}'}
 
+@router.post('/{provider}/unlink')
+def unlink_oauth_provider(provider: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    if provider not in ('discord', 'google'):
+        raise HTTPException(status_code = 400, detail = 'Invalid OAuth provider')
+
+    has_password = current_user.hashed_password is not None
+    other_linked = (
+        current_user.google_id is not None if provider == 'discord' else current_user.discord_id is not None
+    )
+
+    if not has_password and not other_linked:
+        raise HTTPException(status_code = 400, detail = 'Cannot unlink your only login method. Set a password or link another account first.')
+
+    if provider == 'discord':
+        current_user.discord_id = None
+    else:
+        current_user.google_id = None
+
+    db.commit()
+    return {'success': True, 'message': f'{provider.title()} account has been unlinked.'}
+
 @router.get('/discord/callback')
 def discord_callback(
     code: Optional[str] = None,
@@ -254,18 +275,23 @@ def discord_callback(
     except httpx.RequestError:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_timeout')
 
+    discord_id = str(profile['id'])
+    discord_avatar_hash = profile.get('avatar')
+    discord_avatar_url = (f'https://cdn.discord.app.com/avatars/{discord_id}/{discord_avatar_hash}.png' if discord_avatar_hash else None)
     try:
         user = auth.resolve_oauth_user(
             provider = 'discord',
-            provider_id = str(profile['id']),
+            provider_id = discord_id,
             email = profile.get('email'),
             email_verified = bool(profile.get('verified')),
             display_name = profile.get('global_name') or profile.get('username', 'Milletian'),
+            avatar_url = discord_avatar_url,
             current_user = current_user,
             db = db
         )
-    except HTTPException:
-        return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=discord_already_linked')
+    except HTTPException as e:
+        err_slug = 'oauth_not_registered'
+        return RedirectResponse(f'{FRONTEND_URL}/login?error={err_slug}')
 
     # If state was present, the user was already logged in and linking from /account/settings
     if state:
@@ -328,11 +354,13 @@ def google_callback(
             email = profile.get('email'),
             email_verified = bool(profile.get('verified_email')),
             display_name = profile.get('name', 'Milletian'),
+            avatar_url = profile.get('picture'),
             current_user = current_user,
             db = db
         )
-    except HTTPException:
-        return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=google_already_linked')
+    except HTTPException as e:
+        err_slug = 'oauth_not_registered'
+        return RedirectResponse(f'{FRONTEND_URL}/login?error={err_slug}')
 
     # If state was present, the user was already logged in and linking from /account/settings
     if state:

@@ -18,7 +18,7 @@ export default function AuthProvider( {children} : {children: ReactNode} ) {
     const [isLoading, setLoading] = useState<boolean>(true);
 
     const checkSession = async () => {
-        setLoading(true);
+        if (!window.location.href.match("settings")) setLoading(true);
         try {
             const res = await api.get('/api/users/me');
             if (res) {
