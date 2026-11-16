@@ -48,35 +48,37 @@ export default function OAuthAccounts() {
                 <h1 className="text-xl">Connected Accounts</h1>
                 <p className="text-mabi-text-muted text-sm">Linking a verified Discord or Google account automatically verifies your account and let you log in with just one click.</p>
             </div>
-            <div className="flex flex-col gap-5 bg-mabi-surface p-2 outline-1 outline-mabi-border">
+            <div className="grid grid-cols-2 gap-4 place-items-center bg-mabi-surface px-4 py-2 outline-1 outline-mabi-border min-h-30">
                 {user?.auth_status.discord_linked ? (
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1 rounded-lg p-2 w-fit outline-1 bg-[#5865F2] text-[#E0E3FF] outline-[#E0E3FF]">
-                            {user.auth_status.discord_avatar && (<img src={user.auth_status.discord_avatar} className="w-12 h-12 rounded-full" />)}
+                    <div className="flex flex-col gap-2 min-w-50">
+                        <div className="flex items-center gap-5 text-[#E0E3FF] bg-[#5865F2] p-2 outline-1 outline-mabi-border-heavy">
+                            {user.auth_status.discord_avatar && (<img src={user.auth_status.discord_avatar} className="w-12 h-12 rounded-full bg-[#E0E3FF]" />)}
                             {user.auth_status.discord_username && (<p>{user.auth_status.discord_username}</p>)}
                         </div>
                         <button className="rounded p-2 font-bold text-xs bg-[#5865F2] text-[#E0E3FF] cursor-pointer hover:bg-[#E0E3FF] hover:text-[#000] outline-1 outline-mabi-border-heavy hover:outline-mabi-border w-fit"
-                        onClick={() => handleOAuthUnlink('discord')}>Unlink</button>
+                        onClick={() => handleOAuthUnlink('discord')}>Unlink from Discord</button>
                     </div>
                 ) : (
-                    <div>
+                    <div className="flex flex-col gap-2 min-w-50">
                         <p>Have a Discord account?</p>
                         <button className="rounded p-2 font-bold text-xs bg-[#E0E3FF] text-[#000] cursor-pointer hover:bg-[#5865F2] hover:text-[#E0E3FF] outline-1 outline-mabi-border-heavy hover:outline-mabi-border w-fit"
                         onClick={() => handleOAuthLink('discord')}>Link to Discord</button>
                     </div>
                 )}
                 {user?.auth_status.google_linked ? (
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1 rounded-lg p-2 w-fit outline-1 bg-[#FFF] text-[#F00] outline-[#F00]">
+                    <div className="flex flex-col gap-2 min-w-50">
+                        <div className="flex items-center gap-5 text-[#F00] bg-[#FFF] p-2 outline-1 outline-mabi-border">
                             {user.auth_status.google_avatar && (<img src={user.auth_status.google_avatar} className="w-12 h-12 rounded-full" />)}
-                            {user.auth_status.google_name && (<p>{user.auth_status.google_name}</p>)}
-                            {user.auth_status.google_email && (<p className="text-sm">({user.auth_status.google_email})</p>)}
+                            <div className="flex flex-col">
+                                {user.auth_status.google_name && (<p>{user.auth_status.google_name}</p>)}
+                                {user.auth_status.google_email && (<p className="text-sm">{user.auth_status.google_email}</p>)}
+                            </div>
                         </div>
                         <button className="rounded p-2 font-bold text-xs bg-[#FFF] text-[#F00] cursor-pointer hover:bg-[#DDD] outline-1 outline-mabi-border-heavy hover:outline-mabi-border w-fit"
-                        onClick={() => handleOAuthUnlink('google')}>Unlink</button>
+                        onClick={() => handleOAuthUnlink('google')}>Unlink from Google</button>
                     </div>
                 ) : (
-                    <div>
+                    <div className="flex flex-col gap-2 min-w-50">
                         <p>Have a Google account?</p>
                         <button className="rounded p-2 font-bold text-xs bg-[#FFF] text-[#F00] cursor-pointer hover:bg-[#DDD] outline-1 outline-mabi-border-heavy hover:outline-mabi-border w-fit"
                         onClick={() => handleOAuthLink('google')}>Link to Google</button>
