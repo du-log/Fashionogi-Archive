@@ -86,10 +86,19 @@ def get_unique_username(base_name: str, db: Session) -> str:
         candidate = f'{clean}_{secrets.token_hex(2)}'
     return candidate
 
-def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], email_verified: bool, display_name: str, current_user: Optional[User], db: Session) -> User:
+def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], email_verified: bool, display_name: str, avatar_url: Optional[str], current_user: Optional[User], db: Session) -> User:
     id_attribute = 'discord_id' if provider == 'discord' else 'google_id'
     id_column = User.discord_id if provider == 'discord' else User.google_id
 
+    def update_provider_metadata(target_user: User):
+        if provider == 'discord':
+            target_user.discord_username = display_name
+            target_user.discord_avatar = avatar_url
+        else:
+            target_user.google_name = display_name
+            target_user.google_email = email
+            target_user.google_avatar = avatar_url
+    # User is linking OAuth
     linkingStmt = (select(User).where(id_column == provider_id))
     if current_user:
         existing_id = getattr(current_user, id_attribute)
@@ -101,39 +110,30 @@ def resolve_oauth_user(provider: str, provider_id: str, email: Optional[str], em
             raise HTTPException(status_code = 400, detail = f'This {provider.title()} account is already linked to another user.')
 
         setattr(current_user, id_attribute, provider_id)
+        update_provider_metadata(current_user)
         if email_verified:
             current_user.is_verified = True
         db.commit()
         return current_user
-
+    # User already linked with OAuth
     existingLoginStmt = (select(User).where(id_column == provider_id))
     user = db.execute(existingLoginStmt).scalars().first()
     if user:
+        update_provider_metadata(user)
         user.last_login = func.now()
         db.commit()
         return user
-
+    # Only if the user account's email is the same as the email used with OAuth
     existingVerifiedStmt = (select(User).where(User.email == email))
     if email and email_verified:
         user = db.execute(existingVerifiedStmt).scalars().first()
         if user:
             if getattr(user, id_attribute) is None:
                 setattr(user, id_attribute, provider_id)
+                update_provider_metadata(user)
             user.is_verified = True
             user.last_login = func.now()
             db.commit()
             return user
-
-    new_user = User(
-        username = get_unique_username(display_name, db),
-        email = email,
-        hashed_password = None,
-        is_verified = email_verified,
-        last_login = func.now(),
-        **{id_attribute: provider_id}
-    )
-    new_user.profile = UserProfile()
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    # Else block unauthorized OAuth, previously would just auto-register but that isn't ideal
+    raise HTTPException(status_code = 400, detail = 'No account found with this OAuth credential, please register or login first then link from settings to enable OAuth logins.')

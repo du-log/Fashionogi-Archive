@@ -254,18 +254,23 @@ def discord_callback(
     except httpx.RequestError:
         return RedirectResponse(f'{FRONTEND_URL}/login?error=discord_timeout')
 
+    discord_id = str(profile['id'])
+    discord_avatar_hash = profile.get('avatar')
+    discord_avatar_url = (f'https://cdn.discord.app.com/avatars/{discord_id}/{discord_avatar_hash}.png' if discord_avatar_hash else None)
     try:
         user = auth.resolve_oauth_user(
             provider = 'discord',
-            provider_id = str(profile['id']),
+            provider_id = discord_id,
             email = profile.get('email'),
             email_verified = bool(profile.get('verified')),
             display_name = profile.get('global_name') or profile.get('username', 'Milletian'),
+            avatar_url = discord_avatar_url,
             current_user = current_user,
             db = db
         )
-    except HTTPException:
-        return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=discord_already_linked')
+    except HTTPException as e:
+        err_slug = 'oauth_not_registered'
+        return RedirectResponse(f'{FRONTEND_URL}/login?error={err_slug}')
 
     # If state was present, the user was already logged in and linking from /account/settings
     if state:
@@ -328,11 +333,13 @@ def google_callback(
             email = profile.get('email'),
             email_verified = bool(profile.get('verified_email')),
             display_name = profile.get('name', 'Milletian'),
+            avatar_url = profile.get('picture'),
             current_user = current_user,
             db = db
         )
-    except HTTPException:
-        return RedirectResponse(f'{FRONTEND_URL}/account/settings?error=google_already_linked')
+    except HTTPException as e:
+        err_slug = 'oauth_not_registered'
+        return RedirectResponse(f'{FRONTEND_URL}/login?error={err_slug}')
 
     # If state was present, the user was already logged in and linking from /account/settings
     if state:
