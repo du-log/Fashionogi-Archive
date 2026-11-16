@@ -10,7 +10,8 @@ export type User = {
     avatar_id: string,
     title_name: string,
     title_type: string,
-    auth_status: AuthStatus
+    auth_status: AuthStatus,
+    email: string
 }
 
 type AuthContextType = {

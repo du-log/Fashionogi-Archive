@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, USERS_URL } from "../../utilities/MiscUtility";
+import { USERS_URL } from "../../utilities/MiscUtility";
 import PwChangeForm from "./PwChangeForm";
 import AvatarSettings from "./AvatarSettings";
-import { AccountSecuritySection } from "./AccountSettingsSecuritySection";
 import type { userProfile } from "./UserProfile";
+import RecoveryCodeGen from "./RecoveryCodeGen";
+import OAuthAccounts from "./OAuthAccounts";
 
 function AccountSettings() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
     const userLoading = auth?.isLoading ?? true;
-    const checkSession = auth?.checkSession ?? (() => {});
     const logout = auth?.logout ?? (async () => {});
     const [isLoading, setLoading] = useState<boolean>(true);
     const [isChecking, setChecking] = useState<boolean>(false);
@@ -190,11 +190,16 @@ function AccountSettings() {
                     </div>
                     <h1 className="text-2xl border-y-1 border-mabi-border-heavy p-3 bg-mabi-surface">Security</h1>
                     <div className="flex flex-col gap-5 px-10">
+                        <div className="flex gap-2 items-center p-2 bg-mabi-surface w-fit outline-1">
+                            <p className="text-xl">Account Verification Status: </p>
+                            <p className={`outline-1 outline-mabi-border px-2 py-1 text-xl bg-mabi-border-heavy ${user?.auth_status.is_verified ? 'text-[#0F0]' : 'text-[#0F0]'}`}>{user?.auth_status.is_verified ? 'Verified' : 'Unverified'}</p>
+                        </div>
                         <div className="flex flex-col gap-2 py-2 w-full">
                             <h1 className="text-xl">Change Password</h1>
                             <PwChangeForm />
                         </div>
-                        <AccountSecuritySection AUTH_URL={`${BASE_URL}/api/auth`} authStatus={user?.auth_status} onRefreshUser={checkSession} />
+                        <RecoveryCodeGen />
+                        <OAuthAccounts />
                         <div className="flex flex-col gap-2 py-2 w-full">
                             <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
                             <p>If you wish to have your account deactivated, please click the button below.</p>

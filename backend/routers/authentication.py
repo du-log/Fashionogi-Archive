@@ -207,6 +207,27 @@ def google_link(current_user: models.User = Depends(auth.get_current_user)):
     }
     return {'url': f'https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}'}
 
+@router.post('/{provider}/unlink')
+def unlink_oauth_provider(provider: str, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    if provider not in ('discord', 'google'):
+        raise HTTPException(status_code = 400, detail = 'Invalid OAuth provider')
+
+    has_password = current_user.hashed_password is not None
+    other_linked = (
+        current_user.google_id is not None if provider == 'discord' else current_user.discord_id is not None
+    )
+
+    if not has_password and not other_linked:
+        raise HTTPException(status_code = 400, detail = 'Cannot unlink your only login method. Set a password or link another account first.')
+
+    if provider == 'discord':
+        current_user.discord_id = None
+    else:
+        current_user.google_id = None
+
+    db.commit()
+    return {'success': True, 'message': f'{provider.title()} account has been unlinked.'}
+
 @router.get('/discord/callback')
 def discord_callback(
     code: Optional[str] = None,
