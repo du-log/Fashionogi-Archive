@@ -1,7 +1,7 @@
 {
   "name": "fashionogilookbook",
   "private": true,
-  "version": "1.7.2",
+  "version": "1.8.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,6 +22,7 @@
     "react-router-dom": "^7.11.0",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "tailwindcss": "^4.2.4"
   },

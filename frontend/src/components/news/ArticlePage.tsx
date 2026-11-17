@@ -6,6 +6,7 @@ import remarkBreaks from "remark-breaks";
 import remarkRehype from "remark-rehype";
 import { NEWS_URL, useDocTitle } from "../../utilities/MiscUtility";
 import type { Article } from "./NewsPage";
+import remarkParse from "remark-parse";
 
 function ArticlePage() {
     const { id } = useParams();
@@ -55,7 +56,7 @@ function ArticlePage() {
                             <p>{formattedDate}</p>
                         </div>
                     </div>
-                    <Markdown remarkPlugins={[remarkGfm, remarkBreaks, remarkRehype]}>{pageData.context}</Markdown>
+                    <Markdown remarkPlugins={[remarkGfm, remarkBreaks, remarkRehype, remarkParse]}>{pageData.context}</Markdown>
                 </div>
             )}
         </div>

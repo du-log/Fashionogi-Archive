@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
 import policy from './PRIPOL.md?raw';
 import { useEffect, useState } from "react";
+import remarkParse from "remark-parse";
 
 export default function PrivacyPolicy() {
     const [isLoading, setLoading] = useState<boolean>(true);
@@ -16,7 +17,7 @@ export default function PrivacyPolicy() {
         <div className={`prose prose-invert max-w-none pt-20 px-[5%] xl:px-[20%] min-h-[69.1vh] text-mabi-text transition-opacity duration-200 ease-in-out ${isLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             <title>Privacy Policy | Fashionogi Archive</title>
             <div className="w-full bg-gradient-to-t from-mabi-surface-muted/50 to-mabi-surface/50 p-[5%]">
-                <Markdown remarkPlugins={[remarkGfm,remarkBreaks, remarkRehype]}>
+                <Markdown remarkPlugins={[remarkGfm, remarkBreaks, remarkRehype, remarkParse]}>
                     {policy}
                 </Markdown>
             </div>
