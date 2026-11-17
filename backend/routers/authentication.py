@@ -277,7 +277,7 @@ def discord_callback(
 
     discord_id = str(profile['id'])
     discord_avatar_hash = profile.get('avatar')
-    discord_avatar_url = (f'https://cdn.discord.app.com/avatars/{discord_id}/{discord_avatar_hash}.png' if discord_avatar_hash else None)
+    discord_avatar_url = (f'https://cdn.discordapp.com/avatars/{discord_id}/{discord_avatar_hash}.png' if discord_avatar_hash else None)
     try:
         user = auth.resolve_oauth_user(
             provider = 'discord',
