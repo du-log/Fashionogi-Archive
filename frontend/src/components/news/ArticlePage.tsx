@@ -37,9 +37,9 @@ function ArticlePage() {
     }, [id])
 
     return (
-        <div className={`flex flex-col min-h-[86vh] px-10 xl:px-[20%] py-20 gap-5 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+        <div className={`flex flex-col min-h-[86vh] w-full px-10 xl:px-[20%] py-20 gap-5 text-mabi-text transition-opacity duration-200 ease-in-out ${pageLoading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
             {pageData && (
-                <div className="flex flex-col gap-5 px-10 xl:px-[10%] py-10 bg-mabi-surface-muted min-h-[60vh]">
+                <div className="flex flex-col gap-5 px-10 xl:px-[10%] py-10 bg-mabi-surface-muted min-h-[60vh] w-full">
                     <button className="cursor-pointer outline-1 py-1 px-2 rounded hover:text-mabi-green sm:text-sm xl:text-md w-fit" onClick={() => navigate('/news')}>{'<-'} News</button>
                     <h1 className="text-4xl">{pageData.title}</h1>
                     <div className="flex justify-between items-center py-2 border-b text-lg">
@@ -56,7 +56,9 @@ function ArticlePage() {
                             <p>{formattedDate}</p>
                         </div>
                     </div>
-                    <Markdown remarkPlugins={[remarkGfm, remarkBreaks, remarkRehype, remarkParse]}>{pageData.context}</Markdown>
+                    <div className="max-w-none prose text-mabi-text">
+                        <Markdown remarkPlugins={[remarkGfm, remarkBreaks, remarkRehype, remarkParse]}>{pageData.context}</Markdown>
+                    </div>
                 </div>
             )}
         </div>
