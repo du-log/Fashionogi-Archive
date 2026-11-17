@@ -1,5 +1,29 @@
 # Changelog
 
+## 11/16/2026
+OAuth implementation and recovery code update.
+
+- Implemented OAuth-based logins and linking. This was a much bigger pain in the behind that I thought, so much troubleshooting.
+  - Currently, Discord and Google are available options for open authorization.
+  - If you want to unlink, you can do that as well.
+  - Logins are only possible if you have the associated account linked to a Fashion Archive account. Otherwise, you'll get an error.
+  - Linking with OAuth will automatically verify your account.
+
+- Added a recovery code function.
+  - This will be used to change your password if you end up forgetting it.
+  - At some point, I'll add email-based verification and recovery as a supplementary option.
+
+- Added page titles just to help with search engine optimization.
+
+- Added a page displaying a list of all users with active accounts, using the nameplate for better formatting.
+
+- Added loading indicators on all page components just to help with the UX, adjusted any timings as necessary.
+
+- Changed the returned data for submissions.
+  - Creator's nameplate should now load almost instantly alongside the submission's images and information.
+
+- Modified the layout for the settings page to all be in one single column rather than choosing tabs.
+
 ## 11/12/2026
 Title system and small UI changes.
 
