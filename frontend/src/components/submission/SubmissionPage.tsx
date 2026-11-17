@@ -6,6 +6,7 @@ import { SUBS_URL, useDocTitle } from "../../utilities/MiscUtility";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import type { NameplateUser } from "../user/UserProfile";
 
 type EquipmentDetail = {
     name: string,
@@ -33,6 +34,7 @@ type SubmissionDetail = {
     equipment: EquipmentDetail[],
     favorites_count: number,
     is_favorited: boolean,
+    author_initial_data: NameplateUser
 }
 
 function SubmissionPage() {
@@ -267,7 +269,7 @@ function SubmissionPage() {
                             </div>
                             <div className="flex flex-col gap-2 p-4 outline outline-mabi-border-heavy bg-mabi-surface-muted w-75">
                                 <h1 className="text-xl text-start">Outfit Creator</h1>
-                                <UserNameplate username={submission.author} />
+                                <UserNameplate username={submission.author} intialData={submission.author_initial_data} />
                             </div>
                         </div>
                     </div>
