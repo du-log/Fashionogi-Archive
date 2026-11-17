@@ -369,6 +369,18 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
             sub.views = sub.views + 1
             db.commit()
 
+    def serialize_user(u: models.User):
+        # If server/IGN/avatar live on a 1-to-1 u.profile relation, read from u.profile instead
+        profile = getattr(u, 'profile', u)
+        return {
+            'username': u.username,
+            'id': getattr(profile, 'id', u.id),
+            'avatar_id': getattr(profile, 'avatar_id', None),
+            'server': getattr(profile, 'server', None),
+            'in_game_name': getattr(profile, 'in_game_name', None),
+            'active_title': profile.active_title if profile else {'name': 'Member', 'stat_type': 'default'}
+        }
+
     return {
         'id': sub.id,
         'title': sub.title,
@@ -383,7 +395,8 @@ def get_submission(submission_id: int, db: Session = Depends(get_db), current_us
         'images': [f'{R2_PUBLIC_URL}/submissions/{img.image_id.hex}.webp' for img in sorted_images],
         'equipment': equipment_data,
         'favorites_count': favorites_count,
-        'is_favorited': is_favorited
+        'is_favorited': is_favorited,
+        'author_initial_data': serialize_user(sub.author)
     }
 
 @router.get('/edit/{id}')

@@ -194,12 +194,12 @@ function AccountSettings() {
                             <p className="text-xl">Account Verification Status: </p>
                             <p className={`outline-1 outline-mabi-border px-2 py-1 text-xl bg-mabi-border-heavy ${user?.auth_status.is_verified ? 'text-[#0F0]' : 'text-[#0F0]'}`}>{user?.auth_status.is_verified ? 'Verified' : 'Unverified'}</p>
                         </div>
+                        <RecoveryCodeGen />
+                        <OAuthAccounts />
                         <div className="flex flex-col gap-2 py-2 w-full">
                             <h1 className="text-xl">Change Password</h1>
                             <PwChangeForm />
                         </div>
-                        <RecoveryCodeGen />
-                        <OAuthAccounts />
                         <div className="flex flex-col gap-2 py-2 w-full">
                             <h1 className="text-xl">Deactivate Account (Not Implemented)</h1>
                             <p>If you wish to have your account deactivated, please click the button below.</p>
