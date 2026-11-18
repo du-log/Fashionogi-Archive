@@ -261,10 +261,10 @@ def get_submission_gallery(
         stmt = stmt.where(models.Submission.title.ilike(f'%{title}%'))
     
     if username:
-        stmt = stmt.join(models.User).where(models.User.username.ilike(f'%{username}%'))
+        stmt = stmt.join(models.User).where(models.User.username.ilike(f'{username}'))
 
     if tag:
-        stmt = stmt.where(models.Submission.tags.any(models.Tag.name.ilike(f'%{tag}%')))
+        stmt = stmt.where(models.Submission.tags.any(models.Tag.name.ilike(f'{tag}')))
 
     if gender:
         stmt = stmt.where(models.Submission.gender == gender)

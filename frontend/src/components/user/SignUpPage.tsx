@@ -227,6 +227,18 @@ function SignUpPage() {
                     <form className="flex flex-col w-full py-10 px-5 gap-5" method="post" onSubmit={(e) => registerHandler(e)}>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex gap-10 items-center justify-between w-full">
+                                <label htmlFor="emailL">Email</label>
+                                <div className="flex items-center relative">
+                                    <input className={`bg-mabi-surface-muted px-1 ${emailErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                    {!isEmailChecking && emailErr.length === 0 && isValidEmail(email) && (
+                                        <p className="absolute right-1 text-[#00a000]"><CheckIcon size={20} /></p>
+                                    )}
+                                </div>
+                            </div>
+                            <span className="text-[#aa0000] text-wrap">{emailErr}</span>
+                        </div>
+                        <div className="flex flex-col gap-1 w-full">
+                            <div className="flex gap-10 items-center justify-between w-full">
                                 <label htmlFor="usernameL">Username</label>
                                 <div className="flex items-center relative">
                                     <input className={`bg-mabi-surface-muted px-1 ${nameErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="text" id="usernameL" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={15} required
@@ -238,18 +250,6 @@ function SignUpPage() {
                             </div>
                             <p className="text-sm text-mabi-text-muted">Must be between 3-15 characters, no spaces.</p>
                             <span className="flex text-[#aa0000] text-wrap">{nameErr}</span>
-                        </div>
-                        <div className="flex flex-col gap-1 w-full">
-                            <div className="flex gap-10 items-center justify-between w-full">
-                                <label htmlFor="emailL">Email</label>
-                                <div className="flex items-center relative">
-                                    <input className={`bg-mabi-surface-muted px-1 ${emailErr.length > 0 ? 'outline-2 outline-[#ff0000]' : ''}`} type="email" id="emailL" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                                    {!isEmailChecking && emailErr.length === 0 && isValidEmail(email) && (
-                                        <p className="absolute right-1 text-[#00a000]"><CheckIcon size={20} /></p>
-                                    )}
-                                </div>
-                            </div>
-                            <span className="text-[#aa0000] text-wrap">{emailErr}</span>
                         </div>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex flex-col gap-6">
