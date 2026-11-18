@@ -30,7 +30,7 @@ def search_equipment(q: str, slot: str, db: Session = Depends(get_db)):
         select(models.BaseEquipment)
         .where(
             models.BaseEquipment.slot == slot,
-            models.BaseEquipment.name.ilike(f"%{q}%")
+            models.BaseEquipment.name.ilike(f'%{q}%')
         )
         .limit(10)
     )
@@ -48,7 +48,7 @@ def search_tags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     )
 
     if q:
-        stmt = stmt.where(models.BaseTags.name.ilike(f"%{q}%"))
+        stmt = stmt.where(models.BaseTags.name.ilike(f'%{q}%'))
 
     results = db.execute(stmt).scalars().all()
 
@@ -62,7 +62,7 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
         .order_by(models.User.username.asc())
     )
     if q:
-        userStmt = userStmt.where(models.User.username.ilike(f"%{q}%"))
+        userStmt = userStmt.where(models.User.username.ilike(f'%{q}%'))
 
     subStmt = (
         select(models.Submission)
@@ -74,7 +74,7 @@ def search_by_query(q: Optional[str] = Query(None), db: Session = Depends(get_db
         .options(joinedload(models.Submission.author))
     )
     if q:
-        subStmt = subStmt.where(models.Submission.title.ilike(f"%{q}%"))
+        subStmt = subStmt.where(models.Submission.title.ilike(f'%{q}%'))
 
     users = db.execute(userStmt).scalars().all()
     submissions = db.execute(subStmt).scalars().all()
