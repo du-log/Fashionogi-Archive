@@ -1,10 +1,11 @@
-import uuid
 from typing import Optional, List
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table, DateTime, UniqueConstraint, Date, Text
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID, TEXT, JSON
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from database import Base
+
+import uuid
 
 # Tags Junction Table
 submission_tags = Table(
@@ -236,6 +237,7 @@ class Submission(Base):
     rejected_msg: Mapped[Optional[str]] = mapped_column(TEXT, nullable = True)
 
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
+    updated_at = mapped_column(DateTime(timezone = True), nullable = True)
 
     favorited_by = relationship(
         "User",
@@ -284,7 +286,9 @@ class News(Base):
     context = mapped_column(Text, nullable = False)
     created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
     author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable = False)
+    total_views: Mapped[int] = mapped_column(Integer, default = 0, server_default = "0", index = True, nullable = False)
 
+# Daily Visitor Tracking Model (Not utilized yet)
 class DailyVisitor(Base):
     __tablename__ = "daily_visitors"
 
@@ -298,6 +302,7 @@ class DailyVisitor(Base):
         UniqueConstraint("visit_date", "session_id", name = "uix_daily_session"),
     )
 
+# User Titles Model (Titles actually unlocked by a user)
 class UserTitle(Base):
     __tablename__ = "user_titles"
 
@@ -305,6 +310,7 @@ class UserTitle(Base):
     title_id: Mapped[int] = mapped_column(ForeignKey("titles.id", ondelete = "CASCADE"), primary_key = True)
     unlocked_at = mapped_column(DateTime(timezone = True), server_default = func.now(), nullable = False)
 
+# All Titles Model (Just entire list of unlockable titles)
 class Title(Base):
     __tablename__ = "titles"
 
@@ -314,3 +320,23 @@ class Title(Base):
     stat_type: Mapped[str] = mapped_column(String(30), nullable = False)
     # styles, favorites views, followers, following, hybrid, special
     requirements: Mapped[dict] = mapped_column(JSON, default = dict, server_default = "{}", nullable = False)
+
+# Notifications Model
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key = True, index = True)
+    created_at = mapped_column(DateTime(timezone = True), server_default = func.now(), index = True, nullable = False)
+
+    recipient_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete = "CASCADE"), index = True, nullable = False)
+    actor_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete = "CASCADE"), nullable = True)
+
+    type: Mapped[str] = mapped_column(String(32), nullable = False)
+    # Types can be: follow, favorite, submission_approved, submission_rejected, title_unlock
+
+    submission_id: Mapped[int] = mapped_column(ForeignKey("submissions.id", ondelete = "CASCADE"), nullable = True)
+    submission_title: Mapped[str] = mapped_column(String(100), index = True, nullable = True)
+    message: Mapped[str] = mapped_column(String(255), nullable = True)
+    # Only used if a submission was rejected
+
+    is_read: Mapped[bool] = mapped_column(Boolean, default = False, server_default = "false", index = True, nullable = False)

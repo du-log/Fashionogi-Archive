@@ -1,21 +1,10 @@
 from fastapi import APIRouter
-
-import os
-import shutil
-import uuid
-import json
-
-from pydantic import BaseModel
-from typing import List, Optional
-
-from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.staticfiles import StaticFiles
-
-from sqlalchemy.orm import Session, joinedload, selectinload
+from fastapi import Depends, Query
+from typing import Optional
 from sqlalchemy import select
+from sqlalchemy.orm import Session, joinedload
+from database import get_db
 
-from database import get_db, engine, Base
 import models
 
 router = APIRouter(prefix = '/api/misc', tags = ['Miscellaneous'])
