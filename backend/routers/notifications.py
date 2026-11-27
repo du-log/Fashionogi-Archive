@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import User, Notification, Submission
 from auth import get_current_user
-from service_funcs import create_dashboard_notif_msg
+from backend.routers.service_funcs import create_dashboard_notif_msg
 
 router = APIRouter(prefix = '/api/notifications', tags = ['Notifications'])
 
