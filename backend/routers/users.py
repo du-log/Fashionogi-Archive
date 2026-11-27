@@ -8,6 +8,7 @@ from datetime import datetime
 from botocore.config import Config
 from database import get_db
 from services.service_funcs import create_notification, sync_user_titles
+from notifications import get_notifications, get_admin_notifications
 
 import os
 import uuid
@@ -65,6 +66,10 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     new_titles = sync_user_titles(current_user, db)
     for title in new_titles:
         create_notification(db, current_user.id, type = 'title_unlock', message = f'{title.name}')
+
+    notif_amt = get_notifications(db = db, current_user = current_user)
+    if current_user.is_admin:
+        pending_amt = get_admin_notifications(db = db, current_user = current_user)
     
     return {
         'id': current_user.id,
@@ -74,7 +79,9 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
         'title_name': current_user.equipped_title.name if current_user.equipped_title else 'Member',
         'title_type': current_user.equipped_title.stat_type if current_user.equipped_title else 'default',
         'auth_status': current_user.auth_status,
-        'email': current_user.email
+        'email': current_user.email,
+        'notif_amt': len(notif_amt),
+        'pending_amt': pending_amt if current_user.is_admin else None
     }
 
 @router.post('/me/avatar')

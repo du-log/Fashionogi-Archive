@@ -22,8 +22,19 @@ def get_notifications(db: Session = Depends(get_db), current_user: User = Depend
         )
     )
     notifications = db.execute(stmt).scalars().all()
+    notif_list = []
 
-    return notifications
+    actor_ids = {n.actor_id for n in notifications if n.actor_id}
+    actor_map = {}
+    if actor_ids:
+        actors = db.execute(select(User.id, User.username).where(User.id.in_(actor_ids))).all()
+        actor_map = {u.id: u.username for u in actors}
+
+    for notif in notifications:
+        msg = create_dashboard_notif_msg(notification = notif, actor_map = actor_map)
+        if msg:
+            notif_list.append(msg)
+    return notif_list
 
 @router.get('/admin')
 def get_admin_notifications(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
@@ -36,9 +47,7 @@ def get_admin_notifications(db: Session = Depends(get_db), current_user: User = 
     )
     pending = db.execute(pendingStmt).scalars().all()
 
-    return {
-        'pending': len(pending)
-    }
+    return len(pending)
 
 @router.get('/dashboard/feed')
 def get_feed_notifications(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
@@ -64,7 +73,7 @@ def get_feed_notifications(db: Session = Depends(get_db), current_user: User = D
 
     feed = []
     for notif in notifications:
-        msg = create_dashboard_notif_msg(db, notif, current_user)
+        msg = create_dashboard_notif_msg(notification = notif, actor_map = actor_map)
         if msg:
             feed.append(msg)
 

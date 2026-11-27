@@ -77,5 +77,8 @@ def get_article(id: int, db: Session = Depends(get_db)):
     author = db.execute(select(models.User.username).where(models.User.id == article.author_id)).scalars().first()
     if not author:
         raise HTTPException(status_code = 404, detail = 'Author not found. Break.')
+
+    article.total_views += 1
+    db.commit()
     
-    return {'id': id, 'title': article.title, 'description': article.description, 'type': article.type, 'context': article.context, 'created_at': article.created_at, 'author': author}
+    return {'id': id, 'title': article.title, 'description': article.description, 'type': article.type, 'context': article.context, 'created_at': article.created_at, 'author': author, 'views': article.total_views}
