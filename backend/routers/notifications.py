@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 from database import get_db
 from models import User, Notification, Submission
 from auth import get_current_user
-from backend.routers.service_funcs import create_dashboard_notif_msg
+from routers.services.service_funcs import create_dashboard_notif_msg
 
 router = APIRouter(prefix = '/api/notifications', tags = ['Notifications'])
 
@@ -102,6 +102,8 @@ def get_feed_notifications(db: Session = Depends(get_db), current_user: User = D
                 'is_read': True,
                 'date': sub.updated_at or sub.created_at
             })
+
+    feed.sort(key = lambda item: item['date'], reverse = True)
     
     return {'success': True, 'feed': feed[:15]}
 
@@ -120,7 +122,7 @@ def set_notifications_read(db: Session = Depends(get_db), current_user: User = D
     notifications = db.execute(stmt).scalars().all()
     try:
         for notif in notifications:
-            notif.is_read == True
+            notif.is_read = True
 
         db.commit()
         return{'success': True, 'message': f'All {len(notifications)} unread notifications set to read.'}

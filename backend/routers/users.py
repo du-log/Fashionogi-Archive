@@ -7,8 +7,8 @@ from typing import Optional
 from datetime import datetime
 from botocore.config import Config
 from database import get_db
-from backend.routers.service_funcs import create_notification, sync_user_titles
-from backend.routers.notifications import get_notifications, get_admin_notifications
+from routers.services.service_funcs import create_notification, sync_user_titles
+from routers.notifications import get_notifications, get_admin_notifications
 
 import os
 import uuid
