@@ -11,7 +11,9 @@ export type User = {
     title_name: string,
     title_type: string,
     auth_status: AuthStatus,
-    email: string
+    email: string,
+    notif_amt: number,
+    pending_amt?: number
 }
 
 type AuthContextType = {
