@@ -1,28 +1,16 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, File, UploadFile, Form, Depends, HTTPException, Query, status
+from botocore.config import Config
+from pydantic import BaseModel
+from typing import List, Optional
+from sqlalchemy import select, func, desc, delete
+from sqlalchemy.orm import Session, joinedload, selectinload
+from datetime import datetime, timedelta, timezone
+from database import get_db
 
 import os
-import shutil
 import uuid
 import json
 import boto3
-
-from botocore.config import Config
-
-from pydantic import BaseModel
-from typing import List, Optional
-
-from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response, Request, status
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.staticfiles import StaticFiles
-
-from sqlalchemy.orm import Session, joinedload, selectinload
-from sqlalchemy import select, func, desc, delete
-
-from jose import JWTError, jwt
-
-from datetime import datetime, timedelta, timezone
-
-from database import get_db, engine, Base
 import models
 import auth
 
@@ -525,6 +513,7 @@ def update_submission(
 
         if sub.status != 'pending':
             sub.status = 'pending'
+        sub.updated_at = func.now()
 
         db.commit()
     except Exception as e:
@@ -549,6 +538,7 @@ def softdelete_submission(id: int, current_user: models.User = Depends(auth.get_
     try:
         sub.status = 'deleted'
         sub.is_active = False
+        sub.updated_at = func.now()
 
         db.commit()
         return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been deleted'}
@@ -571,6 +561,7 @@ def unlist_submission(id: int, current_user: models.User = Depends(auth.get_curr
     
     try:
         sub.status = 'unlisted'
+        sub.updated_at = func.now()
 
         db.commit()
         return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been unlisted'}
@@ -593,6 +584,7 @@ def relist_submission(id: int, current_user: models.User = Depends(auth.get_curr
     
     try:
         sub.status = 'pending'
+        sub.updated_at = func.now()
 
         db.commit()
         return {'success': True, 'message': f'Submission {str(id)} titled {sub.title} has been relisted'}

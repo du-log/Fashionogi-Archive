@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UserCollapse from "./UserCollapse";
 import SearchBarComboBox from "./SearchBarComboBox";
 import { Moon, Sun } from "lucide-react";
+import Notifications from "./Notifications";
 
 function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => void} ) {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                     </div>
                 </div>
                 <div className="right relative flex flex-1 gap-10 justify-start items-center h-22">
+                    <Notifications />
                     <button aria-label="Toggle Theme" onClick={toggleTheme}
                     className="group p-2 rounded-lg bg-mabi-surface hover:bg-mabi-surface-muted transition-colors duration-0 flex items-center justify-center outline-1 outline-mabi-border cursor-pointer">
                         {theme === "light" ? (

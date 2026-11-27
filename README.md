@@ -17,6 +17,7 @@ My hope is that the Archive will successfully serve a niche in the Mabinogi comm
 * User profiles and private dashboard to view personally uploaded styles, your favorites, and followers/following.
 * Ability to change your username, avatar, and password (no email yet).
 * OAuth-based logins and linking with Discord and Google.
+* Simple one-time recovery code system for password recovery.
 * Basic news system for sharing any site news and updates.
 * Search bar for looking up users and submissions.
 * Two themes, light and dark.

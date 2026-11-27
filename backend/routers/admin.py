@@ -1,21 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session, selectinload
+from sqlalchemy import func, select
+from database import get_db
+from services.service_funcs import create_notification
 
 import os
-import shutil
-import uuid
-import json
-
-from pydantic import BaseModel
-from typing import List, Optional
-
-from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.staticfiles import StaticFiles
-
-from sqlalchemy.orm import Session, joinedload, selectinload
-from sqlalchemy import select
-
-from database import get_db, engine, Base
 import models, auth
 
 router = APIRouter(prefix = '/api/admin', tags = ['Administrator'])
@@ -145,7 +134,19 @@ def admin_approve_sub(sub_id: int, current_user: models.User = Depends(auth.get_
     submission.status = 'approved'
     if not submission.was_approved:
         submission.was_approved = True
+
     db.commit()
+
+    active_notification = db.execute(select(models.Notification).where(models.Notification.recipient_id == submission.user_id, models.Notification.submission_id == submission.id)).scalars().first()
+    if not active_notification:
+        create_notification(db = db, recipient_id = submission.user_id, type = 'submission_approved', submission_id = submission.id, submission_title = submission.title)
+    else:
+        if active_notification.type == 'submission_rejected':
+            active_notification.type = 'submission_approved'
+        active_notification.created_at = func.now()
+        active_notification.submission_title = submission.title
+        active_notification.is_read = False
+        db.commit()
 
     return {'message': 'Approved submission', 'id': submission.id, 'status': submission.status}
 
@@ -167,5 +168,16 @@ def admin_reject_sub(sub_id: int, current_user: models.User = Depends(auth.get_c
 
     submission.status = 'rejected'
     db.commit()
+
+    active_notification = db.execute(select(models.Notification).where(models.Notification.recipient_id == submission.user_id, models.Notification.submission_id == submission.id)).scalars().first()
+    if not active_notification:
+        create_notification(db = db, recipient_id = submission.user_id, type = 'submission_rejecte', submission_id = submission.id, submission_title = submission.title, message = submission.rejected_msg)
+    else:
+        if active_notification.type != 'submission_rejected':
+            active_notification.type = 'submission_rejected'
+        active_notification.created_at = func.now()
+        active_notification.submission_title = submission.title
+        active_notification.is_read = False
+        db.commit()
 
     return {'message': 'Rejected submission', 'id': submission.id, 'status': submission.status}

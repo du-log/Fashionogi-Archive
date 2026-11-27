@@ -1,27 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, File, UploadFile, Depends, HTTPException
+from sqlalchemy import select, desc
+from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy.sql import func
+from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime
+from botocore.config import Config
+from database import get_db
+from services.service_funcs import create_notification, sync_user_titles
+from notifications import get_notifications, get_admin_notifications
 
 import os
-import shutil
 import uuid
-import json
 import boto3
-
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime
-from uuid import UUID
-
-from botocore.config import Config
-
-from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.staticfiles import StaticFiles
-
-from sqlalchemy.orm import Session, joinedload, selectinload
-from sqlalchemy import select, desc
-from sqlalchemy.sql import func
-
-from database import get_db, engine, Base
 import models, auth
 
 router = APIRouter(prefix = '/api/users', tags = ['Users'])
@@ -70,6 +61,15 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
     if not current_user:
         raise HTTPException(status_code = 401, detail = 'Unauthorized')
     current_user.last_active = func.now()
+    db.commit()
+
+    new_titles = sync_user_titles(current_user, db)
+    for title in new_titles:
+        create_notification(db, current_user.id, type = 'title_unlock', message = f'{title.name}')
+
+    notif_amt = get_notifications(db = db, current_user = current_user)
+    if current_user.is_admin:
+        pending_amt = get_admin_notifications(db = db, current_user = current_user)
     
     return {
         'id': current_user.id,
@@ -79,7 +79,9 @@ def get_user_me(current_user: models.User = Depends(auth.get_current_user), db: 
         'title_name': current_user.equipped_title.name if current_user.equipped_title else 'Member',
         'title_type': current_user.equipped_title.stat_type if current_user.equipped_title else 'default',
         'auth_status': current_user.auth_status,
-        'email': current_user.email
+        'email': current_user.email,
+        'notif_amt': len(notif_amt),
+        'pending_amt': pending_amt if current_user.is_admin else None
     }
 
 @router.post('/me/avatar')
@@ -409,6 +411,13 @@ def toggle_follow(user_id: int, db: Session = Depends(get_db), current_user: mod
     else:
         target_user.followers.append(current_user)
         followed = True
+        active_notification = db.execute(select(models.Notification).where(models.Notification.type == 'follow', models.Notification.recipient_id == target_user.id, models.Notification.actor_id == current_user.id)).scalars().first()
+        if active_notification:
+            active_notification.created_at = func.now()
+            active_notification.is_read = False
+            db.commit()
+        else:
+            create_notification(db = db, recipient_id = target_user.id, actor_id = current_user.id, type = 'follow')
     
     db.commit()
 

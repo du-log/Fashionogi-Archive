@@ -1,32 +1,19 @@
 from urllib.parse import urlencode
-
-from fastapi import APIRouter
-
-import os
-import shutil
-import uuid
-import json
-
-from fastapi.responses import RedirectResponse
-import httpx
-from pydantic import BaseModel
-from typing import List, Optional
-
-from fastapi import File, UploadFile, Form, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Form, Depends, HTTPException, Response
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.staticfiles import StaticFiles
-
-from sqlalchemy.orm import Session, joinedload, selectinload
+from fastapi.responses import RedirectResponse
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
-
+from pydantic import BaseModel
+from typing import Optional
 from config import DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_REDIRECT_URI, FRONTEND_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI
-from database import get_db, engine, Base
+from database import get_db
+
 import models
 import auth
-
 import secrets
-import string
+import httpx
 
 router = APIRouter(prefix = '/api/auth', tags = ['Authentication'])
 
@@ -299,6 +286,8 @@ def discord_callback(
 
     # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
     handoff_token = auth.create_token(data = {'sub': str(user.id)})
+    current_user.last_login = func.now()
+    db.commit()
     return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
 
 @router.get('/google/callback')
@@ -368,6 +357,8 @@ def google_callback(
 
     # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
     handoff_token = auth.create_token(data = {'sub': str(user.id)})
+    current_user.last_login = func.now()
+    db.commit()
     return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
 
 class OAuthSessionPayload(BaseModel):
