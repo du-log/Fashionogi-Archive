@@ -23,3 +23,4 @@ export const NEWS_URL = import.meta.env.VITE_API_NEWS_URL;
 export const ADMIN_URL = import.meta.env.VITE_API_ADMIN_URL;
 export const R2_PUBLIC_URL = import.meta.env.VITE_R2_PUBLIC_URL;
 export const AUTH_URL = `${BASE_URL}/api/auth`
+export const NOTIF_URL = `${BASE_URL}/api/notifications`
