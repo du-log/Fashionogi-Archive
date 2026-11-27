@@ -7,7 +7,7 @@ from typing import Optional
 from datetime import datetime
 from botocore.config import Config
 from database import get_db
-from services.service_funcs import create_notification, sync_user_titles
+from service_funcs import create_notification, sync_user_titles
 from notifications import get_notifications, get_admin_notifications
 
 import os
