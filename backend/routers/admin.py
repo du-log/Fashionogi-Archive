@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import func, select
 from database import get_db
-from service_funcs import create_notification
+from backend.routers.service_funcs import create_notification
 
 import os
 import models, auth
