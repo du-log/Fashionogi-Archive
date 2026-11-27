@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import func, select
 from database import get_db
-from backend.routers.service_funcs import create_notification
+from routers.services.service_funcs import create_notification
 
 import os
 import models, auth
@@ -171,7 +171,7 @@ def admin_reject_sub(sub_id: int, current_user: models.User = Depends(auth.get_c
 
     active_notification = db.execute(select(models.Notification).where(models.Notification.recipient_id == submission.user_id, models.Notification.submission_id == submission.id)).scalars().first()
     if not active_notification:
-        create_notification(db = db, recipient_id = submission.user_id, type = 'submission_rejecte', submission_id = submission.id, submission_title = submission.title, message = submission.rejected_msg)
+        create_notification(db = db, recipient_id = submission.user_id, type = 'submission_rejected', submission_id = submission.id, submission_title = submission.title, message = submission.rejected_msg)
     else:
         if active_notification.type != 'submission_rejected':
             active_notification.type = 'submission_rejected'
