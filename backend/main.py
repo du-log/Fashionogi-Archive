@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import get_db, engine, Base
-import models
 
 from routers import authentication, miscellaneous, submissions, users, admin, news
 
