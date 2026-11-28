@@ -96,10 +96,8 @@ def get_feed_notifications(db: Session = Depends(get_db), current_user: User = D
             action = 'updated' if sub.updated_at else 'created'
             feed.append({
                 'type': 'following_style',
-                'actor': sub.author.username,
                 'message': f'{sub.author.username} {action} a style:',
-                'title': sub.title,
-                'is_read': True,
+                'sub_id': sub.title,
                 'date': sub.updated_at or sub.created_at
             })
 

@@ -286,8 +286,6 @@ def discord_callback(
 
     # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
     handoff_token = auth.create_token(data = {'sub': str(user.id)})
-    current_user.last_login = func.now()
-    db.commit()
     return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
 
 @router.get('/google/callback')
@@ -357,8 +355,6 @@ def google_callback(
 
     # Otherwise, hand off the token to /login so fetch() sets the cookie cleanly
     handoff_token = auth.create_token(data = {'sub': str(user.id)})
-    current_user.last_login = func.now()
-    db.commit()
     return RedirectResponse(f'{FRONTEND_URL}/login?oauth_token={handoff_token}')
 
 class OAuthSessionPayload(BaseModel):
@@ -381,7 +377,9 @@ def exchange_oauth_session(
     user = db.query(models.User).filter(models.User.id == int(user_id)).first()
     if not user:
         raise HTTPException(status_code = 404, detail = 'User not found')
-
+    user.last_login = func.now()
+    db.commit()
+    
     auth.set_auth_cookie(response, user.id)
     return {
         'message': 'Logged in successfully',

@@ -21,7 +21,7 @@ function Navigation( {theme, toggleTheme} : {theme: string, toggleTheme: () => v
                         <h5 className="italic text-sm text-[#FFD700]">Discover your Erinn Style</h5>
                     </div>
                 </div>
-                <div className="right relative flex flex-1 gap-10 justify-start items-center h-22">
+                <div className="right relative flex flex-1 gap-5 justify-start items-center h-22">
                     <Notifications />
                     <button aria-label="Toggle Theme" onClick={toggleTheme}
                     className="group p-2 rounded-lg bg-mabi-surface hover:bg-mabi-surface-muted transition-colors duration-0 flex items-center justify-center outline-1 outline-mabi-border cursor-pointer">

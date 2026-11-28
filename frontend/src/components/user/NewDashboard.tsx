@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Cog, UserIcon, UserMinus } from "lucide-react";
-import { R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
+import { NOTIF_URL, R2_PUBLIC_URL, USERS_URL } from "../../utilities/MiscUtility";
 import type { userProfile, followData, NameplateUser } from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
 import type { GalleryItem } from "../gallery/Gallery";
@@ -11,6 +11,7 @@ import UserNameplate from "./UserNameplate";
 import TitleBadge from "./TitleBadge";
 import type { TitleProps } from "./TitleModalBody";
 import TitleModalBody from "./TitleModalBody";
+import type { notifMsg } from "../navbartop/Notifications";
 
 export default function NewDashboard() {
     const auth = useContext(AuthContext);
@@ -19,13 +20,15 @@ export default function NewDashboard() {
     const checkSession = auth?.checkSession ?? (() => {});
     const [isLoading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
+    const [tabLoading, setTabLoading] = useState<boolean>(false);
 
     const [userData, setUserData] = useState<userProfile | null | undefined>();
     const [followData, setFollowData] = useState<followData>();
-    const [activeTab, setActiveTab] = useState<string>('styles');
+    const [userFeed, setUserFeed] = useState<notifMsg[]>([]);
+    const [activeTab, setActiveTab] = useState<string>('feed');
 
     const [styles, setStyles] = useState<GalleryItem[]>([]);
-    const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
+    //const [favoritesTotal, setFavoritesTotal] = useState<number>(0);
     const [favoriteStyles, setFavoriteStyles] = useState<GalleryItem[]>([]);
 
     const [followersData, setFollowersData] = useState<NameplateUser[]>([]);
@@ -43,19 +46,23 @@ export default function NewDashboard() {
     }
 
     const fetchFavorites = async () => {
+        setTabLoading(true);
         const res = await fetch(`${USERS_URL}/dashboard/favorites`, {
             credentials: 'include'
         })
         if (res.ok) {
             const data = await res.json();
             setFavoriteStyles(data);
+            setTabLoading(false);
         }
     }
 
     const fetchFollowing = async () => {
+        setTabLoading(true);
         const res = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
         if (res.ok) {
             const data = await res.json();
+            setFollowersData(data.followers);
             setFollowingData(data.following);
         }
         const dataRes = await fetch(`${USERS_URL}/profiles/${user?.username}/data`, {
@@ -65,6 +72,8 @@ export default function NewDashboard() {
             const addiData = await dataRes.json();
             setFollowData(addiData);
         }
+
+        if(res.ok && dataRes.ok) setTabLoading(false);
     }
 
     const toggleFollow = async (id: number) => {
@@ -82,13 +91,15 @@ export default function NewDashboard() {
     }
 
     const fetchQueue = async () => {
+        setTabLoading(true);
         const res = await fetch(`${USERS_URL}/dashboard/queue`, {
             credentials: 'include'
         })
         if (res.ok) {
             const data = await res.json();
             setStyles(data.styles);
-            setFavoritesTotal(Number(data.total_favorites) || 0);
+            //setFavoritesTotal(Number(data.total_favorites) || 0);
+            setTabLoading(false);
         }
     }
 
@@ -142,28 +153,14 @@ export default function NewDashboard() {
                 const addiData = await dataRes.json();
                 setFollowData(addiData);
             }
-            const styleRes = await fetch(`${USERS_URL}/dashboard/queue`, {
+            const feedRes = await fetch(`${NOTIF_URL}/dashboard/feed`, {
                 credentials: 'include'
             })
-            if (styleRes.ok) {
-                const styleData = await styleRes.json();
-                setStyles(styleData.styles);
-                setFavoritesTotal(Number(styleData.total_favorites) || 0);
+            if (feedRes.ok) {
+                const feedData = await feedRes.json();
+                setUserFeed(feedData);
             }
-            const favoritesRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
-                credentials: 'include'
-            })
-            if (favoritesRes.ok) {
-                const favoritesData = await favoritesRes.json();
-                setFavoriteStyles(favoritesData);
-            }
-            const fetchFollowRes = await fetch(`${USERS_URL}/profiles/${user?.username}/connections`);
-            if (fetchFollowRes.ok) {
-                const fetchedFollowData = await fetchFollowRes.json();
-                setFollowersData(fetchedFollowData.followers);
-                setFollowingData(fetchedFollowData.following);
-            }
-            if(res.ok && dataRes.ok && styleRes.ok && favoritesRes.ok && fetchFollowRes.ok) setTimeout(() => setLoading(false), 100);
+            if(res.ok && dataRes.ok && feedRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (user) fetchData();
     }, [user, userLoading, navigate]);
@@ -195,16 +192,16 @@ export default function NewDashboard() {
                     </div>
                     <div className="grid grid-cols-1 items-center">
                         <div className="flex flex-col gap-5 items-end justify-between">
-                            <div className="flex gap-5 items-center">
-                                <Link to={`/profile/${user?.username}`}><p className={`p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold`}>View Profile</p></Link>
-                                <Link to='/account/settings'><div className="flex gap-2 items-center p-2 rounded-lg bg-mabi-border hover:bg-mabi-gold"><Cog /><p>Settings</p></div></Link>
-                            </div>
-                            <h1 className="px-2 py-1 outline-1 outline-mabi-border-heavy w-fit bg-mabi-surface-muted">Total Style Favorites: {favoritesTotal}</h1>
+                                <Link to={`/profile/${user?.username}`}><p className={`text-center p-2 w-30 rounded-lg bg-mabi-border hover:bg-mabi-gold`}>View Profile</p></Link>
+                                <Link to='/account/settings'><div className="flex gap-2 items-center p-2 w-30 rounded-lg bg-mabi-border hover:bg-mabi-gold"><Cog /><p>Settings</p></div></Link>
                         </div>
                     </div>
                 </div>
                 <div className="flex w-full xl:w-[80%] outline-1 outline-mabi-border-heavy bg-mabi-surface-muted justify-between">
                     <div className="flex gap-2 items-center p-2">
+                        <button className={` p-2 rounded-lg ${activeTab === 'feed' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('feed')}>
+                            User Feed
+                        </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
                             My Styles [{styles.length}]
                         </button>
@@ -228,6 +225,23 @@ export default function NewDashboard() {
                     </div>
                 </div>
                 <div className="flex flex-col items-center min-h-[50vh] w-full xl:w-[80%] bg-gradient-to-t from-mabi-surface-muted to-transparent mt-1 rounded-b-lg">
+                    {tabLoading && (
+                        <>
+                            <p className="text-center place-self-center">Loading...</p>
+                        </>
+                    )}
+                    {activeTab === 'feed' && (
+                        <>
+                            <div className="flex flex-col w-full">
+                                {userFeed.map((notif) => (
+                                    <div key={notif.type} className="px-2 flex justify-between items-center">
+                                        <p>{notif.message}</p>
+                                        <p>{notif.date}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
                     {activeTab === 'styles' && (
                         <>
                             {styles.length > 0 && (
