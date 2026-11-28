@@ -37,6 +37,12 @@ export default function NewDashboard() {
     const [titleModalOpen, setTitleModalOpen] = useState<boolean>(false);
     const [titles, setTitles] = useState<TitleProps | null>(null);
 
+    const formattedDate = (date: string): string =>
+        new Date(date).toLocaleDateString('en-US', {
+            month: 'numeric',
+            day: 'numeric'
+        })
+
     const fetchUserData = async () => {
         const res = await fetch(`${USERS_URL}/profiles/${user?.username}`);
         if (res.ok) {
@@ -158,9 +164,23 @@ export default function NewDashboard() {
             })
             if (feedRes.ok) {
                 const feedData = await feedRes.json();
-                setUserFeed(feedData);
+                setUserFeed(feedData.feed);
             }
-            if(res.ok && dataRes.ok && feedRes.ok) setTimeout(() => setLoading(false), 100);
+            const queueRes = await fetch(`${USERS_URL}/dashboard/queue`, {
+                credentials: 'include'
+            })
+            if (queueRes.ok) {
+                const queueData = await queueRes.json();
+                setStyles(queueData.styles);
+            }
+            const favRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
+                credentials: 'include'
+            })
+            if (favRes.ok) {
+                const favData = await favRes.json();
+                setFavoriteStyles(favData);
+            }
+            if(res.ok && dataRes.ok && feedRes.ok && queueRes.ok && favRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (user) fetchData();
     }, [user, userLoading, navigate]);
@@ -202,19 +222,19 @@ export default function NewDashboard() {
                         <button className={` p-2 rounded-lg ${activeTab === 'feed' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('feed')}>
                             User Feed
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('styles')}>
-                            My Styles [{styles.length}]
+                        <button className={` p-2 rounded-lg ${activeTab === 'styles' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => {setActiveTab('styles'); fetchQueue()}}>
+                            My Styles {styles ? `[${styles.length}]` : ''}
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('favorites')}>
-                            Favorites [{favoriteStyles.length}]
+                        <button className={` p-2 rounded-lg ${activeTab === 'favorites' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => {setActiveTab('favorites'); fetchFavorites()}}>
+                            Favorites {favoriteStyles ? `[${favoriteStyles.length}]` : ''}
                         </button>
                         <button className={` p-2 rounded-lg ${activeTab === 'collections' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('collections')}>
                             My Collections
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'followers' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('followers')}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'followers' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => {setActiveTab('followers'); fetchFollowing()}}>
                             Followers [{followData?.followers_count}]
                         </button>
-                        <button className={` p-2 rounded-lg ${activeTab === 'following' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => setActiveTab('following')}>
+                        <button className={` p-2 rounded-lg ${activeTab === 'following' ? 'bg-mabi-green' : 'hover:text-mabi-text-muted hover:bg-mabi-border cursor-pointer'}`} onClick={() => {setActiveTab('following'); fetchFollowing()}}>
                             Following [{followData?.following_count}]
                         </button>
                     </div>
@@ -226,25 +246,37 @@ export default function NewDashboard() {
                 </div>
                 <div className="flex flex-col items-center min-h-[50vh] w-full xl:w-[80%] bg-gradient-to-t from-mabi-surface-muted to-transparent mt-1 rounded-b-lg">
                     {tabLoading && (
-                        <>
-                            <p className="text-center place-self-center">Loading...</p>
-                        </>
+                        <div className="w-full min-h-[20vh] flex justify-center items-center">
+                            <p className="text-center place-self-center text-lg">Loading...</p>
+                        </div>
                     )}
                     {activeTab === 'feed' && (
-                        <>
-                            <div className="flex flex-col w-full">
-                                {userFeed.map((notif) => (
-                                    <div key={notif.type} className="px-2 flex justify-between items-center">
-                                        <p>{notif.message}</p>
-                                        <p>{notif.date}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <>  
+                            {userFeed.length > 0 && (
+                                <div className="flex flex-col w-full gap-0.5 text-lg">
+                                    {userFeed.map((notif, index) => (
+                                        <>
+                                            {(notif.type === 'submission_approved' || notif.type === 'following_style') && (
+                                                <Link to={`/fashion/id/${notif.sub_id}`} className={`flex items-center justify-between px-4 py-2 outline-1 outline-mabi-border ${index % 2 === 0 ? 'bg-mabi-base hover:bg-mabi-base/50' : 'bg-mabi-green hover:bg-mabi-green/50'}`}>
+                                                    <p>{notif.message}</p>
+                                                    <p>{formattedDate(notif.date)}</p>
+                                                </Link>
+                                            )}
+                                            {(notif.type !== 'submission_approved' && notif.type !== 'following_style') && (
+                                                <div className={`flex items-center justify-between px-4 py-2 outline-1 outline-mabi-border ${index % 2 === 0 ? 'bg-mabi-base hover:bg-mabi-base/50' : 'bg-mabi-green hover:bg-mabi-green/50'}`}>
+                                                    <p>{notif.message}</p>
+                                                    <p>{formattedDate(notif.date)}</p>
+                                                </div>
+                                            )}
+                                        </>
+                                    ))}
+                                </div>
+                            )}
                         </>
                     )}
                     {activeTab === 'styles' && (
                         <>
-                            {styles.length > 0 && (
+                            {styles.length > 0 && !tabLoading && (
                                 <div className="grid grid-cols-5 gap-5 p-10 place-items-center w-full">
                                     {styles.map((style) => (
                                         <div key={style.id} className="relative">
@@ -262,7 +294,7 @@ export default function NewDashboard() {
                                     ))}
                                 </div>
                             )}
-                            {styles.length === 0 && (
+                            {styles.length === 0 && !tabLoading && (
                                 <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
                                     <p className="text-lg">You haven't submitted any styles yet!</p>
                                     <p>Check back after you've made your first submission.</p>
@@ -272,7 +304,7 @@ export default function NewDashboard() {
                     )}
                     {activeTab === 'favorites' && (
                         <>
-                            {favoriteStyles.length > 0 && (
+                            {favoriteStyles.length > 0 && !tabLoading && (
                                 <div className="grid grid-cols-5 place-items-center w-full">
                                     {favoriteStyles.map((style) => (
                                         <div key={style.id} className="relative">
@@ -284,7 +316,7 @@ export default function NewDashboard() {
                                     ))}
                                 </div>
                             )}
-                            {favoriteStyles.length === 0 && (
+                            {favoriteStyles.length === 0 && !tabLoading && (
                                 <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
                                     <p className="text-lg">You haven't favorited any styles yet!</p>
                                     <p>Check back after you've found something you like.</p>
@@ -302,14 +334,14 @@ export default function NewDashboard() {
                     )}
                     {activeTab === 'followers' && (
                         <>
-                            {followersData.length > 0 && (
+                            {followersData.length > 0 && !tabLoading && (
                                 <div className="grid grid-cols-3 xl:grid-cols-5 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
                                     {followersData.map((user) => (
                                         <UserNameplate key={user.username} username={user.username} intialData={user} />
                                     ))}
                                 </div>
                             )}
-                            {followersData.length === 0 && (
+                            {followersData.length === 0 && !tabLoading && (
                                 <div className="flex flex-col gap-2 justify-center items-center min-h-[20vh]">
                                     <p className="text-lg">You don't have any followers yet...</p>
                                 </div>
@@ -318,7 +350,7 @@ export default function NewDashboard() {
                     )}
                     {activeTab === 'following' && (
                         <>
-                            {followingData.length > 0 && (
+                            {followingData.length > 0 && !tabLoading && (
                                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 p-10 place-items-center max-h-[50vh] w-full overflow-y-auto">
                                     {followingData.map((user) => (
                                         <div className="group relative">
@@ -333,9 +365,9 @@ export default function NewDashboard() {
                                 </div>
                             )}
                             {
-                                followingData.length === 0 && (
+                                followingData.length === 0 && !tabLoading && (
                                     <div className="flex flex-col justify-center items-center min-h-[20vh]">
-                                        <p>You're not following anyone yet!</p>
+                                        <p className="text-lg">You're not following anyone yet!</p>
                                     </div>
                                 )
                             }

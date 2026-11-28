@@ -24,6 +24,7 @@ type AuthContextType = {
     register: (username: string, email: string, password: string) => Promise<boolean | { success: boolean, message: string, type: string }>,
     isLoading: boolean,
     checkSession: () => Promise<void>,
+    checkSessionSoft: () => Promise<void>,
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

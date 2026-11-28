@@ -52,6 +52,10 @@ function ArticlePage() {
                             <p>{pageData.type}</p>
                         </div>
                         <div className="flex flex-col items-end">
+                            <p>Total Views</p>
+                            <p>{pageData.views}</p>
+                        </div>
+                        <div className="flex flex-col items-end">
                             <p>Published</p>
                             <p>{formattedDate}</p>
                         </div>

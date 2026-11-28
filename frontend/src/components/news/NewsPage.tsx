@@ -10,7 +10,8 @@ export type Article = {
     type: string,
     context: string,
     created_at: string,
-    author: string
+    author: string,
+    views: number
 }
 
 function NewsPage() {

@@ -34,6 +34,20 @@ export default function AuthProvider( {children} : {children: ReactNode} ) {
         }
     }
 
+    const checkSessionSoft = async () => {
+        try {
+            const res = await api.get('/api/users/me');
+            if (res) {
+                setUser(res.data);
+                setAuth(true);
+            }
+        } catch (err) {
+            console.error('No session', err);
+            setUser(null);
+            setAuth(false);
+        }
+    }
+
     const login = async (email: string, password: string) => {
         const formData = new URLSearchParams();
         formData.append('username', email);
@@ -112,7 +126,7 @@ export default function AuthProvider( {children} : {children: ReactNode} ) {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuth, user, login, logout, register, isLoading, checkSession }}>
+        <AuthContext.Provider value={{ isAuth, user, login, logout, register, isLoading, checkSession, checkSessionSoft }}>
             {children}
         </AuthContext.Provider>
     )
