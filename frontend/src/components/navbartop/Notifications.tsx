@@ -15,7 +15,7 @@ export interface notifMsg {
 export default function Notifications() {
     const auth = useContext(AuthContext);
     const user = auth?.user ?? null;
-    const checkSession = auth?.checkSession ?? (() => {});
+    const checkSessionSoft = auth?.checkSessionSoft ?? (() => {});
     const menuRef = useRef<HTMLDivElement | null>(null);
     const [notifs, setNotifs] = useState<notifMsg[]>([]);
     const [pendingAmt, setAmt] = useState<number>(0);
@@ -29,7 +29,7 @@ export default function Notifications() {
             credentials: 'include'
         })
         if (res.ok) {
-            checkSession();
+            checkSessionSoft();
             setNotifs([]);
             setLoading(false);
         }
@@ -94,10 +94,13 @@ export default function Notifications() {
                             {notifs.map((notif) => (
                                 <>
                                     {notif.type === 'submission_approved' && (
-                                        <Link key={notif.type} to={`/fashion/id/${notif.sub_id}`} className="p-1 hover:bg-mabi-surface hover:text-mabi-text" onClick={() => setOpen(false)}>{notif.message}</Link>
+                                        <Link key={notif.type} to={`/fashion/id/${notif.sub_id}`} className="p-2 hover:bg-mabi-surface text-mabi-text" onClick={() => setOpen(false)}>{notif.message}</Link>
                                     )}
-                                    {notif.type !== 'submission_approved' && (
-                                        <p key={notif.type} className="p-1 hover:bg-mabi-surface hover:text-mabi-text">{notif.message}</p>
+                                    {notif.type === 'submission_rejected' && (
+                                        <Link key={notif.type} to={`/account/dashboard`} className="p-2 hover:bg-mabi-surface text-mabi-text" onClick={() => setOpen(false)}>{notif.message}</Link>
+                                    )}
+                                    {notif.type !== 'title_unlocked' && (
+                                        <Link key={notif.type} to={'/account/dashboard'} className="p-2 hover:bg-mabi-surface text-mabi-text" onClick={() => setOpen(false)}>{notif.message}</Link>
                                     )}
                                 </>
                             ))}
