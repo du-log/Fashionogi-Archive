@@ -166,7 +166,21 @@ export default function NewDashboard() {
                 const feedData = await feedRes.json();
                 setUserFeed(feedData.feed);
             }
-            if(res.ok && dataRes.ok && feedRes.ok) setTimeout(() => setLoading(false), 100);
+            const queueRes = await fetch(`${USERS_URL}/dashboard/queue`, {
+                credentials: 'include'
+            })
+            if (queueRes.ok) {
+                const queueData = await queueRes.json();
+                setStyles(queueData.styles);
+            }
+            const favRes = await fetch(`${USERS_URL}/dashboard/favorites`, {
+                credentials: 'include'
+            })
+            if (favRes.ok) {
+                const favData = await favRes.json();
+                setFavoriteStyles(favData);
+            }
+            if(res.ok && dataRes.ok && feedRes.ok && queueRes.ok && favRes.ok) setTimeout(() => setLoading(false), 100);
         }
         if (user) fetchData();
     }, [user, userLoading, navigate]);
